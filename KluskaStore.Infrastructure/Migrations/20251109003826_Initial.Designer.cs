@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KluskaStore.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251109001503_Initial")]
+    [Migration("20251109003826_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
