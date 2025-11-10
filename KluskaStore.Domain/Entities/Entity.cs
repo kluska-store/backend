@@ -1,6 +1,8 @@
-﻿namespace KluskaStore.Domain.Entities;
+﻿using KluskaStore.Domain.Interfaces;
 
-public abstract class Entity<TId> {
+namespace KluskaStore.Domain.Entities;
+
+public abstract class Entity<TId> : IEntity {
   public TId Id { get; protected set; }
 
   protected Entity() { }
