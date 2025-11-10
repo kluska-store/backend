@@ -11,6 +11,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
+// Add Unit of Work
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 // Add Controllers and Endpoints
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
