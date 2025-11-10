@@ -1,17 +1,21 @@
+using KluskaStore.Domain.Repositories;
 using KluskaStore.Infrastructure.Data;
+using KluskaStore.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- CONFIGURAÇÃO DO EF CORE ---
+// Add DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-// --- CONFIGURAÇÃO DE CONTROLLERS E SWAGGER ---
+// Add Controllers and Endpoints
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Add Swagger
 builder.Services.AddSwaggerGen(options => 
   options.SwaggerDoc("v1", new OpenApiInfo {
     Title = "KluskaStore API",
@@ -20,9 +24,10 @@ builder.Services.AddSwaggerGen(options =>
   })
 );
 
+// Build App
 var app = builder.Build();
 
-// --- CONFIGURAÇÃO DO PIPELINE ---
+// Configure Swagger
 if (app.Environment.IsDevelopment()) {
   app.UseSwagger();
   app.UseSwaggerUI(options => {
