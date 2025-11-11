@@ -9,7 +9,7 @@ public abstract class ValueObject<T> : IValueObject {
 
   protected ValueObject() { }
 
-  public T Value { get; protected set; }
+  public readonly T Value;
 
   public sealed override bool Equals(object? obj) {
     if (obj is not ValueObject<T> other) return false;
