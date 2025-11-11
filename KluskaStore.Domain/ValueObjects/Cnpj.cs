@@ -5,7 +5,7 @@ namespace KluskaStore.Domain.ValueObjects;
 public partial class Cnpj : ValueObject<string> {
   public Cnpj() { }
 
-  public Cnpj(string value, bool isMockCnpj = false) : base(0, value) {
+  public Cnpj(string value, bool isMockCnpj = false) : base(value) {
     if (Validate(value, isMockCnpj)) throw new ArgumentException("Invalid CNPJ.", nameof(value));
   }
 

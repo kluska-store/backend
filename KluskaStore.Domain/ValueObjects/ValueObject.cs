@@ -3,14 +3,12 @@
 namespace KluskaStore.Domain.ValueObjects;
 
 public abstract class ValueObject<T> : IValueObject {
-  protected ValueObject(uint id, T value) {
-    Id = id;
+  protected ValueObject(T value) {
     Value = value;
   }
 
   protected ValueObject() { }
-  
-  public uint Id { get; protected set; }
+
   public T Value { get; protected set; }
 
   public sealed override bool Equals(object? obj) {

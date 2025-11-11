@@ -5,7 +5,7 @@ namespace KluskaStore.Domain.ValueObjects;
 public partial class Phone : ValueObject<string> {
   public Phone() { }
 
-  public Phone(string value) : base(0, value) {
+  public Phone(string value) : base(value) {
     if (!PhoneRegex().IsMatch(value)) throw new ArgumentException("Invalid Phone.", nameof(value));
   }
 
