@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using KluskaStore.Domain.Entities;
+using KluskaStore.Infrastructure.Configurations;
 
 namespace KluskaStore.Infrastructure.Data;
 
@@ -11,7 +12,7 @@ public class AppDbContext : DbContext {
 
   protected override void OnModelCreating(ModelBuilder modelBuilder) {
     base.OnModelCreating(modelBuilder);
-    
-    // TODO: adicionar os mapeamentos com Fluent API
+
+    modelBuilder.ApplyConfiguration(new StoreConfiguration());
   }
 }
