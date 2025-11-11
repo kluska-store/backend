@@ -2,9 +2,10 @@
 using KluskaStore.Domain.Repositories;
 using KluskaStore.Domain.ValueObjects;
 using KluskaStore.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace KluskaStore.Infrastructure.Repositories;
 
 public class StoreRepository(AppDbContext context) : EntityRepository<Store, Guid>(context), IStoreRepository {
-  public async Task<Store?> GetByCnpjAsync(Cnpj cnpj) => await Context.Stores.FindAsync(cnpj);
+  public async Task<Store?> GetByCnpjAsync(Cnpj cnpj) => await Context.Stores.FirstOrDefaultAsync(s => s.Cnpj == cnpj);
 }
