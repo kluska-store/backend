@@ -1,3 +1,4 @@
+using KluskaStore.API.Middleware;
 using KluskaStore.Application;
 using KluskaStore.Infrastructure;
 using Microsoft.OpenApi.Models;
@@ -34,6 +35,7 @@ if (app.Environment.IsDevelopment()) {
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 
