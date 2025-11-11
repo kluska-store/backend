@@ -10,6 +10,8 @@ public class Store : Entity<Guid> {
   public bool IsActive { get; private set; }
   public string PasswordHash { get; private set; }
 
+  private Store() { }
+
   public Store(Cnpj cnpj, string name, Email email, string passwordHash) : base(Guid.Empty) {
     if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name must not be empty", nameof(name));
     if (string.IsNullOrWhiteSpace(passwordHash))

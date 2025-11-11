@@ -3,7 +3,9 @@
 namespace KluskaStore.Domain.ValueObjects;
 
 public partial class Email : ValueObject<string> {
-  public Email(string value) : base(value) {
+  public Email() { }
+
+  public Email(string value) : base(0, value) {
     if (!EmailRegex().IsMatch(value)) throw new ArgumentException("Invalid email.", nameof(value));
   }
 
