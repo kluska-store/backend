@@ -6,7 +6,7 @@ public partial class Cnpj : ValueObject<string> {
   public Cnpj() { }
 
   public Cnpj(string value, bool isMockCnpj = false) : base(value) {
-    if (Validate(value, isMockCnpj)) throw new ArgumentException("Invalid CNPJ.", nameof(value));
+    if (!Validate(value, isMockCnpj)) throw new ArgumentException("Invalid CNPJ.", nameof(value));
   }
 
   [GeneratedRegex(@"\d{14}")]
@@ -25,13 +25,14 @@ public partial class Cnpj : ValueObject<string> {
     var rest = sum % 11;
     var verifierDigit1 = rest is 1 or 0 ? 0 : 11 - rest;
 
-    if ((char)verifierDigit1 != cnpj[12]) return false;
+    if (verifierDigit1 != (int)char.GetNumericValue(cnpj[12])) return false;
 
     sum = 0;
     for (var i = 0; i < 13; i++) sum += (int)char.GetNumericValue(cnpj[i]) * weights2[i];
     rest = sum % 11;
     var verifierDigit2 = rest is 1 or 0 ? 0 : 11 - rest;
 
-    return (char)verifierDigit2 == cnpj[13];
+    var isValid = verifierDigit2 == (int)char.GetNumericValue(cnpj[13]);
+    return isValid;
   }
 }
