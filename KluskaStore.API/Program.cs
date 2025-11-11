@@ -1,18 +1,12 @@
-using KluskaStore.Domain.Repositories;
-using KluskaStore.Infrastructure.Data;
-using KluskaStore.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
+using KluskaStore.Application;
+using KluskaStore.Infrastructure;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Add DbContext
-builder.Services.AddDbContext<AppDbContext>(options =>
-  options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
-
-// Add Unit of Work
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddInfrastructure(connectionString!);
+builder.Services.AddApplication();
 
 // Add Controllers and Endpoints
 builder.Services.AddControllers();
