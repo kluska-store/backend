@@ -8,8 +8,13 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
       await next(context);
     }
     catch (NotFoundException e) {
-      logger.LogWarning(e, "Domain exception caught");
+      logger.LogWarning(e, "Application exception caught: Not Found");
       context.Response.StatusCode = StatusCodes.Status404NotFound;
+      await HandleExceptionAsync(context, e.Message);
+    }
+    catch (BadRequestException e) {
+      logger.LogWarning(e, "Application exception caught: Bad Request");
+      context.Response.StatusCode = StatusCodes.Status400BadRequest;
       await HandleExceptionAsync(context, e.Message);
     }
     catch (Exception e) {
