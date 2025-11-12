@@ -2,14 +2,8 @@
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public abstract class ValueObject<T> : IValueObject {
-  protected ValueObject(T value) {
-    Value = value;
-  }
-
-  protected ValueObject() { }
-
-  public readonly T Value;
+public abstract class ValueObject<T>(T value) : IValueObject {
+  public readonly T Value = value;
 
   public sealed override bool Equals(object? obj) {
     if (obj is not ValueObject<T> other) return false;

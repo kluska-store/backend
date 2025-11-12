@@ -1,12 +1,15 @@
 ﻿using System.Text.RegularExpressions;
+using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public partial class Cnpj : ValueObject<string> {
-  public Cnpj() { }
+public partial class Cnpj : ValueObject<string>, ICreatableVo<Cnpj> {
+  private Cnpj(string value, bool isMockCnpj = false) : base(value) { }
 
-  public Cnpj(string value, bool isMockCnpj = false) : base(value) {
-    if (!Validate(value, isMockCnpj)) throw new ArgumentException("Invalid CNPJ.", nameof(value));
+  public static VoValidationResult<Cnpj> New(string value) {
+    if (Validate(value))
+      return new VoValidationResult<Cnpj>(true, new Cnpj(value), null);
+    return new VoValidationResult<Cnpj>(false, null, $"CNPJ {value} is invalid");
   }
 
   [GeneratedRegex(@"\d{14}")]
