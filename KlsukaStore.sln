@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KluskaStore.Infrastructure"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KluskaStore.API", "KluskaStore.API\KluskaStore.API.csproj", "{8267AC10-F4F9-49EF-A6D1-7E51030E0485}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KluskaStore.Tests", "KluskaStore.Tests\KluskaStore.Tests.csproj", "{DBFD9896-0EAE-4737-8AE9-15F0696202FB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{8267AC10-F4F9-49EF-A6D1-7E51030E0485}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8267AC10-F4F9-49EF-A6D1-7E51030E0485}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8267AC10-F4F9-49EF-A6D1-7E51030E0485}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBFD9896-0EAE-4737-8AE9-15F0696202FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBFD9896-0EAE-4737-8AE9-15F0696202FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBFD9896-0EAE-4737-8AE9-15F0696202FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBFD9896-0EAE-4737-8AE9-15F0696202FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
