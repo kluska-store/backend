@@ -12,7 +12,7 @@ public partial class Cnpj : ValueObject<string>, ICreatableVo<Cnpj> {
     return new VoValidationResult<Cnpj>(false, null, $"CNPJ {value} is invalid");
   }
 
-  [GeneratedRegex(@"\d{14}")]
+  [GeneratedRegex(@"^\d{14}$")]
   private static partial Regex CnpjRegex();
 
   private static bool Validate(string cnpj, bool skipCheckDigits = false) {

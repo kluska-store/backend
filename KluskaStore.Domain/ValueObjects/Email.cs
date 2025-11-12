@@ -12,6 +12,6 @@ public partial class Email : ValueObject<string>, ICreatableVo<Email> {
     return new VoValidationResult<Email>(false, null, $"Email {value} is invalid");
   }
 
-  [GeneratedRegex(@"\w+(\.\w+)*@\w+(\.\w+)+", RegexOptions.Compiled)]
+  [GeneratedRegex(@"^\w+(\.\w+)*@\w+(\.\w+)+$", RegexOptions.Compiled)]
   private static partial Regex EmailRegex();
 }

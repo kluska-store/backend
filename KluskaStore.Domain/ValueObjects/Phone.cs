@@ -12,6 +12,6 @@ public partial class Phone : ValueObject<string>, ICreatableVo<Phone> {
     return new VoValidationResult<Phone>(false, null, $"Phone {value} is invalid");
   }
 
-  [GeneratedRegex(@"\+?\d{12,15}")]
+  [GeneratedRegex(@"^\+?\d{12,15}$")]
   private static partial Regex PhoneRegex();
 }
