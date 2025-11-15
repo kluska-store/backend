@@ -1,4 +1,5 @@
-﻿using KluskaStore.Domain.ValueObjects;
+﻿using KluskaStore.Domain.Shared;
+using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Domain.Entities;
 
@@ -12,11 +13,7 @@ public class Store : Entity<Guid> {
 
   private Store() { }
 
-  public Store(Cnpj cnpj, string name, Email email, string passwordHash) : base(Guid.Empty) {
-    if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name must not be empty", nameof(name));
-    if (string.IsNullOrWhiteSpace(passwordHash))
-      throw new ArgumentException("Password must not be empty", nameof(passwordHash));
-
+  private Store(Cnpj cnpj, string name, Email email, string passwordHash) : base(Guid.Empty) {
     Cnpj = cnpj;
     Name = name;
     Email = email;
@@ -24,17 +21,32 @@ public class Store : Entity<Guid> {
     PasswordHash = passwordHash;
   }
 
-  public void ChangeName(string name) {
-    if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name must not be empty", nameof(name));
+  public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash) {
+    List<string> errors = [];
+
+    if (string.IsNullOrWhiteSpace(name)) errors.Add("Name must not be empty");
+    if (string.IsNullOrWhiteSpace(passwordHash)) errors.Add("Password must not be empty");
+
+    return errors.Count > 0
+      ? Result<Store>.Success(new Store(cnpj, name, email, passwordHash))
+      : Result<Store>.Failure(errors);
+  }
+
+  public Result<Store> ChangeName(string name) {
+    if (string.IsNullOrWhiteSpace(name)) return Result<Store>.Failure("Name must not be empty");
+
     Name = name;
+    return Result<Store>.Success(this);
   }
 
   public void ChangeEmail(Email email) => Email = email;
   public void ChangePicture(string? url) => PictureUrl = url;
 
-  public void ChangePasswordHash(string hash) {
-    if (string.IsNullOrWhiteSpace(hash)) throw new ArgumentException("Password must not be empty", nameof(hash));
+  public Result<Store> ChangePasswordHash(string hash) {
+    if (string.IsNullOrWhiteSpace(hash)) return Result<Store>.Failure("Password must not be empty");
+
     PasswordHash = hash;
+    return Result<Store>.Success(this);
   }
 
   public void Activate() => IsActive = true;
