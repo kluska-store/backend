@@ -1,5 +1,7 @@
 using KluskaStore.API.Middleware;
 using KluskaStore.Application;
+using KluskaStore.Application.Abstractions;
+using KluskaStore.Application.Features;
 using KluskaStore.Infrastructure;
 using Microsoft.OpenApi.Models;
 
@@ -7,14 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddInfrastructure(connectionString!);
-builder.Services.AddApplication();
+builder.Services.AddMediatR(cfg => {
+  cfg.RegisterServicesFromAssembly(typeof(Command<>).Assembly);
+});
 
 // Add Controllers and Endpoints
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 // Add Swagger
-builder.Services.AddSwaggerGen(options => 
+builder.Services.AddSwaggerGen(options =>
   options.SwaggerDoc("v1", new OpenApiInfo {
     Title = "KluskaStore API",
     Version = "v1",
