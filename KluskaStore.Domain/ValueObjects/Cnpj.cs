@@ -7,8 +7,8 @@ public partial class Cnpj : ValueObject<string>
 {
     private Cnpj(string value) : base(value) { }
 
-    public static Result<Cnpj> Create(string value, bool isMock = false) =>
-        Validate(value, isMock)
+    public static Result<Cnpj> Create(string value, bool skipVerifierDigitsValidation = false) =>
+        Validate(value, skipVerifierDigitsValidation)
             ? Result<Cnpj>.Success(new Cnpj(value))
             : Result<Cnpj>.Failure("Invalid cnpj");
 
