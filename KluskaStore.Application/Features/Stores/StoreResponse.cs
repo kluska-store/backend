@@ -1,11 +1,3 @@
-﻿using KluskaStore.Application.Interfaces;
+﻿namespace KluskaStore.Application.Features.Stores;
 
-namespace KluskaStore.Application.Features.Stores;
-
-public record StoreResponse(
-  Guid Id,
-  string Cnpj,
-  string Name,
-  string Email,
-  bool IsActive
-) : IDto;
+public record StoreResponse(Guid Id, string Cnpj, string Name, string Email, bool IsActive );

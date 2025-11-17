@@ -1,6 +1,4 @@
-﻿using KluskaStore.Domain.Entities;
-using KluskaStore.Domain.Shared;
-using MediatR;
+﻿using KluskaStore.Application.Abstractions;
 
 namespace KluskaStore.Application.Features.Stores.CreateStore;
 
@@ -9,4 +7,4 @@ public record CreateStoreCommand(
   string Name,
   string Email,
   string Password
-) : IRequest<Result<StoreResponse>>;
+) : Command<StoreResponse>;
