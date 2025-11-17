@@ -1,5 +1,4 @@
 ﻿using KluskaStore.Application.Abstractions;
-using KluskaStore.Application.Interfaces.Stores;
 using KluskaStore.Domain.Entities;
 using KluskaStore.Domain.Repositories;
 using KluskaStore.Domain.Shared;
@@ -7,9 +6,7 @@ using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Application.Features.Stores.CreateStore;
 
-public class CreateStoreHandler(IUnitOfWork uow) :
-    Handler<CreateStoreCommand, Result<StoreResponse>>(uow),
-    ICreateStoreHandler
+public class CreateStoreHandler(IUnitOfWork uow) : Handler<CreateStoreCommand, Result<StoreResponse>>(uow)
 {
     public override async Task<Result<StoreResponse>> Handle(
         CreateStoreCommand request,

@@ -1,13 +1,10 @@
 ﻿using KluskaStore.Application.Abstractions;
-using KluskaStore.Application.Interfaces.Stores;
 using KluskaStore.Domain.Repositories;
 using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Application.Features.Stores.GetStoreById;
 
-public class GetStoreByIdHandler(IUnitOfWork uow) :
-    Handler<GuidQuery<StoreResponse>, Result<StoreResponse>>(uow),
-    IGetStoreByIdHandler
+public class GetStoreByIdHandler(IUnitOfWork uow) : Handler<GuidQuery<StoreResponse>, Result<StoreResponse>>(uow)
 {
     public override async Task<Result<StoreResponse>> Handle(
         GuidQuery<StoreResponse> request,
