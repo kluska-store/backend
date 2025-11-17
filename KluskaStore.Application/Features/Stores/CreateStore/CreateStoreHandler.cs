@@ -17,8 +17,8 @@ public class CreateStoreHandler(IUnitOfWork uow) :
     var emailResult = Email.Create(request.Email);
 
     List<string> errors = [];
-    if (!cnpjResult.IsFailure) errors.AddRange(cnpjResult.Errors);
-    if (!emailResult.IsFailure) errors.AddRange(emailResult.Errors);
+    if (cnpjResult.IsFailure) errors.AddRange(cnpjResult.Errors);
+    if (emailResult.IsFailure) errors.AddRange(emailResult.Errors);
 
     var storeResult = Store.Create(cnpjResult.Value, request.Name, emailResult.Value, request.Password);
     if (storeResult.IsFailure) errors.AddRange(storeResult.Errors);
