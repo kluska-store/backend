@@ -6,10 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace KluskaStore.Infrastructure;
 
-public static class DependencyInjection {
-  public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString) {
-    services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
-    services.AddScoped<IUnitOfWork, UnitOfWork>();
-    return services;
-  }
+public static class DependencyInjection
+{
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
+    {
+        services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        return services;
+    }
 }

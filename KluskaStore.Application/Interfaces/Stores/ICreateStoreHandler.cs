@@ -5,4 +5,4 @@ using MediatR;
 
 namespace KluskaStore.Application.Interfaces.Stores;
 
-public interface ICreateStoreHandler : IRequestHandler<CreateStoreCommand, Result<StoreResponse>> { }
+public interface ICreateStoreHandler : IRequestHandler<CreateStoreCommand, Result<StoreResponse>>;

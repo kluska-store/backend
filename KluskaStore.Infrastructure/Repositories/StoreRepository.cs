@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KluskaStore.Infrastructure.Repositories;
 
-public class StoreRepository(AppDbContext context) : EntityRepository<Store, Guid>(context), IStoreRepository {
-  public async Task<Store?> GetByCnpjAsync(Cnpj cnpj) => await Context.Stores.FirstOrDefaultAsync(s => s.Cnpj == cnpj);
+public class StoreRepository(AppDbContext context) : EntityRepository<Store, Guid>(context), IStoreRepository
+{
+    public async Task<Store?> GetByCnpjAsync(Cnpj cnpj) =>
+        await Context.Stores.FirstOrDefaultAsync(s => s.Cnpj == cnpj);
 }
