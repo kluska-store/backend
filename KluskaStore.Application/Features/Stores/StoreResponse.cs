@@ -1,6 +1,6 @@
 ﻿using KluskaStore.Application.Interfaces;
 
-namespace KluskaStore.Application.DTOs.Store;
+namespace KluskaStore.Application.Features.Stores;
 
 public record StoreResponse(
   Guid Id,
