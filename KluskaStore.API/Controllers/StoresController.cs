@@ -1,31 +1,26 @@
-﻿using KluskaStore.Application.DTOs;
-using KluskaStore.Application.DTOs.Store;
-using KluskaStore.Application.Interfaces;
+﻿using KluskaStore.Application.Features.Stores.CreateStore;
+using KluskaStore.Application.Features.Stores.GetStoreById;
+using KluskaStore.Application.Interfaces.Stores;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KluskaStore.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class StoresController : ControllerBase {
-  private readonly IStoreService _service;
-
-  public StoresController(IStoreService service) {
-    _service = service;
-  }
-
+public class StoresController(IStoreService service) : ControllerBase {
   [HttpPost]
-  public async Task<IActionResult> Create([FromBody] CreateStoreRequest request) {
+  public async Task<IActionResult> Create([FromBody] CreateStoreCommand request, CancellationToken ct) {
     if (!ModelState.IsValid) return BadRequest(ModelState);
-    
-    var store = await _service.CreateStoreAsync(request);
-
-    return CreatedAtAction(nameof(GetById), new { id = store.Id }, store);
+    var resultResult = await service.CreateStoreAsync(request, ct);
+    return resultResult.IsFailure
+      ? BadRequest(resultResult.Errors)
+      : CreatedAtAction(nameof(GetById), new { id = resultResult.Value.Id }, resultResult.Value);
   }
 
   [HttpGet("{id:guid}")]
-  public async Task<IActionResult> GetById(Guid id) {
-    var store = await _service.GetStoreByIdAsync(new GuidRequest(id));
-    return Ok(store);
+  public async Task<IActionResult> GetById(Guid id, CancellationToken ct) {
+    var request = new GetStoreByIdCommand(id);
+    var storeResult = await service.GetStoreByIdAsync(request, ct);
+    return storeResult.IsFailure ? NotFound(storeResult.Errors) : Ok(storeResult.Value);
   }
 }
