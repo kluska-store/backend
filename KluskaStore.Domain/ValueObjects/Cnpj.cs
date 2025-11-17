@@ -10,7 +10,7 @@ public partial class Cnpj : ValueObject<string> {
   public static Result<Cnpj> Create(string value, bool isMock = false) {
     return Validate(value, isMock)
       ? Result<Cnpj>.Success(new Cnpj(value)) 
-      : Result<Cnpj>.Failure("Invalid email");
+      : Result<Cnpj>.Failure("Invalid cnpj");
   }
 
   [GeneratedRegex(@"^\d{14}$")]
