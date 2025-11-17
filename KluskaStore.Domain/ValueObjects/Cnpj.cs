@@ -3,6 +3,7 @@ using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.ValueObjects;
 
+// TODO: implement formatted ToString method
 public partial class Cnpj : ValueObject<string>
 {
     private Cnpj(string value) : base(value) { }

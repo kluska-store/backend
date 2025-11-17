@@ -1,6 +1,8 @@
 ﻿using KluskaStore.Application.Abstractions;
 using KluskaStore.Application.Features.Stores;
 using KluskaStore.Application.Features.Stores.CreateStore;
+using KluskaStore.Application.Features.Stores.GetStoreByCnpj;
+using KluskaStore.Domain.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +30,17 @@ public class StoresController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
     {
         var request = new GuidQuery<StoreResponse>(id);
+        var storeResult = await mediator.Send(request, ct);
+        return storeResult.IsFailure ? NotFound(storeResult.Errors) : Ok(storeResult.Value);
+    }
+
+    [HttpGet("{cnpj}")]
+    public async Task<IActionResult> GetByCnpj(string cnpj, CancellationToken ct)
+    {
+        var cnpjResult = Cnpj.Create(cnpj, skipVerifierDigitsValidation: true);
+        if (cnpjResult.IsFailure) return BadRequest(cnpjResult.Errors);
+
+        var request = new CnpjQuery(cnpjResult.Value);
         var storeResult = await mediator.Send(request, ct);
         return storeResult.IsFailure ? NotFound(storeResult.Errors) : Ok(storeResult.Value);
     }

@@ -2,6 +2,7 @@
 
 namespace KluskaStore.Domain.ValueObjects;
 
+// TODO: implement generic ToString method
 public abstract class ValueObject<T>(T value) : IValueObject
 {
     public readonly T Value = value;
