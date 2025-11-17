@@ -10,12 +10,12 @@ public class StoreConfiguration : IEntityTypeConfiguration<Store> {
     builder.HasKey(s => s.Id);
 
     builder.Property(s => s.Cnpj)
-      .HasConversion(c => c.Value, v => Cnpj.New(v).Vo!)
+      .HasConversion(c => c.Value, v => Cnpj.Create(v, false).Value)
       .HasMaxLength(14)
       .IsRequired();
 
     builder.Property(s => s.Email)
-      .HasConversion(e => e.Value, v => Email.New(v).Vo!)
+      .HasConversion(e => e.Value, v => Email.Create(v).Value)
       .HasMaxLength(100)
       .IsRequired();
 
