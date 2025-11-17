@@ -10,12 +10,12 @@ public class EmailTests {
   [InlineData("bigger.example@email.com")]
   [InlineData("numeric55.example_123@email.com")]
   public void GivenValidEmail_ThenCreatesVo(string email) {
-    var result = Email.New(email);
+    var result = Email.Create(email);
 
-    result.IsValid.Should().BeTrue();
-    result.Error.Should().BeNull();
-    result.Vo.Should().BeAssignableTo<Email>();
-    result.Vo.Value.Should().Be(email);
+    result.IsSuccess.Should().BeTrue();
+    result.Errors.Should().BeEmpty();
+    result.Value.Should().BeAssignableTo<Email>();
+    result.Value.Value.Should().Be(email);
   }
 
   [Theory]
@@ -26,10 +26,10 @@ public class EmailTests {
   [InlineData("exampleemail.com")]
   [InlineData("example@email@com")]
   public void GivenInvalidEmail_ThenCreatesInvalidVoResult(string email) {
-    var result = Email.New(email);
+    var result = Email.Create(email);
 
-    result.IsValid.Should().BeFalse();
-    result.Error.Should().NotBeNullOrWhiteSpace();
-    result.Vo.Should().BeNull();
+    result.IsFailure.Should().BeTrue();
+    result.Errors.Should().NotBeNullOrEmpty();
+    result.Value.Should().BeNull();
   }
 }

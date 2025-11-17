@@ -8,12 +8,12 @@ public class CnpjTests {
   [InlineData("04658924000130")]
   [InlineData("10619284000152")]
   public void GivenValidCnpj_WhenNotSkippingVerifierDigitsValidation_ThenCreatesVo(string cnpj) {
-    var result = Cnpj.New(cnpj);
+    var result = Cnpj.Create(cnpj);
 
-    result.IsValid.Should().BeTrue();
-    result.Error.Should().BeNull();
-    result.Vo.Should().BeAssignableTo<Cnpj>();
-    result.Vo.Value.Should().Be(cnpj);
+    result.IsSuccess.Should().BeTrue();
+    result.Errors.Should().BeEmpty();
+    result.Value.Should().BeAssignableTo<Cnpj>();
+    result.Value.Value.Should().Be(cnpj);
   }
 
   [Theory]
@@ -23,10 +23,10 @@ public class CnpjTests {
   [InlineData("00000000000000")]
   [InlineData("04658924000")]
   public void GivenInvalidCnpj_WhenNotSkippingVerifierDigistValidation_ThenReturnsInvalidVoResult(string cnpj) {
-    var result = Cnpj.New(cnpj);
+    var result = Cnpj.Create(cnpj);
 
-    result.IsValid.Should().BeFalse();
-    result.Error.Should().NotBeNullOrWhiteSpace();
-    result.Vo.Should().BeNull();
+    result.IsFailure.Should().BeTrue();
+    result.Errors.Should().NotBeNullOrEmpty();
+    result.Value.Should().BeNull();
   }
 }
