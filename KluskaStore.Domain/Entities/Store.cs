@@ -27,7 +27,7 @@ public class Store : Entity<Guid> {
     if (string.IsNullOrWhiteSpace(name)) errors.Add("Name must not be empty");
     if (string.IsNullOrWhiteSpace(passwordHash)) errors.Add("Password must not be empty");
 
-    return errors.Count > 0
+    return errors.Count == 0
       ? Result<Store>.Success(new Store(cnpj, name, email, passwordHash))
       : Result<Store>.Failure(errors);
   }
