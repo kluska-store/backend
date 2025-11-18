@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Application.Abstractions;
+using KluskaStore.Application.Mappers;
 using KluskaStore.Domain.Repositories;
 using KluskaStore.Domain.Shared;
 
@@ -14,7 +15,6 @@ public class GetStoreByIdHandler(IUnitOfWork uow) : Handler<GuidQuery<StoreRespo
         var store = await UoW.Stores.GetByIdAsync(request.Guid);
         if (store is null) return Result<StoreResponse>.Failure($"Store with id {request.Guid} not found");
 
-        var response = new StoreResponse(store.Id, store.Cnpj.Value, store.Name, store.Email.Value, store.IsActive);
-        return Result<StoreResponse>.Success(response);
+        return Result<StoreResponse>.Success(store.ToResponse());
     }
 }

@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Application.Abstractions;
+using KluskaStore.Application.Mappers;
 using KluskaStore.Domain.Entities;
 using KluskaStore.Domain.Repositories;
 using KluskaStore.Domain.Shared;
@@ -29,7 +30,6 @@ public class CreateStoreHandler(IUnitOfWork uow) : Handler<CreateStoreCommand, R
         await UoW.Stores.AddAsync(store);
         await UoW.SaveChangesAsync();
 
-        var response = new StoreResponse(store.Id, store.Cnpj.Value, store.Name, store.Email.Value, store.IsActive);
-        return Result<StoreResponse>.Success(response);
+        return Result<StoreResponse>.Success(store.ToResponse());
     }
 }

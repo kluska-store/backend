@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Application.Abstractions;
+using KluskaStore.Application.Mappers;
 using KluskaStore.Domain.Repositories;
 using KluskaStore.Domain.Shared;
 
@@ -14,7 +15,6 @@ public class GetStoreByCnpjHandler(IUnitOfWork uow) : Handler<CnpjQuery, Result<
         var store = await UoW.Stores.GetByCnpjAsync(request.Cnpj);
         if (store is null) return Result<StoreResponse>.Failure($"Store with CNPJ {request.Cnpj} not found");
 
-        var response = new StoreResponse(store.Id, store.Cnpj.Value, store.Name, store.Email.Value, store.IsActive);
-        return Result<StoreResponse>.Success(response);
+        return Result<StoreResponse>.Success(store.ToResponse());
     }
 }
