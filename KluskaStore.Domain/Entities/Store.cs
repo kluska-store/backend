@@ -45,15 +45,9 @@ public class Store : Entity<Guid>
         return Result<Store>.Success(this);
     }
 
-    public void ChangeEmail(Email email)
-    {
-        Email = email;
-    }
+    public void ChangeEmail(Email email) => Email = email;
 
-    public void ChangePicture(string? url)
-    {
-        PictureUrl = url;
-    }
+    public void ChangePicture(string? url) => PictureUrl = url;
 
     public Result<Store> ChangePasswordHash(string hash)
     {
@@ -65,13 +59,7 @@ public class Store : Entity<Guid>
 
     public void ChangeAddress(Address address) => Address = address;
 
-    public void Activate()
-    {
-        IsActive = true;
-    }
+    public void Activate() => IsActive = true;
 
-    public void Deactivate()
-    {
-        IsActive = false;
-    }
+    public void Deactivate() => IsActive = false;
 }
