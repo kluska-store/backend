@@ -4,23 +4,15 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace KluskaStore.Infrastructure.Repositories;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork(AppDbContext context) : IUnitOfWork
 {
-    private readonly AppDbContext _context;
     private bool _disposed;
     private IDbContextTransaction? _transaction;
 
-    public UnitOfWork(AppDbContext context)
-    {
-        _context = context;
-        Stores = new StoreRepository(_context);
-        Addresses = new AddressRepository(_context);
-    }
+    public IStoreRepository Stores { get; } = new StoreRepository(context);
+    public IAddressRepository Addresses { get; } = new AddressRepository(context);
 
-    public IStoreRepository Stores { get; }
-    public IAddressRepository Addresses { get; }
-
-    public async Task BeginTransactionAsync() => _transaction ??= await _context.Database.BeginTransactionAsync();
+    public async Task BeginTransactionAsync() => _transaction ??= await context.Database.BeginTransactionAsync();
 
     public async Task CommitTransactionAsync()
     {
@@ -42,7 +34,7 @@ public class UnitOfWork : IUnitOfWork
         }
     }
 
-    public async Task<int> SaveChangesAsync() => await _context.SaveChangesAsync();
+    public async Task<int> SaveChangesAsync() => await context.SaveChangesAsync();
 
     public void Dispose()
     {
@@ -56,7 +48,7 @@ public class UnitOfWork : IUnitOfWork
         if (disposing)
         {
             _transaction?.Dispose();
-            _context.Dispose();
+            context.Dispose();
         }
 
         _disposed = true;
