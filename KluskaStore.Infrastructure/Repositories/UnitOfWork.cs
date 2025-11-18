@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace KluskaStore.Infrastructure.Repositories;
 
-public class UnitOfWork(AppDbContext context) : IUnitOfWork
+public sealed class UnitOfWork(AppDbContext context) : IUnitOfWork
 {
-    private bool _disposed;
     private IDbContextTransaction? _transaction;
 
     public IStoreRepository Stores { get; } = new StoreRepository(context);
@@ -38,19 +37,7 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork
 
     public void Dispose()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (_disposed) return;
-        if (disposing)
-        {
-            _transaction?.Dispose();
-            context.Dispose();
-        }
-
-        _disposed = true;
+        _transaction?.Dispose();
+        context.Dispose();
     }
 }
