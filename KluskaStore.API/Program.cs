@@ -1,6 +1,8 @@
+using KluskaStore.API.Extensions;
 using KluskaStore.API.Middleware;
 using KluskaStore.Application.Abstractions;
 using KluskaStore.Infrastructure;
+using KluskaStore.Infrastructure.Data;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +39,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.MigrateDatabase<AppDbContext>();
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseAuthorization();
