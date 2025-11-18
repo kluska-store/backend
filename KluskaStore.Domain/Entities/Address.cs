@@ -22,6 +22,7 @@ public class Address : Entity<uint>
         Street = street;
         Number = number;
         PostalCode = postalCode;
+        Complement = complement;
     }
     
     public string Country { get; private set; }
@@ -30,4 +31,5 @@ public class Address : Entity<uint>
     public string Street { get; private set; }
     public uint Number { get; private set; }
     public PostalCode PostalCode { get; set; }
+    public string? Complement;
 }
