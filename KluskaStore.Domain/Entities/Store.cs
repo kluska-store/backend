@@ -22,6 +22,7 @@ public class Store : Entity<Guid>
     public Email Email { get; private set; }
     public bool IsActive { get; private set; }
     public string PasswordHash { get; private set; }
+    public Address Address { get; private set; }
 
     public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash)
     {
