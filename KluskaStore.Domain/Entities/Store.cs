@@ -7,13 +7,14 @@ public class Store : Entity<Guid>
 {
     private Store() { }
 
-    private Store(Cnpj cnpj, string name, Email email, string passwordHash)
+    private Store(Cnpj cnpj, string name, Email email, string passwordHash, Address address)
     {
         Cnpj = cnpj;
         Name = name;
         Email = email;
         IsActive = true;
         PasswordHash = passwordHash;
+        Address = address;
     }
 
     public Cnpj Cnpj { get; private set; }
@@ -24,7 +25,7 @@ public class Store : Entity<Guid>
     public string PasswordHash { get; private set; }
     public Address Address { get; private set; }
 
-    public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash)
+    public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash, Address address)
     {
         List<string> errors = [];
 
@@ -32,7 +33,7 @@ public class Store : Entity<Guid>
         if (string.IsNullOrWhiteSpace(passwordHash)) errors.Add("Password must not be empty");
 
         return errors.Count == 0
-            ? Result<Store>.Success(new Store(cnpj, name, email, passwordHash))
+            ? Result<Store>.Success(new Store(cnpj, name, email, passwordHash, address))
             : Result<Store>.Failure(errors);
     }
 
@@ -61,6 +62,8 @@ public class Store : Entity<Guid>
         PasswordHash = hash;
         return Result<Store>.Success(this);
     }
+
+    public void ChangeAddress(Address address) => Address = address;
 
     public void Activate()
     {
