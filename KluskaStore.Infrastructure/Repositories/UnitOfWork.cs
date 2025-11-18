@@ -14,9 +14,11 @@ public class UnitOfWork : IUnitOfWork
     {
         _context = context;
         Stores = new StoreRepository(_context);
+        Addresses = new AddressRepository(_context);
     }
 
     public IStoreRepository Stores { get; }
+    public IAddressRepository Addresses { get; }
 
     public async Task BeginTransactionAsync() => _transaction ??= await _context.Database.BeginTransactionAsync();
 
