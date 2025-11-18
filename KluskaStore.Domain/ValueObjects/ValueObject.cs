@@ -2,7 +2,6 @@
 
 namespace KluskaStore.Domain.ValueObjects;
 
-// TODO: implement generic ToString method
 public abstract class ValueObject<T>(T value) : IValueObject
 {
     public readonly T Value = value;
@@ -14,9 +13,11 @@ public abstract class ValueObject<T>(T value) : IValueObject
         return EqualityComparer<T>.Default.Equals(Value, other.Value);
     }
 
+    public override string ToString() => Value?.ToString() ?? "null";
+
     public sealed override int GetHashCode() => EqualityComparer<T>.Default.GetHashCode(Value!);
-    
+
     public static bool operator ==(ValueObject<T>? a, ValueObject<T>? b) => a?.Equals(b) ?? b is null;
-    
+
     public static bool operator !=(ValueObject<T>? a, ValueObject<T>? b) => !(a == b);
 }
