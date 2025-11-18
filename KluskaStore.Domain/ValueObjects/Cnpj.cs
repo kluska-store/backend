@@ -3,7 +3,7 @@ using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public partial class Cnpj : ValueObject<string>
+public partial record Cnpj : ValueObject<string>
 {
     private Cnpj(string value) : base(value) { }
 
