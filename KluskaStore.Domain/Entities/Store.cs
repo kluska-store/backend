@@ -7,7 +7,7 @@ public class Store : Entity<Guid>
 {
     private Store() { }
 
-    private Store(Cnpj cnpj, string name, Email email, string passwordHash) : base(Guid.Empty)
+    private Store(Cnpj cnpj, string name, Email email, string passwordHash)
     {
         Cnpj = cnpj;
         Name = name;
