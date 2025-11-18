@@ -3,7 +3,6 @@ using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-// TODO: implement formatted ToString method
 public partial class Cnpj : ValueObject<string>
 {
     private Cnpj(string value) : base(value) { }
@@ -40,4 +39,9 @@ public partial class Cnpj : ValueObject<string>
         var isValid = verifierDigit2 == (int)char.GetNumericValue(cnpj[13]);
         return isValid;
     }
+
+    public override string ToString() => Value.Insert(12, "-")
+        .Insert(8, "/")
+        .Insert(5, ".")
+        .Insert(2, ".");
 }
