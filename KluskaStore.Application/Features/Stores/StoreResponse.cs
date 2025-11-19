@@ -2,4 +2,12 @@
 
 namespace KluskaStore.Application.Features.Stores;
 
-public record StoreResponse(Guid Id, string Cnpj, string Name, string Email, bool IsActive, AddressResponse Address);
+public record StoreResponse(
+    Guid Id,
+    string Cnpj,
+    string Name,
+    string Email,
+    bool IsActive,
+    string? PictureUrl,
+    AddressResponse Address
+);

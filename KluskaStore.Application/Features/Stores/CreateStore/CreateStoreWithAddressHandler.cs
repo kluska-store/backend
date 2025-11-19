@@ -53,6 +53,8 @@ public class CreateStoreWithAddressHandler(IUnitOfWork uow)
         var store = storeResult.Value;
         var address = addressResult.Value;
 
+        if (!string.IsNullOrWhiteSpace(request.PictureUrl)) store.ChangePicture(request.PictureUrl);
+
         try
         {
             await UoW.BeginTransactionAsync();

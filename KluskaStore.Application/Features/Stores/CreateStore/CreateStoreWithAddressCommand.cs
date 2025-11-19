@@ -8,5 +8,6 @@ public record CreateStoreWithAddressCommand(
     string Name,
     string Email,
     string Password,
+    string? PictureUrl,
     AddressData Address
 ) : Command<StoreResponse>;

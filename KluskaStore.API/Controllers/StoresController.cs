@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KluskaStore.API.Controllers;
 
+// TODO: implement UPDATE and DELETE
 [ApiController]
 [Route("api/[controller]")]
 public class StoresController(IMediator mediator) : ControllerBase
