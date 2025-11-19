@@ -3,7 +3,6 @@ using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Domain.Entities;
 
-// TODO: implement password hashing
 public class Store : Entity<Guid>
 {
     private Store() { }

@@ -17,5 +17,10 @@ public class EntityRepository<T, TId>(AppDbContext context) : IEntityRepository<
 
     public virtual void UpdateAsync(T entity) => Context.Set<T>().Update(entity);
 
-    public virtual void DeleteAsync(T entity) => Context.Set<T>().Remove(entity);
+    public virtual async Task DeleteAsync(TId id)
+    {
+        var entity = await GetByIdAsync(id);
+        if (entity is null) return;
+        Context.Set<T>().Remove(entity);
+    }
 }
