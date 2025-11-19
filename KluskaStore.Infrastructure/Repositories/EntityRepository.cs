@@ -9,13 +9,13 @@ public class EntityRepository<T, TId>(AppDbContext context) : IEntityRepository<
 {
     protected readonly AppDbContext Context = context;
 
-    public async Task<T?> GetByIdAsync(TId id) => await Context.Set<T>().FindAsync(id);
+    public virtual async Task<T?> GetByIdAsync(TId id) => await Context.Set<T>().FindAsync(id);
 
-    public async Task<IEnumerable<T>> GetAllAsync() => await Context.Set<T>().ToListAsync();
+    public virtual async Task<IEnumerable<T>> GetAllAsync() => await Context.Set<T>().ToListAsync();
 
-    public async Task AddAsync(T entity) => await Context.Set<T>().AddAsync(entity);
+    public virtual async Task AddAsync(T entity) => await Context.Set<T>().AddAsync(entity);
 
-    public void UpdateAsync(T entity) => Context.Set<T>().Update(entity);
+    public virtual void UpdateAsync(T entity) => Context.Set<T>().Update(entity);
 
-    public void DeleteAsync(T entity) => Context.Set<T>().Remove(entity);
+    public virtual void DeleteAsync(T entity) => Context.Set<T>().Remove(entity);
 }
