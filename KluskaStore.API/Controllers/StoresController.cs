@@ -13,7 +13,7 @@ namespace KluskaStore.API.Controllers;
 public class StoresController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateStoreCommand request, CancellationToken ct)
+    public async Task<IActionResult> Create([FromBody] CreateStoreWithAddressCommand request, CancellationToken ct)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
         var resultResult = await mediator.Send(request, ct);
