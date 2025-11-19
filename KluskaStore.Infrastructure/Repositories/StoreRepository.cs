@@ -9,5 +9,12 @@ namespace KluskaStore.Infrastructure.Repositories;
 public class StoreRepository(AppDbContext context) : EntityRepository<Store, Guid>(context), IStoreRepository
 {
     public async Task<Store?> GetByCnpjAsync(Cnpj cnpj) =>
-        await Context.Stores.FirstOrDefaultAsync(s => s.Cnpj == cnpj);
+        await Context.Stores
+            .Include(s => s.Address)
+            .FirstOrDefaultAsync(s => s.Cnpj == cnpj);
+
+    public override async Task<Store?> GetByIdAsync(Guid id) =>
+        await Context.Stores
+            .Include(s => s.Address)
+            .FirstOrDefaultAsync(s => s.Id == id);
 }
