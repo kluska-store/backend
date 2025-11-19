@@ -3,7 +3,7 @@ using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public partial record PostalCode : ValueObject<string>
+public partial class PostalCode : ValueObject<string>
 {
     private PostalCode(string value) : base(value) { }
     

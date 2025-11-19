@@ -3,7 +3,7 @@ using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public partial record Phone : ValueObject<string>
+public partial class Phone : ValueObject<string>
 {
     private Phone(string value) : base(value) { }
 

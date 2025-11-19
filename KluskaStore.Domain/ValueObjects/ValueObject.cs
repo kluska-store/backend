@@ -2,7 +2,8 @@
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public abstract record ValueObject<T>(T Value) : IValueObject
+public abstract class ValueObject<T>(T value) : IValueObject
 {
-    public override string ToString() => Value?.ToString() ?? "null";
+    public T Value { get; } = value;
+    public override string ToString() => Value is null ? "null" : Value.ToString()!;
 }
