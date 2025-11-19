@@ -31,7 +31,7 @@ public class Address : Entity<uint>
     public string City { get; private set; }
     public string Street { get; private set; }
     public uint Number { get; private set; }
-    public PostalCode PostalCode { get; set; }
+    public PostalCode PostalCode { get; private set; }
     public string? Complement;
 
     public static Result<Address> Create(
