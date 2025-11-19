@@ -1,6 +1,8 @@
-﻿using KluskaStore.Domain.Repositories;
+﻿using KluskaStore.Application.Interfaces;
+using KluskaStore.Domain.Repositories;
 using KluskaStore.Infrastructure.Data;
 using KluskaStore.Infrastructure.Repositories;
+using KluskaStore.Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +14,7 @@ public static class DependencyInjection
     {
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IPasswordHasher, BCryptHasher>();
         return services;
     }
 }

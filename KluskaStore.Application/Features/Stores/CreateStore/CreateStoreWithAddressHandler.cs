@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Application.Abstractions;
+using KluskaStore.Application.Interfaces;
 using KluskaStore.Application.Mappers;
 using KluskaStore.Domain.Entities;
 using KluskaStore.Domain.Repositories;
@@ -7,7 +8,7 @@ using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Application.Features.Stores.CreateStore;
 
-public class CreateStoreWithAddressHandler(IUnitOfWork uow)
+public class CreateStoreWithAddressHandler(IUnitOfWork uow, IPasswordHasher hasher)
     : Handler<CreateStoreWithAddressCommand, Result<StoreResponse>>(uow)
 {
     public override async Task<Result<StoreResponse>> Handle(
@@ -38,11 +39,12 @@ public class CreateStoreWithAddressHandler(IUnitOfWork uow)
 
         if (addressResult.IsFailure) errors.AddRange(addressResult.Errors);
 
+        var passwordHash = hasher.Hash(request.Password);
         var storeResult = Store.Create(
             cnpjResult.Value,
             request.Name,
             emailResult.Value,
-            request.Password,
+            passwordHash,
             addressResult.Value
         );
 
