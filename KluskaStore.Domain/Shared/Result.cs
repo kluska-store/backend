@@ -4,7 +4,7 @@ public class Result
 {
     private readonly List<string> _errors = [];
 
-    protected Result(bool isSucess, params List<string> errors)
+    protected Result(bool isSucess, params IEnumerable<string> errors)
     {
         IsSuccess = isSucess;
         AddErrors(errors);
@@ -16,9 +16,9 @@ public class Result
 
     public static Result Success() => new(true);
 
-    public static Result Failure(params List<string> errors) => new(false, errors);
+    public static Result Failure(params IEnumerable<string> errors) => new(false, errors);
 
-    public void AddErrors(params List<string> errors)
+    public void AddErrors(params IEnumerable<string> errors)
     {
         _errors.AddRange(errors.Where(e => !string.IsNullOrWhiteSpace(e)));
     }
