@@ -30,7 +30,7 @@ public class StoreConfiguration : IEntityTypeConfiguration<Store>
             .IsRequired();
 
         builder.Property(s => s.IsActive).IsRequired();
-        
+
         builder.HasIndex(s => s.Cnpj).IsUnique();
         builder.HasIndex(s => s.Email).IsUnique();
     }

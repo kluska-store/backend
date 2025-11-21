@@ -6,7 +6,7 @@ namespace KluskaStore.Domain.ValueObjects;
 public partial class PostalCode : ValueObject<string>
 {
     private PostalCode(string value) : base(value) { }
-    
+
     public static Result<PostalCode> Create(string value) =>
         PostalCodeRegex().IsMatch(value)
             ? Result<PostalCode>.Success(new PostalCode(value))
