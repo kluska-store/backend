@@ -23,12 +23,12 @@ public class Address
         Complement = complement;
     }
 
-    public string Country { get;  }
-    public string State { get;  }
-    public string City { get;  }
-    public string Street { get;  }
-    public uint Number { get;  }
-    public PostalCode PostalCode { get;  }
+    public string Country { get; }
+    public string State { get; }
+    public string City { get; }
+    public string Street { get; }
+    public uint Number { get; }
+    public PostalCode PostalCode { get; }
     public string? Complement { get; }
 
     public static Result<Address> Create(
@@ -47,8 +47,8 @@ public class Address
         if (string.IsNullOrWhiteSpace(city)) errors.Add("City must not be null");
         if (string.IsNullOrWhiteSpace(street)) errors.Add("Street must not be null");
 
-        return errors.Count > 0 
-            ? Result<Address>.Failure(errors) 
+        return errors.Count > 0
+            ? Result<Address>.Failure(errors)
             : Result<Address>.Success(new Address(country, state, city, street, number, postalCode, complement));
     }
 }

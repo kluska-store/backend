@@ -1,3 +1,3 @@
 ﻿namespace KluskaStore.Domain.Interfaces;
 
-public interface IEntity { }
+public interface IEntity;
