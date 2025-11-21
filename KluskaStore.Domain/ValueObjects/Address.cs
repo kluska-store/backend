@@ -39,7 +39,7 @@ public class Address : IValueObject
         string street,
         uint number,
         PostalCode postalCode,
-        string? complement
+        string? complement = null
     )
     {
         List<string> errors = [];
