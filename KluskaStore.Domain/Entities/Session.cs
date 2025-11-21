@@ -5,6 +5,8 @@ namespace KluskaStore.Domain.Entities;
 
 public class Session : Entity<string>
 {
+    private Session() { }
+
     private Session(SessionOwner owner, DateTime createdAt)
     {
         Owner = owner;
