@@ -48,6 +48,8 @@ public class Address : IValueObject
         if (string.IsNullOrWhiteSpace(city)) errors.Add("City must not be null");
         if (string.IsNullOrWhiteSpace(street)) errors.Add("Street must not be null");
 
+        if (string.IsNullOrWhiteSpace(complement)) complement = null;
+
         return errors.Count > 0
             ? Result<Address>.Failure(errors)
             : Result<Address>.Success(new Address(country, state, city, street, number, postalCode, complement));
