@@ -3,9 +3,11 @@ using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public partial class Cnpj : ValueObject<string>
+public partial class Cnpj
 {
-    private Cnpj(string value) : base(value) { }
+    private Cnpj(string value) => Value = value;
+
+    public string Value { get; }
 
     public static Result<Cnpj> Create(string value, bool skipVerifierDigitsValidation = false) =>
         Validate(value, skipVerifierDigitsValidation)

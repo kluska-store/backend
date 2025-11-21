@@ -3,9 +3,11 @@ using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public partial class Phone : ValueObject<string>
+public partial class Phone
 {
-    private Phone(string value) : base(value) { }
+    private Phone(string value) => Value = value;
+
+    public string Value { get; }
 
     public static Result<Phone> Create(string value) =>
         PhoneRegex().IsMatch(value)

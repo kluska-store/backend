@@ -3,10 +3,12 @@ using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public partial class PostalCode : ValueObject<string>
+public partial class PostalCode
 {
-    private PostalCode(string value) : base(value) { }
-
+    private PostalCode(string value) => Value = value;
+    
+    public string Value { get; }
+    
     public static Result<PostalCode> Create(string value) =>
         PostalCodeRegex().IsMatch(value)
             ? Result<PostalCode>.Success(new PostalCode(value))
