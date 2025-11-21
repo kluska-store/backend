@@ -15,6 +15,6 @@ public partial class PostalCode : IValueObject
             ? Result<PostalCode>.Success(new PostalCode(value))
             : Result<PostalCode>.Failure("Invalid postal code");
 
-    [GeneratedRegex(@"\d{8}")]
+    [GeneratedRegex(@"^\d{8}$")]
     private static partial Regex PostalCodeRegex();
 }
