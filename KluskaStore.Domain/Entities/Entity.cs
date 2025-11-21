@@ -14,6 +14,8 @@ public abstract class Entity<TId> : IEntity
     {
         if (obj is not Entity<TId> other) return false;
         if (ReferenceEquals(this, other)) return true;
+        if (EqualityComparer<TId>.Default.Equals(Id, default)) return false;
+        if (EqualityComparer<TId>.Default.Equals(other.Id, default)) return false;
         return EqualityComparer<TId>.Default.Equals(Id, other.Id);
     }
 
