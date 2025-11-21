@@ -3,7 +3,8 @@ using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Domain.Repositories;
 
-public interface IStoreRepository : IEntityRepository<Store, Guid>
+public interface IStoreRepository
 {
-    Task<Store?> GetByCnpjAsync(Cnpj cnpj);
+    Task<Store?> GetByIdAsync(Guid id);
+    Task AddAsync(Store store);
 }
