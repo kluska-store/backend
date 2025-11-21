@@ -1,8 +1,9 @@
 ﻿using KluskaStore.Domain.Shared;
+using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public class Address
+public class Address : IValueObject
 {
     private Address(
         string country,

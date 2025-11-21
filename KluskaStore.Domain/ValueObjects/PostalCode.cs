@@ -1,9 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using KluskaStore.Domain.Shared;
+using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public partial class PostalCode
+public partial class PostalCode : IValueObject
 {
     private PostalCode(string value) => Value = value;
 

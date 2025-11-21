@@ -1,8 +1,9 @@
 ﻿using KluskaStore.Domain.Shared;
+using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public class SessionOwner
+public class SessionOwner : IValueObject
 {
     public enum OwnerTypeEnum
     {

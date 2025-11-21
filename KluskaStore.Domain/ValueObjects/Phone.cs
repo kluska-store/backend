@@ -1,9 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using KluskaStore.Domain.Shared;
+using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public partial class Phone
+public partial class Phone : IValueObject
 {
     private Phone(string value) => Value = value;
 

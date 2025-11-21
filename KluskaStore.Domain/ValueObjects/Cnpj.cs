@@ -1,9 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using KluskaStore.Domain.Shared;
+using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public partial class Cnpj
+public partial class Cnpj : IValueObject
 {
     private Cnpj(string value) => Value = value;
 
