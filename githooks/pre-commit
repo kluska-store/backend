@@ -1,0 +1,22 @@
+#! /bin/bash
+
+function error() {
+    tput setaf 1
+    echo "$1"
+    tput sgr0
+}
+
+if ! dotnet format --verify-no-changes > /dev/null 2>&1; then
+    error "The code is malformatted"
+    error "Run 'dotnet format' before commiting"
+    exit 1
+fi
+echo "Format inspection passed"
+
+if ! dotnet test > /dev/null 2>&1; then
+    error "Tests failed"
+    exit 1
+fi
+echo "Tests passed"
+
+echo "Commit executed"

@@ -6,6 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>9b9038dd-d695-4bf5-9e49-398d1616867e</UserSecretsId>
     </PropertyGroup>
+    
+    <Target Name="PreRunChecks" BeforeTargets="Build">
+        <Exec Command="dotnet test" />
+    </Target>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.10"/>
