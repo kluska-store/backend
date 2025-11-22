@@ -23,4 +23,10 @@ public class Session : Entity<string>
         ownerResult.IsFailure
             ? Result<Session>.Failure(ownerResult.Errors)
             : Result<Session>.Success(new Session(ownerResult.Value, createdAt));
+
+    public static Result<Session> CreateUserSession(Guid userId, DateTime createdAt) =>
+        Create(SessionOwner.User(userId), createdAt);
+
+    public static Result<Session> CreateStoreSession(Guid storeId, DateTime createdAt) =>
+        Create(SessionOwner.Store(storeId), createdAt);
 }
