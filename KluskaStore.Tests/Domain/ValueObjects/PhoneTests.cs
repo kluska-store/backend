@@ -25,19 +25,19 @@ public class PhoneTests
     }
 
     [Theory]
-    [InlineData("", "212", "55555-1234")]
-    [InlineData("1111", "212", "55555-1234")]
-    [InlineData("1w", "212", "55555-1234")]
-    [InlineData("1", "", "55555-1234")]
-    [InlineData("1", "2122", "55555-1234")]
-    [InlineData("1", "21w", "55555-1234")]
-    [InlineData("1", "212", "")]
-    [InlineData("1", "212", "55555-12345")]
-    [InlineData("1", "212", "555551234")]
-    [InlineData("1", "212", "5555w1234")]
-    public void GivenInvalidPhone_ThenReturnsFailure(string ddi, string ddd, string phoneNumber)
+    [InlineData("+ (212) 55555-1234")]
+    [InlineData("+1111 (212) 55555-1234")]
+    [InlineData("+1w (212) 55555-1234")]
+    [InlineData("1 (212) 55555-1234")]
+    [InlineData("+1 () 55555-1234")]
+    [InlineData("+1 (2122) 55555-1234")]
+    [InlineData("+1 (21w) 55555-1234")]
+    [InlineData("+1 212 55555-1234")]
+    [InlineData("+1 (212) ")]
+    [InlineData("+1 (212) 55555-12345")]
+    [InlineData("+1 (212) 55555-1w34")]
+    public void GivenInvalidPhone_ThenReturnsFailure(string phone)
     {
-        var phone = $"+{ddi} ({ddd}) {phoneNumber}";
         var result = Phone.Create(phone);
 
         result.IsFailure.Should().BeTrue();
