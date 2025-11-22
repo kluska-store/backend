@@ -6,15 +6,22 @@ function error() {
     tput sgr0
 }
 
-if ! dotnet format --verify-no-changes > /dev/null 2>&1; then
-    error "The code is malformatted"
-    error "Run 'dotnet format' before commiting"
-    exit 1
-fi
-echo "Format inspection passed"
-
 if ! dotnet test > /dev/null 2>&1; then
     error "Tests failed"
     exit 1
 fi
 echo "Tests passed"
+
+echo "Formatting code..."
+mapfile -t files < <(git diff --cached --name-only -- '*.cs')
+
+if (( ${#files[@]} > 0 )); then
+    if ! dotnet format --include "${files[@]}" > /dev/null 2>&1; then
+        error "Formatting failed"
+        exit 1
+    fi
+    
+    git add "${files[@]}"
+fi
+
+echo "Code formatted"
