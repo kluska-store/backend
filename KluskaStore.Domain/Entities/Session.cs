@@ -19,10 +19,15 @@ public class Session : Entity<string>
 
     public bool IsExpired() => DateTime.UtcNow > ExpiresAt;
 
-    private static Result<Session> Create(Result<SessionOwner> ownerResult, DateTime createdAt) =>
-        ownerResult.IsFailure
-            ? Result<Session>.Failure(ownerResult.Errors)
+    private static Result<Session> Create(Result<SessionOwner> ownerResult, DateTime createdAt)
+    {
+        List<string> errors = [.. ownerResult.Errors];
+        if (createdAt > DateTime.UtcNow) errors.Add("Session cannot be created in future");
+
+        return errors.Count > 0
+            ? Result<Session>.Failure(errors)
             : Result<Session>.Success(new Session(ownerResult.Value, createdAt));
+    }
 
     public static Result<Session> CreateUserSession(Guid userId, DateTime createdAt) =>
         Create(SessionOwner.User(userId), createdAt);
