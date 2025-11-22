@@ -54,7 +54,7 @@ public class SessionTests
         result.Value.IsExpired().Should().BeTrue();
     }
 
-    // All public factory method use the sabe base method to centralize validation
+    // All public factory method use the same base method to centralize validation
     [Fact]
     public void GivenInvalidSession_WhenCreatedAtFutureDate_ThenReturnsFailure()
     {
