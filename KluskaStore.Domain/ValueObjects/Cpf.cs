@@ -10,7 +10,7 @@ public partial class Cpf : IValueObject
 
     public string Value { get; }
 
-    [GeneratedRegex(@"\d{11}")]
+    [GeneratedRegex(@"^\d{11}$")]
     private static partial Regex CpfRegex();
 
     private static bool Validate(string cpf, bool skipCheckDigits)
