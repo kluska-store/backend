@@ -6,7 +6,7 @@ namespace KluskaStore.Domain.ValueObjects;
 
 public partial class Cpf : IValueObject
 {
-    private Cpf(string value) => Value = value;
+    internal Cpf(string value) => Value = value;
 
     public string Value { get; }
 

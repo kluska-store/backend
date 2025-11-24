@@ -6,7 +6,7 @@ namespace KluskaStore.Domain.ValueObjects;
 
 public partial class Phone : IValueObject
 {
-    private Phone(string fullPhone) => FullPhone = fullPhone;
+    internal Phone(string fullPhone) => FullPhone = fullPhone;
 
     public string FullPhone { get; }
     public string Ddi => GetPhonePart("ddi");

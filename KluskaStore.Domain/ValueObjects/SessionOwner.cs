@@ -11,7 +11,7 @@ public class SessionOwner : IValueObject
         Store = 2
     }
 
-    private SessionOwner(OwnerTypeEnum type, Guid ownerId)
+    internal SessionOwner(OwnerTypeEnum type, Guid ownerId)
     {
         OwnerType = type;
         OwnerId = ownerId;

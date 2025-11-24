@@ -5,7 +5,7 @@ namespace KluskaStore.Domain.ValueObjects;
 
 public class Address : IValueObject
 {
-    private Address(
+    internal Address(
         string country,
         string state,
         string city,

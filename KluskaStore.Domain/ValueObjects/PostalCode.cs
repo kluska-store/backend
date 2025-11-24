@@ -6,7 +6,7 @@ namespace KluskaStore.Domain.ValueObjects;
 
 public partial class PostalCode : IValueObject
 {
-    private PostalCode(string value) => Value = value;
+    internal PostalCode(string value) => Value = value;
 
     public string Value { get; }
 

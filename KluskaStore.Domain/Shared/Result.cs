@@ -4,7 +4,7 @@ public class Result
 {
     private readonly List<string> _errors = [];
 
-    protected Result(bool isSucess, params IEnumerable<string> errors)
+    internal Result(bool isSucess, params IEnumerable<string> errors)
     {
         IsSuccess = isSucess;
         AddErrors(errors);

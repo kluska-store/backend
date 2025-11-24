@@ -6,7 +6,7 @@ namespace KluskaStore.Domain.ValueObjects;
 
 public partial class Email : IValueObject
 {
-    private Email(string value) => Value = value;
+    internal Email(string value) => Value = value;
 
     public string Value { get; }
 

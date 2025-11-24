@@ -2,7 +2,7 @@
 
 public class Result<T> : Result
 {
-    private Result(T value, bool isSuccess, params IEnumerable<string> errors) : base(isSuccess, errors) => Value = value;
+    internal Result(T value, bool isSuccess, params IEnumerable<string> errors) : base(isSuccess, errors) => Value = value;
 
     public T Value { get; }
 

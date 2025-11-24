@@ -6,7 +6,7 @@ namespace KluskaStore.Domain.ValueObjects;
 
 public partial class Cnpj : IValueObject
 {
-    private Cnpj(string value) => Value = value;
+    internal Cnpj(string value) => Value = value;
 
     public string Value { get; }
 
