@@ -7,7 +7,7 @@ public class Store : Entity<Guid>
 {
     private Store() { }
 
-    private Store(Cnpj cnpj, string name, Email email, string passwordHash, Address address)
+    private Store(Cnpj cnpj, string name, Email email, string passwordHash, Address address, params IEnumerable<Phone> phones)
     {
         Cnpj = cnpj;
         Name = name;
@@ -15,7 +15,10 @@ public class Store : Entity<Guid>
         IsActive = true;
         PasswordHash = passwordHash;
         Address = address;
+        _phones = phones.ToList();
     }
+
+    private readonly List<Phone> _phones;
 
     public Cnpj Cnpj { get; private set; }
     public string Name { get; private set; }
@@ -24,8 +27,9 @@ public class Store : Entity<Guid>
     public bool IsActive { get; private set; }
     public string PasswordHash { get; private set; }
     public Address Address { get; private set; }
+    public IReadOnlyList<Phone> Phones => _phones.AsReadOnly();
 
-    public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash, Address address)
+    public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash, Address address, params IEnumerable<Phone> phones)
     {
         List<string> errors = [];
 
@@ -33,7 +37,7 @@ public class Store : Entity<Guid>
         if (string.IsNullOrWhiteSpace(passwordHash)) errors.Add("Password must not be empty");
 
         return errors.Count == 0
-            ? Result<Store>.Success(new Store(cnpj, name, email, passwordHash, address))
+            ? Result<Store>.Success(new Store(cnpj, name, email, passwordHash, address, phones))
             : Result<Store>.Failure(errors);
     }
 
@@ -62,4 +66,8 @@ public class Store : Entity<Guid>
     public void Activate() => IsActive = true;
 
     public void Deactivate() => IsActive = false;
+
+    public void AddPhones(params IEnumerable<Phone> phones) => _phones.AddRange(phones);
+
+    public void RemovePhoneAt(Phone phone) => _phones.Remove(phone);
 }
