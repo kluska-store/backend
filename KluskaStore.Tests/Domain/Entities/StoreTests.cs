@@ -20,31 +20,24 @@ public class StoreTests
             new PostalCode("postal code"),
             "complement"
         ),
-        new Phone("phone")
+        new Phone("phone"), new Phone("phone 2"), new Phone("phone 3")
     );
 
     [Fact]
     public void GivenEntityCreation_WhenDataIsValid_ThenCreatesStore()
     {
-        var name = "test store";
-        var password = "12345678";
-        var cnpj = Cnpj.Create("00000000000000", skipVerifierDigitsValidation: true).Value;
-        var email = Email.Create("test@store.com").Value;
-        var postalCode = PostalCode.Create("00000000").Value;
-        var address = Address.Create("country", "state", "city", "street", 0, postalCode, "complement").Value;
-        List<string> phonesStr = ["+00 (00) 00000-0001", "+00 (00) 00000-0002", "+00 (00) 00000-0003"];
-        var phones = phonesStr.Select(Phone.Create).Select(r => r.Value).ToList();
-
-        var result = Store.Create(cnpj, name, email, password, address, phones);
+        var result = Store.Create(_sut.Cnpj, _sut.Name, _sut.Email, _sut.PasswordHash, _sut.Address, _sut.Phones);
 
         result.IsSuccess.Should().BeTrue();
         result.Errors.Should().BeEmpty();
         result.Value.Should().BeAssignableTo<Store>();
-        result.Value.Name.Should().Be(name);
-        result.Value.PasswordHash.Should().Be(password);
-        result.Value.Cnpj.Should().Be(cnpj);
-        result.Value.Address.Should().Be(address);
-        result.Value.Phones.Should().BeEquivalentTo(phones);
+        result.Value.IsActive.Should().BeTrue();
+        result.Value.Cnpj.Should().Be(_sut.Cnpj);
+        result.Value.Name.Should().Be(_sut.Name);
+        result.Value.Email.Should().Be(_sut.Email);
+        result.Value.PasswordHash.Should().Be(_sut.PasswordHash);
+        result.Value.Address.Should().Be(_sut.Address);
+        result.Value.Phones.Should().BeEquivalentTo(_sut.Phones);
     }
 
     [Fact]
@@ -135,7 +128,7 @@ public class StoreTests
     [Fact]
     public void GivenPhoneAdditionAndRemoval_ThenAddsAndRemovesPhone()
     {
-        var newPhone = new Phone("phone 2");
+        var newPhone = new Phone("phone extra");
         _sut.AddPhones(newPhone);
         _sut.Phones[^1].Should().Be(newPhone);
 
