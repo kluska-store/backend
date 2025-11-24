@@ -5,9 +5,9 @@ namespace KluskaStore.Domain.Entities;
 
 public class User : Entity<Guid>
 {
-    internal User() { }
+    private User() { }
 
-    private User(
+    internal User(
         Cpf cpf,
         Email email,
         string username,

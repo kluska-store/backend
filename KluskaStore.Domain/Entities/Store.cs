@@ -5,9 +5,9 @@ namespace KluskaStore.Domain.Entities;
 
 public class Store : Entity<Guid>
 {
-    internal Store() { }
+    private Store() { }
 
-    private Store(Cnpj cnpj, string name, Email email, string passwordHash, Address address, params IEnumerable<Phone> phones)
+    internal Store(Cnpj cnpj, string name, Email email, string passwordHash, Address address, params IEnumerable<Phone> phones)
     {
         Cnpj = cnpj;
         Name = name;

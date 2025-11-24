@@ -4,9 +4,9 @@ namespace KluskaStore.Domain.Entities;
 
 public abstract class Entity<TId> : IEntity
 {
-    internal Entity() { }
+    protected Entity() { }
 
-    protected Entity(TId id) => Id = id;
+    internal Entity(TId id) => Id = id;
 
     public TId Id { get; protected set; }
 
