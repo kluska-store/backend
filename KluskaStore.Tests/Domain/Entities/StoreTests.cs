@@ -6,9 +6,7 @@ namespace KluskaStore.Tests.Domain.Entities;
 
 public class StoreTests
 {
-    private readonly Store _sut;
-
-    public StoreTests() => _sut = new Store(
+    private readonly Store _sut = new(
         new Cnpj("cnpj"),
         "name",
         new Email("email"),
