@@ -24,7 +24,7 @@ public class StoreTests
     );
 
     [Fact]
-    public void GivenValidStore_ThenCreatesEntity()
+    public void GivenEntityCreation_WhenDataIsValid_ThenCreatesStore()
     {
         var name = "test store";
         var password = "12345678";
@@ -48,7 +48,7 @@ public class StoreTests
     }
 
     [Fact]
-    public void GivenInvalidStore_ThenReturnsFailure()
+    public void GivenEntityCreation_WhenDataIsInvalid_ThenReturnsFailure()
     {
         var result = Store.Create(null!, "", null!, "", null!);
 
