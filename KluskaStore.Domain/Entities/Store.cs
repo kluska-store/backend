@@ -69,5 +69,5 @@ public class Store : Entity<Guid>
 
     public void AddPhones(params IEnumerable<Phone> phones) => _phones.AddRange(phones);
 
-    public void RemovePhoneAt(Phone phone) => _phones.Remove(phone);
+    public void RemovePhone(Phone phone) => _phones.Remove(phone);
 }
