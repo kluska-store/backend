@@ -7,20 +7,12 @@ public class User : Entity<Guid>
 {
     private User() { }
 
-    internal User(
-        Cpf cpf,
-        Email email,
-        string username,
-        bool isActive,
-        Phone phone,
-        DateOnly birthday,
-        string passwordHash
-    )
+    internal User(Cpf cpf, Email email, string username, Phone phone, DateOnly birthday, string passwordHash)
     {
         Cpf = cpf;
         Email = email;
         Username = username;
-        IsActive = isActive;
+        IsActive = true;
         Phone = phone;
         Birthday = birthday;
         PasswordHash = passwordHash;
@@ -39,7 +31,6 @@ public class User : Entity<Guid>
         Cpf cpf,
         Email email,
         string username,
-        bool isActive,
         Phone phone,
         DateOnly birthday,
         string passwordHash
@@ -55,7 +46,7 @@ public class User : Entity<Guid>
 
         if (errors.Count > 0) return Result<User>.Failure(errors);
 
-        var user = new User(cpf, email, username, isActive, phone, birthday, passwordHash);
+        var user = new User(cpf, email, username, phone, birthday, passwordHash);
         return Result<User>.Success(user);
     }
 
