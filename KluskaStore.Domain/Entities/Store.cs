@@ -7,7 +7,7 @@ public class Store : Entity<Guid>
 {
     private Store() { }
 
-    internal Store(Cnpj cnpj, string name, Email email, string passwordHash, Address address, params IEnumerable<Phone> phones)
+    internal Store(Cnpj cnpj, string name, Email email, string passwordHash, Address address, IEnumerable<Phone> phones)
     {
         Cnpj = cnpj;
         Name = name;
@@ -29,7 +29,7 @@ public class Store : Entity<Guid>
     public Address Address { get; private set; }
     public IReadOnlyList<Phone> Phones => _phones.AsReadOnly();
 
-    public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash, Address address, params IEnumerable<Phone> phones)
+    public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash, Address address, IEnumerable<Phone> phones)
     {
         List<string> errors = [];
 

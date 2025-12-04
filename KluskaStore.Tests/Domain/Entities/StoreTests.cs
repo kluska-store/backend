@@ -20,7 +20,11 @@ public class StoreTests
             new PostalCode("postal code"),
             "complement"
         ),
-        new Phone("phone"), new Phone("phone 2"), new Phone("phone 3")
+        phones: [
+            new Phone("phone"),
+            new Phone("phone 2"),
+            new Phone("phone 3")
+        ]
     );
 
     [Fact]
@@ -43,7 +47,7 @@ public class StoreTests
     [Fact]
     public void GivenEntityCreation_WhenDataIsInvalid_ThenReturnsFailure()
     {
-        var result = Store.Create(null!, "", null!, "", null!);
+        var result = Store.Create(null!, "", null!, "", null!, []);
 
         result.IsFailure.Should().BeTrue();
         result.Errors.Count.Should().Be(2);
