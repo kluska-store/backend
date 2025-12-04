@@ -5,25 +5,18 @@ namespace KluskaStore.Tests.Domain.Entities;
 
 public class ItemTests
 {
-    private readonly Item _sut = new(
-        new Product(
-            new Dictionary<string, string>(),
-            10,
-            "product"
-        ),
-        2
-    );
-
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsValid_ThenCreatesItem()
     {
-        var result = Item.Create(_sut.Product, _sut.Quantity);
+        var product = new Product(new Dictionary<string, string>(), 10, "product");
+        uint quantity = 10;
+        var result = Item.Create(product, quantity);
 
         result.IsSuccess.Should().BeTrue();
         result.Errors.Should().BeEmpty();
         result.Value.Should().BeAssignableTo<Item>();
-        result.Value.Product.Should().Be(_sut.Product);
-        result.Value.Quantity.Should().Be(_sut.Quantity);
+        result.Value.Product.Should().Be(product);
+        result.Value.Quantity.Should().Be(quantity);
     }
 
     [Fact]
@@ -34,15 +27,5 @@ public class ItemTests
         result.IsFailure.Should().BeTrue();
         result.Errors.Should().NotBeNullOrEmpty();
         result.Value.Should().BeNull();
-    }
-
-    [Theory]
-    [InlineData(0)]
-    [InlineData(20)]
-    [InlineData(1)]
-    public void GivenQuantityChange_ThenChangesQuantityAndReturnsItemValidity(uint amount)
-    {
-        _sut.ChangeQuantity(amount).Should().Be(_sut.Quantity != 0);
-        _sut.Quantity.Should().Be(amount);
     }
 }

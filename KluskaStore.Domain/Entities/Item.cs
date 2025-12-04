@@ -5,7 +5,7 @@ namespace KluskaStore.Domain.Entities;
 public class Item : Entity<uint>
 {
     public Product Product { get; private set; }
-    public uint Quantity { get; private set; }
+    public uint Quantity { get; internal set; }
 
     private Item() { }
 
@@ -19,10 +19,4 @@ public class Item : Entity<uint>
         quantity == 0
             ? Result<Item>.Failure("Items must be created with quantity >= 1")
             : Result<Item>.Success(new Item(product, quantity));
-
-    public bool ChangeQuantity(uint newQuantity)
-    {
-        Quantity = newQuantity;
-        return Quantity > 0;
-    }
 }
