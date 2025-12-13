@@ -1,6 +1,6 @@
-﻿using PostalCode = KluskaStore.Domain.ValueObjects.PersonalData.Address.PostalCode;
+﻿using PostalCode = KluskaStore.Domain.ValueObjects.AccountData.Address.PostalCode;
 
-namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData.Address;
+namespace KluskaStore.Tests.Domain.ValueObjects.AccountData.Address;
 
 public class PostalCodeTests
 {

@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using KluskaStore.Domain.Interfaces;
 
-namespace KluskaStore.Domain.ValueObjects.PersonalData.Address;
+namespace KluskaStore.Domain.ValueObjects.AccountData.Address;
 
 public partial class PostalCode : IValueObject
 {

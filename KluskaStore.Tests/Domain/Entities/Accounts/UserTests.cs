@@ -1,9 +1,9 @@
-﻿using KluskaStore.Domain.Entities.Users;
-using Cpf = KluskaStore.Domain.ValueObjects.PersonalData.Cpf;
-using Email = KluskaStore.Domain.ValueObjects.PersonalData.Email;
-using Phone = KluskaStore.Domain.ValueObjects.PersonalData.Phone;
+﻿using KluskaStore.Domain.Entities.Accounts;
+using Cpf = KluskaStore.Domain.ValueObjects.AccountData.Cpf;
+using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
+using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
 
-namespace KluskaStore.Tests.Domain.Entities.Users;
+namespace KluskaStore.Tests.Domain.Entities.Accounts;
 
 public class UserTests
 {

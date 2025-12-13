@@ -1,11 +1,11 @@
-﻿using KluskaStore.Domain.Entities.Users;
-using KluskaStore.Domain.ValueObjects.PersonalData.Address;
-using Cnpj = KluskaStore.Domain.ValueObjects.PersonalData.Cnpj;
-using Email = KluskaStore.Domain.ValueObjects.PersonalData.Email;
-using Phone = KluskaStore.Domain.ValueObjects.PersonalData.Phone;
-using PostalCode = KluskaStore.Domain.ValueObjects.PersonalData.Address.PostalCode;
+﻿using KluskaStore.Domain.Entities.Accounts;
+using KluskaStore.Domain.ValueObjects.AccountData.Address;
+using Cnpj = KluskaStore.Domain.ValueObjects.AccountData.Cnpj;
+using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
+using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
+using PostalCode = KluskaStore.Domain.ValueObjects.AccountData.Address.PostalCode;
 
-namespace KluskaStore.Tests.Domain.Entities.Users;
+namespace KluskaStore.Tests.Domain.Entities.Accounts;
 
 public class StoreTests
 {

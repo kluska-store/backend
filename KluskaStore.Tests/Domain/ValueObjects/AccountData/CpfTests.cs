@@ -1,6 +1,6 @@
-﻿using Cpf = KluskaStore.Domain.ValueObjects.PersonalData.Cpf;
+﻿using Cpf = KluskaStore.Domain.ValueObjects.AccountData.Cpf;
 
-namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData;
+namespace KluskaStore.Tests.Domain.ValueObjects.AccountData;
 
 public class CpfTests
 {

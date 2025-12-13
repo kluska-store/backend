@@ -1,10 +1,10 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
-using KluskaStore.Domain.ValueObjects.PersonalData.Address;
-using Cnpj = KluskaStore.Domain.ValueObjects.PersonalData.Cnpj;
-using Email = KluskaStore.Domain.ValueObjects.PersonalData.Email;
-using Phone = KluskaStore.Domain.ValueObjects.PersonalData.Phone;
+using KluskaStore.Domain.ValueObjects.AccountData.Address;
+using Cnpj = KluskaStore.Domain.ValueObjects.AccountData.Cnpj;
+using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
+using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
 
-namespace KluskaStore.Domain.Entities.Users;
+namespace KluskaStore.Domain.Entities.Accounts;
 
 public class Store : DefaultIdentityEntity
 {

@@ -1,6 +1,6 @@
-﻿using Cnpj = KluskaStore.Domain.ValueObjects.PersonalData.Cnpj;
+﻿using Cnpj = KluskaStore.Domain.ValueObjects.AccountData.Cnpj;
 
-namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData;
+namespace KluskaStore.Tests.Domain.ValueObjects.AccountData;
 
 public class CnpjTests
 {

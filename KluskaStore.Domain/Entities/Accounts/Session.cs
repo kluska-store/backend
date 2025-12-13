@@ -1,7 +1,7 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
 using KluskaStore.Domain.ValueObjects;
 
-namespace KluskaStore.Domain.Entities.Users;
+namespace KluskaStore.Domain.Entities.Accounts;
 
 public class Session : Entity<string>
 {

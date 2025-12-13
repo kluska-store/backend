@@ -1,6 +1,6 @@
-﻿using Email = KluskaStore.Domain.ValueObjects.PersonalData.Email;
+﻿using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
 
-namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData;
+namespace KluskaStore.Tests.Domain.ValueObjects.AccountData;
 
 public class EmailTests
 {

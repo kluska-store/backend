@@ -1,6 +1,6 @@
-﻿using PostalCode = KluskaStore.Domain.ValueObjects.PersonalData.Address.PostalCode;
+﻿using PostalCode = KluskaStore.Domain.ValueObjects.AccountData.Address.PostalCode;
 
-namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData.Address;
+namespace KluskaStore.Tests.Domain.ValueObjects.AccountData.Address;
 
 public class AddressTests
 {
@@ -19,12 +19,12 @@ public class AddressTests
     {
         var postalCode = PostalCode.Create(PostalCodeStr).Value;
         var result =
-            KluskaStore.Domain.ValueObjects.PersonalData.Address.Address.Create(Country, State, City, Street, Number,
+            KluskaStore.Domain.ValueObjects.AccountData.Address.Address.Create(Country, State, City, Street, Number,
                 postalCode, complement);
 
         result.IsSuccess.Should().BeTrue();
         result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<KluskaStore.Domain.ValueObjects.PersonalData.Address.Address>();
+        result.Value.Should().BeAssignableTo<KluskaStore.Domain.ValueObjects.AccountData.Address.Address>();
         result.Value.Country.Should().Be(Country);
         result.Value.State.Should().Be(State);
         result.Value.City.Should().Be(City);
@@ -40,12 +40,12 @@ public class AddressTests
         const string complement = "next to shame tower";
         var postalCode = PostalCode.Create(PostalCodeStr).Value;
         var result =
-            KluskaStore.Domain.ValueObjects.PersonalData.Address.Address.Create(Country, State, City, Street, Number,
+            KluskaStore.Domain.ValueObjects.AccountData.Address.Address.Create(Country, State, City, Street, Number,
                 postalCode, complement);
 
         result.IsSuccess.Should().BeTrue();
         result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<KluskaStore.Domain.ValueObjects.PersonalData.Address.Address>();
+        result.Value.Should().BeAssignableTo<KluskaStore.Domain.ValueObjects.AccountData.Address.Address>();
         result.Value.Country.Should().Be(Country);
         result.Value.State.Should().Be(State);
         result.Value.City.Should().Be(City);
@@ -60,7 +60,7 @@ public class AddressTests
     {
         var postalCode = PostalCode.Create(PostalCodeStr).Value;
         var result =
-            KluskaStore.Domain.ValueObjects.PersonalData.Address.Address.Create("", "", "", "", 0, postalCode, "");
+            KluskaStore.Domain.ValueObjects.AccountData.Address.Address.Create("", "", "", "", 0, postalCode, "");
 
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();

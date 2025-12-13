@@ -1,7 +1,7 @@
-﻿using KluskaStore.Domain.Entities.Users;
+﻿using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.ValueObjects;
 
-namespace KluskaStore.Tests.Domain.Entities.Users;
+namespace KluskaStore.Tests.Domain.Entities.Accounts;
 
 public class SessionTests
 {

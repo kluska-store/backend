@@ -1,9 +1,9 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
-using Cpf = KluskaStore.Domain.ValueObjects.PersonalData.Cpf;
-using Email = KluskaStore.Domain.ValueObjects.PersonalData.Email;
-using Phone = KluskaStore.Domain.ValueObjects.PersonalData.Phone;
+using Cpf = KluskaStore.Domain.ValueObjects.AccountData.Cpf;
+using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
+using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
 
-namespace KluskaStore.Domain.Entities.Users;
+namespace KluskaStore.Domain.Entities.Accounts;
 
 public class User : DefaultIdentityEntity
 {

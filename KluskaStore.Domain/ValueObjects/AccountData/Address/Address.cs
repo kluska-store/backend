@@ -1,6 +1,6 @@
 ﻿using KluskaStore.Domain.Interfaces;
 
-namespace KluskaStore.Domain.ValueObjects.PersonalData.Address;
+namespace KluskaStore.Domain.ValueObjects.AccountData.Address;
 
 public class Address : IValueObject
 {

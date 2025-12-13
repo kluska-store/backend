@@ -1,6 +1,6 @@
-﻿using Phone = KluskaStore.Domain.ValueObjects.PersonalData.Phone;
+﻿using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
 
-namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData;
+namespace KluskaStore.Tests.Domain.ValueObjects.AccountData;
 
 public class PhoneTests
 {
