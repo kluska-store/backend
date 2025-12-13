@@ -1,5 +1,6 @@
 ﻿using KluskaStore.Application.Abstractions;
 using KluskaStore.Domain.ValueObjects;
+using KluskaStore.Domain.ValueObjects.PersonalData;
 
 namespace KluskaStore.Application.Features.Stores.GetStoreByCnpj;
 

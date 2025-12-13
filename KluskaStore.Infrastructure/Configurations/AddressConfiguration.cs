@@ -1,5 +1,7 @@
 ﻿using KluskaStore.Domain.Entities;
 using KluskaStore.Domain.ValueObjects;
+using KluskaStore.Domain.ValueObjects.PersonalData;
+using KluskaStore.Domain.ValueObjects.PersonalData.Address;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

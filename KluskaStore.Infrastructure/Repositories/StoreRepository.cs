@@ -1,6 +1,8 @@
 ﻿using KluskaStore.Domain.Entities;
+using KluskaStore.Domain.Entities.Users;
 using KluskaStore.Domain.Repositories;
 using KluskaStore.Domain.ValueObjects;
+using KluskaStore.Domain.ValueObjects.PersonalData;
 using KluskaStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 

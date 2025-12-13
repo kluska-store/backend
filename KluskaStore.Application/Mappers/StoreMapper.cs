@@ -1,6 +1,7 @@
 ﻿using KluskaStore.Application.Features.Addresses;
 using KluskaStore.Application.Features.Stores;
 using KluskaStore.Domain.Entities;
+using KluskaStore.Domain.Entities.Users;
 using Riok.Mapperly.Abstractions;
 
 namespace KluskaStore.Application.Mappers;

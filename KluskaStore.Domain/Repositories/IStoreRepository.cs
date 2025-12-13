@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Domain.Entities;
+using KluskaStore.Domain.Entities.Users;
 
 namespace KluskaStore.Domain.Repositories;
 

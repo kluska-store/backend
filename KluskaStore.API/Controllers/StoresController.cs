@@ -3,6 +3,7 @@ using KluskaStore.Application.Features.Stores;
 using KluskaStore.Application.Features.Stores.CreateStore;
 using KluskaStore.Application.Features.Stores.GetStoreByCnpj;
 using KluskaStore.Domain.ValueObjects;
+using KluskaStore.Domain.ValueObjects.PersonalData;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
