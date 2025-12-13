@@ -1,8 +1,9 @@
-﻿using KluskaStore.Domain.Shared;
+﻿using KluskaStore.Domain.Entities.Generics;
+using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.Entities;
 
-public abstract class ProductCollection : Entity<uint>
+public abstract class ProductCollection : DefaultIdentityEntity
 {
     protected readonly List<Item> _items;
 

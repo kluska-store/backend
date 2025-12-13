@@ -1,4 +1,5 @@
-﻿using KluskaStore.Domain.Shared;
+﻿using KluskaStore.Domain.Entities.Generics;
+using KluskaStore.Domain.Shared;
 using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Domain.Entities;

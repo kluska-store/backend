@@ -1,9 +1,10 @@
-﻿using KluskaStore.Domain.Shared;
+﻿using KluskaStore.Domain.Entities.Generics;
+using KluskaStore.Domain.Shared;
 using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Domain.Entities;
 
-public class User : Entity<Guid>
+public class User : DefaultIdentityEntity
 {
     private User() { }
 

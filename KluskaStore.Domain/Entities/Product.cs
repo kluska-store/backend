@@ -1,8 +1,9 @@
-﻿using KluskaStore.Domain.Shared;
+﻿using KluskaStore.Domain.Entities.Generics;
+using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.Entities;
 
-public class Product : Entity<uint>
+public class Product : DefaultIdentityEntity
 {
     private readonly Dictionary<string, string> _specifications;
 

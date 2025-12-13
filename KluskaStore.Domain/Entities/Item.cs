@@ -1,8 +1,9 @@
-﻿using KluskaStore.Domain.Shared;
+﻿using KluskaStore.Domain.Entities.Generics;
+using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.Entities;
 
-public class Item : Entity<uint>
+public class Item : DefaultIdentityEntity
 {
     public Product Product { get; private set; }
     public uint Quantity { get; internal set; }

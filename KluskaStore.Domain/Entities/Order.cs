@@ -1,10 +1,11 @@
-﻿using KluskaStore.Domain.Interfaces;
+﻿using KluskaStore.Domain.Entities.Generics;
+using KluskaStore.Domain.Interfaces;
 using KluskaStore.Domain.Shared;
 using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Domain.Entities;
 
-public class Order : Entity<uint>
+public class Order : DefaultIdentityEntity
 {
     public enum OrderStatusEnum
     {
