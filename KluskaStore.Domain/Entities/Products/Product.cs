@@ -1,7 +1,7 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
 using KluskaStore.Domain.Shared;
 
-namespace KluskaStore.Domain.Entities.Product;
+namespace KluskaStore.Domain.Entities.Products;
 
 public class Product : DefaultIdentityEntity
 {

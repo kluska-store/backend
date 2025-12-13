@@ -1,6 +1,6 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
 
-namespace KluskaStore.Domain.Entities.Product;
+namespace KluskaStore.Domain.Entities.Products;
 
 public abstract class ProductCollection : DefaultIdentityEntity
 {

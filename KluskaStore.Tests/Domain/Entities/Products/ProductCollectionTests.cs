@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
-using KluskaStore.Domain.Entities.Product;
+using KluskaStore.Domain.Entities.Products;
 
-namespace KluskaStore.Tests.Domain.Entities.Product;
+namespace KluskaStore.Tests.Domain.Entities.Products;
 
 public abstract class ProductCollectionTests
 {
-    private static readonly List<KluskaStore.Domain.Entities.Product.Product> Products =
+    private static readonly List<Product> Products =
     [
         new(null!, 10, "p1"),
         new(null!, 20, "p2"),

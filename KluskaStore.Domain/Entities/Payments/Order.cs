@@ -2,7 +2,7 @@
 using KluskaStore.Domain.Shared;
 using KluskaStore.Domain.ValueObjects;
 
-namespace KluskaStore.Domain.Entities.Payment;
+namespace KluskaStore.Domain.Entities.Payments;
 
 public class Order : DefaultIdentityEntity
 {

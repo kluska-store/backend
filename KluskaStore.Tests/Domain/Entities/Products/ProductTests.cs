@@ -1,10 +1,11 @@
 ﻿using FluentAssertions;
+using KluskaStore.Domain.Entities.Products;
 
-namespace KluskaStore.Tests.Domain.Entities.Product;
+namespace KluskaStore.Tests.Domain.Entities.Products;
 
 public class ProductTests
 {
-    private readonly KluskaStore.Domain.Entities.Product.Product _sut = new(
+    private readonly Product _sut = new(
         new Dictionary<string, string>
         {
             ["size"] = "15cm x 30cm",
@@ -18,11 +19,11 @@ public class ProductTests
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsValid_ThenCreatesEntity()
     {
-        var result = KluskaStore.Domain.Entities.Product.Product.Create(_sut.Specifications, _sut.Price, _sut.Name);
+        var result = Product.Create(_sut.Specifications, _sut.Price, _sut.Name);
 
         result.IsSuccess.Should().BeTrue();
         result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<KluskaStore.Domain.Entities.Product.Product>();
+        result.Value.Should().BeAssignableTo<Product>();
         result.Value.Specifications.Should().BeEquivalentTo(_sut.Specifications);
         result.Value.Price.Should().Be(_sut.Price);
         result.Value.Name.Should().Be(_sut.Name);
@@ -31,7 +32,7 @@ public class ProductTests
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsInvalid_ThenReturnsFailure()
     {
-        var result = KluskaStore.Domain.Entities.Product.Product.Create(new Dictionary<string, string>(), 0, null!);
+        var result = Product.Create(new Dictionary<string, string>(), 0, null!);
 
         result.IsFailure.Should().BeTrue();
         result.Errors.Count.Should().Be(2);

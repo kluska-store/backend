@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
-using KluskaStore.Domain.Entities.Product;
+using KluskaStore.Domain.Entities.Products;
 
-namespace KluskaStore.Tests.Domain.Entities.Product;
+namespace KluskaStore.Tests.Domain.Entities.Products;
 
 public class ItemTests
 {
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsValid_ThenCreatesItem()
     {
-        var product = new KluskaStore.Domain.Entities.Product.Product(new Dictionary<string, string>(), 10, "product");
+        var product = new Product(new Dictionary<string, string>(), 10, "product");
         uint quantity = 10;
         var result = Item.Create(product, quantity);
 

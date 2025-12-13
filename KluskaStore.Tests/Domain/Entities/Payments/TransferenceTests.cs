@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using KluskaStore.Domain.Entities.Payment;
+using KluskaStore.Domain.Entities.Payments;
 
-namespace KluskaStore.Tests.Domain.Entities.Payment;
+namespace KluskaStore.Tests.Domain.Entities.Payments;
 
 public class TransferenceTests
 {

@@ -1,7 +1,7 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
 using KluskaStore.Domain.Shared;
 
-namespace KluskaStore.Domain.Entities.Payment;
+namespace KluskaStore.Domain.Entities.Payments;
 
 public class Transference : DefaultIdentityEntity
 {
