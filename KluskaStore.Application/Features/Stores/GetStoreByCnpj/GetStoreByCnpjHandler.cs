@@ -1,5 +1,4 @@
 ﻿using KluskaStore.Application.Abstractions;
-using KluskaStore.Application.Mappers;
 using KluskaStore.Domain.Repositories;
 using KluskaStore.Domain.Shared;
 

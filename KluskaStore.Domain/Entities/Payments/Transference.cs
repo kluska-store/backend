@@ -1,14 +1,9 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
-using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.Entities.Payments;
 
 public class Transference : DefaultIdentityEntity
 {
-    public Guid ReceiverStoreId { get; private set; }
-    public decimal Value { get; private set; }
-
-
     private Transference() { }
 
     internal Transference(Guid receiverStoreId, decimal value)
@@ -16,6 +11,9 @@ public class Transference : DefaultIdentityEntity
         ReceiverStoreId = receiverStoreId;
         Value = value;
     }
+
+    public Guid ReceiverStoreId { get; private set; }
+    public decimal Value { get; private set; }
 
     public static Result<Transference> Create(Guid receiverStoreId, decimal value)
     {

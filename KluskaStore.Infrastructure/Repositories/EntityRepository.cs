@@ -1,5 +1,4 @@
 ﻿using KluskaStore.Domain.Interfaces;
-using KluskaStore.Domain.Repositories;
 using KluskaStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 

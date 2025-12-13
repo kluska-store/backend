@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using KluskaStore.Domain.ValueObjects;
+﻿using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Tests.Domain.ValueObjects;
 

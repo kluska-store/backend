@@ -1,6 +1,4 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
-using KluskaStore.Domain.Shared;
-using KluskaStore.Domain.ValueObjects;
 using Cpf = KluskaStore.Domain.ValueObjects.PersonalData.Cpf;
 using Email = KluskaStore.Domain.ValueObjects.PersonalData.Email;
 using Phone = KluskaStore.Domain.ValueObjects.PersonalData.Phone;

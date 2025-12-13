@@ -18,8 +18,6 @@ public class Result
 
     public static Result Failure(params IEnumerable<string> errors) => new(false, errors);
 
-    public void AddErrors(params IEnumerable<string> errors)
-    {
+    public void AddErrors(params IEnumerable<string> errors) =>
         _errors.AddRange(errors.Where(e => !string.IsNullOrWhiteSpace(e)));
-    }
 }

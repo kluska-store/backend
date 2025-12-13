@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using KluskaStore.Domain.Entities.Products;
+﻿using KluskaStore.Domain.Entities.Products;
 
 namespace KluskaStore.Tests.Domain.Entities.Products;
 

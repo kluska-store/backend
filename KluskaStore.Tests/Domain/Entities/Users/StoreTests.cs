@@ -1,7 +1,4 @@
-﻿using FluentAssertions;
-using KluskaStore.Domain.Entities.Users;
-using KluskaStore.Domain.ValueObjects;
-using KluskaStore.Domain.ValueObjects.PersonalData;
+﻿using KluskaStore.Domain.Entities.Users;
 using KluskaStore.Domain.ValueObjects.PersonalData.Address;
 using Cnpj = KluskaStore.Domain.ValueObjects.PersonalData.Cnpj;
 using Email = KluskaStore.Domain.ValueObjects.PersonalData.Email;
@@ -26,7 +23,7 @@ public class StoreTests
             new PostalCode("postal code"),
             "complement"
         ),
-        phones: [
+        [
             new Phone("phone"),
             new Phone("phone 2"),
             new Phone("phone 3")

@@ -1,13 +1,9 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
-using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.Entities.Products;
 
 public class Item : DefaultIdentityEntity
 {
-    public Product Product { get; private set; }
-    public uint Quantity { get; internal set; }
-
     private Item() { }
 
     internal Item(Product product, uint quantity)
@@ -15,6 +11,9 @@ public class Item : DefaultIdentityEntity
         Product = product;
         Quantity = quantity;
     }
+
+    public Product Product { get; private set; }
+    public uint Quantity { get; internal set; }
 
     public static Result<Item> Create(Product product, uint quantity) =>
         quantity == 0

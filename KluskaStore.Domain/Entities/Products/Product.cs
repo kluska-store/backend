@@ -1,16 +1,10 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
-using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.Entities.Products;
 
 public class Product : DefaultIdentityEntity
 {
     private readonly Dictionary<string, string> _specifications;
-
-    public IReadOnlyDictionary<string, string> Specifications => _specifications.AsReadOnly();
-    public decimal Price { get; protected set; }
-    public string Name { get; protected set; }
-    public string? Description { get; protected set; }
 
     private Product() { }
 
@@ -20,6 +14,11 @@ public class Product : DefaultIdentityEntity
         Price = price;
         Name = name;
     }
+
+    public IReadOnlyDictionary<string, string> Specifications => _specifications.AsReadOnly();
+    public decimal Price { get; protected set; }
+    public string Name { get; protected set; }
+    public string? Description { get; protected set; }
 
     public static Result<Product> Create(
         IEnumerable<KeyValuePair<string, string>> specifications,
@@ -41,8 +40,14 @@ public class Product : DefaultIdentityEntity
     {
         foreach (var (key, val) in patch)
         {
-            if (string.IsNullOrWhiteSpace(val)) _specifications.Remove(key);
-            else _specifications[key] = val;
+            if (string.IsNullOrWhiteSpace(val))
+            {
+                _specifications.Remove(key);
+            }
+            else
+            {
+                _specifications[key] = val;
+            }
         }
     }
 

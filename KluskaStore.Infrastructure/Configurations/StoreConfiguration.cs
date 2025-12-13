@@ -1,6 +1,4 @@
-﻿using KluskaStore.Domain.Entities;
-using KluskaStore.Domain.Entities.Users;
-using KluskaStore.Domain.ValueObjects;
+﻿using KluskaStore.Domain.Entities.Users;
 using KluskaStore.Domain.ValueObjects.PersonalData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

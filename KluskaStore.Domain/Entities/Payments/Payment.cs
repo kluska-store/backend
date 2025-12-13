@@ -1,18 +1,10 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
-using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.Entities.Payments;
 
 public class Payment : DefaultIdentityEntity
 {
     private readonly List<Transference> _transferences;
-
-    public Guid PayerUserId { get; private set; }
-    public DateTime Date { get; private set; }
-    public Guid OrderId { get; private set; }
-
-    public IReadOnlyList<Transference> Transferences => _transferences.AsReadOnly();
-    public decimal Value => _transferences.Select(t => t.Value).Sum();
 
     private Payment() { }
 
@@ -24,7 +16,15 @@ public class Payment : DefaultIdentityEntity
         _transferences = transfererences.ToList();
     }
 
-    public static Result<Payment> Create(Guid payerUserId, DateTime date, Guid orderId, IEnumerable<Transference> transferences)
+    public Guid PayerUserId { get; private set; }
+    public DateTime Date { get; private set; }
+    public Guid OrderId { get; private set; }
+
+    public IReadOnlyList<Transference> Transferences => _transferences.AsReadOnly();
+    public decimal Value => _transferences.Select(t => t.Value).Sum();
+
+    public static Result<Payment> Create(Guid payerUserId, DateTime date, Guid orderId,
+        IEnumerable<Transference> transferences)
     {
         var innerTransferences = transferences.ToList();
         List<string> errors = [];

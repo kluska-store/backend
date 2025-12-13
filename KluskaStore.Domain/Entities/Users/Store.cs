@@ -1,7 +1,4 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
-using KluskaStore.Domain.Shared;
-using KluskaStore.Domain.ValueObjects;
-using KluskaStore.Domain.ValueObjects.PersonalData;
 using KluskaStore.Domain.ValueObjects.PersonalData.Address;
 using Cnpj = KluskaStore.Domain.ValueObjects.PersonalData.Cnpj;
 using Email = KluskaStore.Domain.ValueObjects.PersonalData.Email;
@@ -11,6 +8,7 @@ namespace KluskaStore.Domain.Entities.Users;
 
 public class Store : DefaultIdentityEntity
 {
+    private readonly List<Phone> _phones;
     private Store() { }
 
     internal Store(Cnpj cnpj, string name, Email email, string passwordHash, Address address, IEnumerable<Phone> phones)
@@ -24,8 +22,6 @@ public class Store : DefaultIdentityEntity
         _phones = phones.ToList();
     }
 
-    private readonly List<Phone> _phones;
-
     public Cnpj Cnpj { get; private set; }
     public string Name { get; private set; }
     public string? PictureUrl { get; private set; }
@@ -35,7 +31,8 @@ public class Store : DefaultIdentityEntity
     public Address Address { get; private set; }
     public IReadOnlyList<Phone> Phones => _phones.AsReadOnly();
 
-    public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash, Address address, IEnumerable<Phone> phones)
+    public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash, Address address,
+        IEnumerable<Phone> phones)
     {
         List<string> errors = [];
 

@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using PostalCode = KluskaStore.Domain.ValueObjects.PersonalData.Address.PostalCode;
+﻿using PostalCode = KluskaStore.Domain.ValueObjects.PersonalData.Address.PostalCode;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData.Address;
 
@@ -19,7 +18,9 @@ public class AddressTests
     public void GivenValidAddress_WhenWithoutComplement_ThenCreatesVo(string? complement)
     {
         var postalCode = PostalCode.Create(PostalCodeStr).Value;
-        var result = KluskaStore.Domain.ValueObjects.PersonalData.Address.Address.Create(Country, State, City, Street, Number, postalCode, complement);
+        var result =
+            KluskaStore.Domain.ValueObjects.PersonalData.Address.Address.Create(Country, State, City, Street, Number,
+                postalCode, complement);
 
         result.IsSuccess.Should().BeTrue();
         result.Errors.Should().BeEmpty();
@@ -38,7 +39,9 @@ public class AddressTests
     {
         const string complement = "next to shame tower";
         var postalCode = PostalCode.Create(PostalCodeStr).Value;
-        var result = KluskaStore.Domain.ValueObjects.PersonalData.Address.Address.Create(Country, State, City, Street, Number, postalCode, complement);
+        var result =
+            KluskaStore.Domain.ValueObjects.PersonalData.Address.Address.Create(Country, State, City, Street, Number,
+                postalCode, complement);
 
         result.IsSuccess.Should().BeTrue();
         result.Errors.Should().BeEmpty();
@@ -56,7 +59,8 @@ public class AddressTests
     public void GivenInvalidAddress_WhenAllFieldsAreWrong_ThenReturnsFailure()
     {
         var postalCode = PostalCode.Create(PostalCodeStr).Value;
-        var result = KluskaStore.Domain.ValueObjects.PersonalData.Address.Address.Create("", "", "", "", 0, postalCode, "");
+        var result =
+            KluskaStore.Domain.ValueObjects.PersonalData.Address.Address.Create("", "", "", "", 0, postalCode, "");
 
         result.IsFailure.Should().BeTrue();
         result.Value.Should().BeNull();

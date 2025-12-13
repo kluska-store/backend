@@ -6,9 +6,6 @@ public abstract class ProductCollection : DefaultIdentityEntity
 {
     protected readonly List<Item> _items;
 
-    public Guid UserId { get; protected set; }
-    public IReadOnlyList<Item> Items => _items.AsReadOnly();
-
     protected ProductCollection() { }
 
     internal ProductCollection(Guid userId, IEnumerable<Item> items)
@@ -17,12 +14,21 @@ public abstract class ProductCollection : DefaultIdentityEntity
         _items = items.ToList();
     }
 
+    public Guid UserId { get; protected set; }
+    public IReadOnlyList<Item> Items => _items.AsReadOnly();
+
     public bool SetItem(Product product, uint quantity)
     {
         var item = _items.Find(i => i.Product == product);
 
-        if (item is not null && quantity == 0) _items.Remove(item);
-        else if (item is not null) item.Quantity = quantity;
+        if (item is not null && quantity == 0)
+        {
+            _items.Remove(item);
+        }
+        else if (item is not null)
+        {
+            item.Quantity = quantity;
+        }
         else if (quantity != 0)
         {
             var newItem = new Item(product, quantity);
@@ -42,8 +48,14 @@ public abstract class ProductCollection : DefaultIdentityEntity
     {
         var item = _items.Find(i => i.Product == product);
 
-        if (item is not null) item.Quantity += 1;
-        else _items.Add(new Item(product, 1));
+        if (item is not null)
+        {
+            item.Quantity += 1;
+        }
+        else
+        {
+            _items.Add(new Item(product, 1));
+        }
     }
 
     public decimal CalculateTotalPrice() => _items.Select(i => i.Product.Price * i.Quantity).Sum();

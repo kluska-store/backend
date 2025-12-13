@@ -1,11 +1,9 @@
 ﻿using KluskaStore.Application.Abstractions;
 using KluskaStore.Application.Interfaces;
 using KluskaStore.Application.Mappers;
-using KluskaStore.Domain.Entities;
 using KluskaStore.Domain.Entities.Users;
 using KluskaStore.Domain.Repositories;
 using KluskaStore.Domain.Shared;
-using KluskaStore.Domain.ValueObjects;
 using KluskaStore.Domain.ValueObjects.PersonalData;
 using KluskaStore.Domain.ValueObjects.PersonalData.Address;
 

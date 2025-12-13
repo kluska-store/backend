@@ -1,11 +1,11 @@
-﻿using FluentAssertions;
-using KluskaStore.Domain.Entities.Products;
+﻿using KluskaStore.Domain.Entities.Products;
 
 namespace KluskaStore.Tests.Domain.Entities.Products;
 
 public class WishListTests : ProductCollectionTests
 {
-    protected override ProductCollection CreateSut(IEnumerable<Item> items) => new WishList(Guid.NewGuid(), items, "my wishlist");
+    protected override ProductCollection CreateSut(IEnumerable<Item> items) =>
+        new WishList(Guid.NewGuid(), items, "my wishlist");
 
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsValid_ThenCreatesCart()

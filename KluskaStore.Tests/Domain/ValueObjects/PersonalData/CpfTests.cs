@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Cpf = KluskaStore.Domain.ValueObjects.PersonalData.Cpf;
+﻿using Cpf = KluskaStore.Domain.ValueObjects.PersonalData.Cpf;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData;
 
@@ -38,7 +37,7 @@ public class CpfTests
     [InlineData("01234567891")]
     public void GivenValidCnpj_WhenSkippingVerifierDigitsValidation_TheCreatesVo(string cpf)
     {
-        var result = Cpf.Create(cpf, skipVerifierDigitsValidation: true);
+        var result = Cpf.Create(cpf, true);
 
         result.IsSuccess.Should().BeTrue();
         result.Errors.Should().BeEmpty();

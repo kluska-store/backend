@@ -7,9 +7,9 @@ namespace KluskaStore.Infrastructure.Repositories;
 public sealed class UnitOfWork(AppDbContext context) : IUnitOfWork
 {
     private IDbContextTransaction? _transaction;
+    public IAddressRepository Addresses { get; } = new AddressRepository(context);
 
     public IStoreRepository Stores { get; } = new StoreRepository(context);
-    public IAddressRepository Addresses { get; } = new AddressRepository(context);
 
     public async Task BeginTransactionAsync() => _transaction ??= await context.Database.BeginTransactionAsync();
 

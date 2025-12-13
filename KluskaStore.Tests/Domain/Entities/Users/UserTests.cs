@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-using KluskaStore.Domain.Entities.Users;
-using KluskaStore.Domain.ValueObjects;
+﻿using KluskaStore.Domain.Entities.Users;
 using Cpf = KluskaStore.Domain.ValueObjects.PersonalData.Cpf;
 using Email = KluskaStore.Domain.ValueObjects.PersonalData.Email;
 using Phone = KluskaStore.Domain.ValueObjects.PersonalData.Phone;
@@ -9,7 +7,7 @@ namespace KluskaStore.Tests.Domain.Entities.Users;
 
 public class UserTests
 {
-    private readonly User _sut = new User(
+    private readonly User _sut = new(
         new Cpf("cpf"),
         new Email("email"),
         "username",

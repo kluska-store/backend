@@ -26,5 +26,4 @@ public static class HostExtensions
 
         return host;
     }
-
 }

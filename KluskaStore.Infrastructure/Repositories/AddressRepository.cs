@@ -1,6 +1,4 @@
-﻿using KluskaStore.Domain.Entities;
-using KluskaStore.Domain.Repositories;
-using KluskaStore.Infrastructure.Data;
+﻿using KluskaStore.Infrastructure.Data;
 
 namespace KluskaStore.Infrastructure.Repositories;
 

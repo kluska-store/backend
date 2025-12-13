@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using PostalCode = KluskaStore.Domain.ValueObjects.PersonalData.Address.PostalCode;
+﻿using PostalCode = KluskaStore.Domain.ValueObjects.PersonalData.Address.PostalCode;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData.Address;
 

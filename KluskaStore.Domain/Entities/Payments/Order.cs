@@ -1,5 +1,4 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
-using KluskaStore.Domain.Shared;
 using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Domain.Entities.Payments;
@@ -20,6 +19,16 @@ public class Order : DefaultIdentityEntity
 
     private readonly List<OrderItem> _items;
 
+    private Order() { }
+
+    internal Order(Guid userId, DateTime date, IEnumerable<OrderItem> items)
+    {
+        UserId = userId;
+        Date = date;
+        Status = OrderStatusEnum.OrderReceived;
+        _items = items.ToList();
+    }
+
     public Guid UserId { get; private set; }
     public DateTime Date { get; private set; }
     public OrderStatusEnum Status { get; private set; }
@@ -30,16 +39,6 @@ public class Order : DefaultIdentityEntity
     public bool WasDelivered => Status == OrderStatusEnum.Delivered;
     public bool WasReturned => Status == OrderStatusEnum.Returned;
     public bool IsActive => Status is not (OrderStatusEnum.Canceled or OrderStatusEnum.Delivered);
-
-    private Order() { }
-
-    internal Order(Guid userId, DateTime date, IEnumerable<OrderItem> items)
-    {
-        UserId = userId;
-        Date = date;
-        Status = OrderStatusEnum.OrderReceived;
-        _items = items.ToList();
-    }
 
     public static Result<Order> Create(Guid userId, DateTime date, IEnumerable<OrderItem> items)
     {

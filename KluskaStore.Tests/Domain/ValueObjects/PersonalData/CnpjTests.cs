@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Cnpj = KluskaStore.Domain.ValueObjects.PersonalData.Cnpj;
+﻿using Cnpj = KluskaStore.Domain.ValueObjects.PersonalData.Cnpj;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData;
 

@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Phone = KluskaStore.Domain.ValueObjects.PersonalData.Phone;
+﻿using Phone = KluskaStore.Domain.ValueObjects.PersonalData.Phone;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData;
 

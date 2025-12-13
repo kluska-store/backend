@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Email = KluskaStore.Domain.ValueObjects.PersonalData.Email;
+﻿using Email = KluskaStore.Domain.ValueObjects.PersonalData.Email;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.PersonalData;
 

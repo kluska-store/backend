@@ -1,6 +1,4 @@
-﻿using KluskaStore.Domain.Entities;
-using KluskaStore.Domain.Entities.Users;
-using KluskaStore.Infrastructure.Configurations;
+﻿using KluskaStore.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace KluskaStore.Infrastructure.Data;

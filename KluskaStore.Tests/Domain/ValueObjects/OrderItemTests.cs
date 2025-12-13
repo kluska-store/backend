@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using KluskaStore.Domain.ValueObjects;
+﻿using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Tests.Domain.ValueObjects;
 
@@ -13,7 +12,7 @@ public class OrderItemTests
         var unitPrice = 10m;
         var description = "description";
         var quantity = 2u;
-        var specifications = new Dictionary<string, string>() { ["size"] = "10cm x 10cm" };
+        var specifications = new Dictionary<string, string> { ["size"] = "10cm x 10cm" };
         var result = OrderItem.Create(productId, name, unitPrice, description, quantity, specifications);
 
         result.IsSuccess.Should().BeTrue();

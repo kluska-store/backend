@@ -1,20 +1,9 @@
 ﻿using KluskaStore.Domain.Interfaces;
-using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.ValueObjects;
 
 public record OrderItem : IValueObject
 {
-    private readonly Dictionary<string, string> _specifications;
-
-    public Guid ProductId { get; }
-    public string Name { get; }
-    public decimal UnitPrice { get; }
-    public string? Description { get; }
-    public uint Quantity { get; }
-    public decimal TotalPrice => UnitPrice * Quantity;
-    public Dictionary<string, string> Specifications => _specifications;
-
     internal OrderItem(
         Guid productId,
         string name,
@@ -29,8 +18,16 @@ public record OrderItem : IValueObject
         UnitPrice = unitPrice;
         Description = description;
         Quantity = quantity;
-        _specifications = specifications.ToDictionary();
+        Specifications = specifications.ToDictionary();
     }
+
+    public Guid ProductId { get; }
+    public string Name { get; }
+    public decimal UnitPrice { get; }
+    public string? Description { get; }
+    public uint Quantity { get; }
+    public decimal TotalPrice => UnitPrice * Quantity;
+    public Dictionary<string, string> Specifications { get; }
 
     public static Result<OrderItem> Create(
         Guid productId,

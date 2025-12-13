@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using KluskaStore.Domain.Entities.Payments;
+﻿using KluskaStore.Domain.Entities.Payments;
 
 namespace KluskaStore.Tests.Domain.Entities.Payments;
 

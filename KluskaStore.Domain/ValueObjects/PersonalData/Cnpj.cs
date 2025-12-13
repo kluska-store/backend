@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using KluskaStore.Domain.Interfaces;
-using KluskaStore.Domain.Shared;
 
 namespace KluskaStore.Domain.ValueObjects.PersonalData;
 

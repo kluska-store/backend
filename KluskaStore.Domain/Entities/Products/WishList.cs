@@ -1,14 +1,11 @@
-﻿using KluskaStore.Domain.Shared;
-
-namespace KluskaStore.Domain.Entities.Products;
+﻿namespace KluskaStore.Domain.Entities.Products;
 
 public class WishList : ProductCollection
 {
-    public string Name { get; private set; }
-
     private WishList() { }
 
     internal WishList(Guid userId, IEnumerable<Item> items, string name) : base(userId, items) => Name = name;
+    public string Name { get; private set; }
 
     public static Result<WishList> Create(Guid userId, IEnumerable<Item> items, string name)
     {

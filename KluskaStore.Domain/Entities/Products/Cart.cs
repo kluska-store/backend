@@ -1,6 +1,4 @@
-﻿using KluskaStore.Domain.Shared;
-
-namespace KluskaStore.Domain.Entities.Products;
+﻿namespace KluskaStore.Domain.Entities.Products;
 
 public class Cart : ProductCollection
 {

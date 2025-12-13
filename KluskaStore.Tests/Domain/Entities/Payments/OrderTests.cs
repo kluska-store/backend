@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using KluskaStore.Domain.Entities.Payments;
+﻿using KluskaStore.Domain.Entities.Payments;
 using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Tests.Domain.Entities.Payments;
@@ -8,7 +7,7 @@ using OrderStatus = Order.OrderStatusEnum;
 
 public class OrderTests
 {
-    private readonly Order _sut = new Order(
+    private readonly Order _sut = new(
         Guid.NewGuid(),
         DateTime.UtcNow.AddDays(-30),
         [

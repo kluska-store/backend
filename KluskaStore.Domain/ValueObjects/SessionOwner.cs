@@ -1,5 +1,4 @@
-﻿using KluskaStore.Domain.Shared;
-using KluskaStore.Domain.Interfaces;
+﻿using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects;
 
