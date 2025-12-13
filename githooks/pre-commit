@@ -7,13 +7,12 @@ function error() {
     exit 1
 }
 
-REPO_ROOT=$(pwd)
+REPO_ROOT=$(git rev-parse --show-toplevel)
 
 echo "Testing added code..."
 tempdir=$(mktemp -d)
 trap 'rm -rf "$tempdir"' EXIT
 
-git archive --format=tar HEAD | tar -xC "$tempdir"
 git checkout-index -af --prefix="${tempdir}/"
 
 cd "$tempdir" || error "Failed to setup test environment. Try again later"
