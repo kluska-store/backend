@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
+using KluskaStore.Domain.ValueObjects.AccountData.Address;
 using Cpf = KluskaStore.Domain.ValueObjects.AccountData.Cpf;
 using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
 using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
@@ -14,9 +15,18 @@ public class User : DefaultIdentityEntity
         Username = null!;
         Phone = null!;
         PasswordHash = null!;
+        _addresses = null!;
     }
 
-    internal User(Cpf cpf, Email email, string username, Phone phone, DateOnly birthday, string passwordHash)
+    internal User(
+        Cpf cpf,
+        Email email,
+        string username,
+        Phone phone,
+        DateOnly birthday,
+        string passwordHash,
+        IEnumerable<Address> addresses
+    )
     {
         Cpf = cpf;
         Email = email;
@@ -25,7 +35,10 @@ public class User : DefaultIdentityEntity
         Phone = phone;
         Birthday = birthday;
         PasswordHash = passwordHash;
+        _addresses = addresses.ToList();
     }
+
+    private readonly List<Address> _addresses;
 
     public Cpf Cpf { get; protected set; }
     public Email Email { get; protected set; }
@@ -35,6 +48,7 @@ public class User : DefaultIdentityEntity
     public Phone Phone { get; protected set; }
     public DateOnly Birthday { get; protected set; }
     public string PasswordHash { get; protected set; }
+    public IReadOnlyList<Address> Addresses => _addresses.AsReadOnly();
 
     public static Result<User> Create(
         Cpf cpf,
@@ -42,7 +56,8 @@ public class User : DefaultIdentityEntity
         string username,
         Phone phone,
         DateOnly birthday,
-        string passwordHash
+        string passwordHash,
+        IEnumerable<Address>? addresses
     )
     {
         List<string> errors = [];
@@ -55,7 +70,7 @@ public class User : DefaultIdentityEntity
 
         if (errors.Count > 0) return Result<User>.Failure(errors);
 
-        var user = new User(cpf, email, username, phone, birthday, passwordHash);
+        var user = new User(cpf, email, username, phone, birthday, passwordHash, addresses ?? []);
         return Result<User>.Success(user);
     }
 
@@ -93,4 +108,17 @@ public class User : DefaultIdentityEntity
         PasswordHash = newPasswordHash;
         return Result<User>.Success(this);
     }
+
+    public void AddAddresses(params IEnumerable<Address> addresses) => _addresses.AddRange(addresses);
+
+    public void RemoveAddresses(params IEnumerable<Address> addresses)
+    {
+        foreach (var address in addresses) _addresses.Remove(address);
+    }
+
+    public void RemoveAddressAt(int index) => _addresses.RemoveAt(index);
+
+    public void ClearAddresses() => _addresses.Clear();
+
+    public bool HasAnyAddress() => _addresses.Count > 0;
 }

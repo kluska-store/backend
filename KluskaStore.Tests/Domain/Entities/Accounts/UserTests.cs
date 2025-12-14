@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Domain.Entities.Accounts;
+using KluskaStore.Domain.ValueObjects.AccountData.Address;
 using Cpf = KluskaStore.Domain.ValueObjects.AccountData.Cpf;
 using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
 using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
@@ -13,13 +14,17 @@ public class UserTests
         "username",
         new Phone("phone"),
         DateOnly.Parse("2000-03-03"),
-        "password"
+        "password",
+        [
+            new Address(null!, null!, null!, null!, 1, null!, null!),
+            new Address(null!, null!, null!, null!, 2, null!, null!)
+        ]
     );
 
     [Fact]
     public void GivenEntityCreation_WhenDataIsValid_ThenCreatesUser()
     {
-        var result = User.Create(_sut.Cpf, _sut.Email, _sut.Username, _sut.Phone, _sut.Birthday, _sut.PasswordHash);
+        var result = User.Create(_sut.Cpf, _sut.Email, _sut.Username, _sut.Phone, _sut.Birthday, _sut.PasswordHash, _sut.Addresses);
 
         result.IsSuccess.Should().BeTrue();
         result.Errors.Should().BeEmpty();
@@ -31,12 +36,14 @@ public class UserTests
         result.Value.Phone.Should().Be(_sut.Phone);
         result.Value.Birthday.Should().Be(_sut.Birthday);
         result.Value.PasswordHash.Should().Be(_sut.PasswordHash);
+        result.Value.Addresses.Should().BeEquivalentTo(_sut.Addresses);
+        result.Value.HasAnyAddress().Should().BeTrue();
     }
 
     [Fact]
     public void GivenEntityCreation_WhenDataIsInvalid_ThenReturnsFailure()
     {
-        var result = User.Create(null!, null!, "", null!, DateOnly.FromDateTime(DateTime.UtcNow), "");
+        var result = User.Create(null!, null!, "", null!, DateOnly.FromDateTime(DateTime.UtcNow), "", null);
 
         result.IsFailure.Should().BeTrue();
         result.Errors.Count.Should().Be(3);
@@ -137,5 +144,43 @@ public class UserTests
         result.IsFailure.Should().BeTrue();
         result.Errors.Should().NotBeNullOrEmpty();
         result.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public void GivenAddressAddition_ThenIncreasesTheAmountOfAddresses()
+    {
+        var lastAmount = _sut.Addresses.Count;
+
+        _sut.AddAddresses(new Address(null!, null!, null!, null!, 3, null!, null!));
+
+        _sut.Addresses.Count.Should().Be(lastAmount + 1);
+    }
+
+    [Fact]
+    public void GivenAddressRemoval_WhenRemovingThroughTheInstance_ThenDecreasesTheAmountOfAddresses()
+    {
+        var lastAmount = _sut.Addresses.Count;
+
+        _sut.RemoveAddresses(_sut.Addresses[1]);
+
+        _sut.Addresses.Count.Should().Be(lastAmount - 1);
+    }
+
+    [Fact]
+    public void GivenAddressRemoval_WhenRemovingThroughTheIndex_ThenDecreasesTheAmountOfAddresses()
+    {
+        var lastAmount = _sut.Addresses.Count;
+
+        _sut.RemoveAddressAt(1);
+
+        _sut.Addresses.Count.Should().Be(lastAmount - 1);
+    }
+
+    [Fact]
+    public void GivenClearAddressesCall_ThenClearsAllAddresses()
+    {
+        _sut.ClearAddresses();
+
+        _sut.Addresses.Should().BeEmpty();
     }
 }
