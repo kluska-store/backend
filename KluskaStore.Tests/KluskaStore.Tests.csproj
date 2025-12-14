@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\KluskaStore.Application\KluskaStore.Application.csproj" />
         <ProjectReference Include="..\KluskaStore.Domain\KluskaStore.Domain.csproj" />
     </ItemGroup>
 
