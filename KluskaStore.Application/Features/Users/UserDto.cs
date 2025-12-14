@@ -1,4 +1,6 @@
-﻿namespace KluskaStore.Application.Features.Users;
+﻿using KluskaStore.Domain.ValueObjects.AccountData.Address;
+
+namespace KluskaStore.Application.Features.Users;
 
 public sealed record UserDto(
     Guid Id,
@@ -8,5 +10,6 @@ public sealed record UserDto(
     string? ProfilePicture,
     bool IsActive,
     string Phone,
-    DateOnly Birthday
+    DateOnly Birthday,
+    List<Address> Addresses
 );
