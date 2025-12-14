@@ -57,7 +57,7 @@ public class User : DefaultIdentityEntity
         Phone phone,
         DateOnly birthday,
         string passwordHash,
-        IEnumerable<Address>? addresses
+        IEnumerable<Address>? addresses = null
     )
     {
         List<string> errors = [];
