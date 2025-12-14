@@ -12,6 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="FluentValidation" Version="12.1.1" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
         <PackageReference Include="MediatR" Version="13.1.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
         <PackageReference Include="Riok.Mapperly" Version="4.3.0" />
