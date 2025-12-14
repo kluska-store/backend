@@ -1,4 +1,5 @@
-﻿using KluskaStore.Domain.Entities.Accounts;
+﻿using KluskaStore.Application.Features.Users.GetUserById;
+using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.ValueObjects.AccountData;
 using Riok.Mapperly.Abstractions;
 

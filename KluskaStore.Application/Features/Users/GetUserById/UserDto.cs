@@ -1,6 +1,6 @@
 ﻿using KluskaStore.Domain.ValueObjects.AccountData.Address;
 
-namespace KluskaStore.Application.Features.Users;
+namespace KluskaStore.Application.Features.Users.GetUserById;
 
 public sealed record UserDto(
     Guid Id,
