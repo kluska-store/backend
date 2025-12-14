@@ -16,7 +16,7 @@ trap 'rm -rf "$tempdir"' EXIT
 git checkout-index -af --prefix="${tempdir}/"
 
 cd "$tempdir" || error "Failed to setup test environment. Try again later"
-if ! dotnet test > /dev/null 2>&1; then error "Tests failed"; fi
+dotnet test > /dev/null 2>&1 || error "Tests failed"
 echo "Tests passed"
 
 
