@@ -5,7 +5,7 @@ namespace KluskaStore.Domain.Entities.Accounts;
 
 public class Session : Entity<string>
 {
-    private Session() { }
+    private Session() => Owner = null!;
 
     internal Session(SessionOwner owner, DateTime createdAt)
     {

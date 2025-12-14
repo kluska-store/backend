@@ -6,7 +6,7 @@ public abstract class ProductCollection : DefaultIdentityEntity
 {
     protected readonly List<Item> _items;
 
-    protected ProductCollection() { }
+    protected ProductCollection() => _items = null!;
 
     internal ProductCollection(Guid userId, IEnumerable<Item> items)
     {

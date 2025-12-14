@@ -6,7 +6,7 @@ public class Payment : DefaultIdentityEntity
 {
     private readonly List<Transference> _transferences;
 
-    private Payment() { }
+    private Payment() => _transferences = null!;
 
     internal Payment(Guid payerUserId, DateTime date, Guid orderId, IEnumerable<Transference> transfererences)
     {

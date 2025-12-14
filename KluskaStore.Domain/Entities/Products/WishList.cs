@@ -2,7 +2,7 @@
 
 public class WishList : ProductCollection
 {
-    private WishList() { }
+    private WishList() => Name = null!;
 
     internal WishList(Guid userId, IEnumerable<Item> items, string name) : base(userId, items) => Name = name;
     public string Name { get; private set; }

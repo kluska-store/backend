@@ -4,7 +4,7 @@ namespace KluskaStore.Domain.Entities.Generics;
 
 public abstract class Entity<TId> : IEntity
 {
-    protected Entity() { }
+    protected Entity() => Id = default!;
 
     internal Entity(TId id) => Id = id;
 

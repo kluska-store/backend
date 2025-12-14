@@ -19,7 +19,11 @@ public class Order : DefaultIdentityEntity
 
     private readonly List<OrderItem> _items;
 
-    private Order() { }
+    private Order()
+    {
+        Status = OrderStatusEnum.OrderReceived;
+        _items = null!;
+    }
 
     internal Order(Guid userId, DateTime date, IEnumerable<OrderItem> items)
     {

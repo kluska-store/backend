@@ -4,7 +4,7 @@ namespace KluskaStore.Domain.Entities.Products;
 
 public class Item : DefaultIdentityEntity
 {
-    private Item() { }
+    private Item() => Product = null!;
 
     internal Item(Product product, uint quantity)
     {

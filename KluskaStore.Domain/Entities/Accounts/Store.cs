@@ -9,7 +9,16 @@ namespace KluskaStore.Domain.Entities.Accounts;
 public class Store : DefaultIdentityEntity
 {
     private readonly List<Phone> _phones;
-    private Store() { }
+
+    private Store()
+    {
+        Cnpj = null!;
+        Name = null!;
+        Email = null!;
+        PasswordHash = null!;
+        Address = null!;
+        _phones = null!;
+    }
 
     internal Store(Cnpj cnpj, string name, Email email, string passwordHash, Address address, IEnumerable<Phone> phones)
     {

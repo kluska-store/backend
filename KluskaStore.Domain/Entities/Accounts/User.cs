@@ -7,7 +7,14 @@ namespace KluskaStore.Domain.Entities.Accounts;
 
 public class User : DefaultIdentityEntity
 {
-    private User() { }
+    private User()
+    {
+        Cpf = null!;
+        Email = null!;
+        Username = null!;
+        Phone = null!;
+        PasswordHash = null!;
+    }
 
     internal User(Cpf cpf, Email email, string username, Phone phone, DateOnly birthday, string passwordHash)
     {

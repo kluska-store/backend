@@ -6,7 +6,11 @@ public class Product : DefaultIdentityEntity
 {
     private readonly Dictionary<string, string> _specifications;
 
-    private Product() { }
+    private Product()
+    {
+        _specifications = null!;
+        Name = null!;
+    }
 
     internal Product(Dictionary<string, string> specifications, decimal price, string name)
     {
