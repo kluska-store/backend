@@ -4,7 +4,8 @@ namespace KluskaStore.Tests.Domain.Entities.Products;
 
 public abstract class ProductCollectionTests
 {
-    private static readonly List<Product> Products =
+    protected readonly List<Item> Items;
+    protected readonly List<Product> Products =
     [
         new(null!, 10, "p1"),
         new(null!, 20, "p2"),
@@ -12,11 +13,11 @@ public abstract class ProductCollectionTests
         new(null!, 40, "p4")
     ];
 
-    protected static readonly List<Item> Items =
+    protected ProductCollectionTests() => Items =
     [
-        new(Products[0], 10),
-        new(Products[1], 5),
-        new(Products[2], 15)
+        new Item(Products[0], 10),
+        new Item(Products[1], 5),
+        new Item(Products[2], 15)
     ];
 
     protected abstract ProductCollection CreateSut(IEnumerable<Item> items);
