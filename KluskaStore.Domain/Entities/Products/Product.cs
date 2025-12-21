@@ -10,6 +10,7 @@ public class Product : DefaultIdentityEntity
     {
         _specifications = null!;
         Name = null!;
+        IsAvailable = true;
     }
 
     internal Product(Dictionary<string, string> specifications, decimal price, string name)
@@ -17,12 +18,14 @@ public class Product : DefaultIdentityEntity
         _specifications = specifications;
         Price = price;
         Name = name;
+        IsAvailable = true;
     }
 
     public IReadOnlyDictionary<string, string> Specifications => _specifications.AsReadOnly();
     public decimal Price { get; protected set; }
     public string Name { get; protected set; }
     public string? Description { get; protected set; }
+    public bool IsAvailable { get; protected set; }
 
     public static Result<Product> Create(
         IEnumerable<KeyValuePair<string, string>> specifications,
@@ -72,4 +75,7 @@ public class Product : DefaultIdentityEntity
     }
 
     public void ChangeDescription(string? newDescription) => Description = newDescription;
+
+    public void MarkAsUnavailable() => IsAvailable = false;
+    public void MarkAsAvailable() => IsAvailable = true;
 }

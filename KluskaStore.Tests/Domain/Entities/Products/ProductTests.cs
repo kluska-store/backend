@@ -26,6 +26,7 @@ public class ProductTests
         result.Value.Specifications.Should().BeEquivalentTo(_sut.Specifications);
         result.Value.Price.Should().Be(_sut.Price);
         result.Value.Name.Should().Be(_sut.Name);
+        result.Value.IsAvailable.Should().BeTrue();
     }
 
     [Fact]
@@ -108,5 +109,25 @@ public class ProductTests
         _sut.ChangeDescription(newDescription);
 
         _sut.Description.Should().Be(newDescription);
+    }
+
+    [Fact]
+    public void GivenMarkingAsUnavailable_WhenAvailable_ThenSetsIsAvailableToFalse()
+    {
+        _sut.IsAvailable.Should().BeTrue();
+
+        _sut.MarkAsUnavailable();
+
+        _sut.IsAvailable.Should().BeFalse();
+    }
+
+    [Fact]
+    public void GivenMarkingAsAvailable_WhenUnavailable_ThenSetsIsAvailableToTrue()
+    {
+        _sut.MarkAsUnavailable();
+
+        _sut.MarkAsAvailable();
+
+        _sut.IsAvailable.Should().BeTrue();
     }
 }
