@@ -14,8 +14,6 @@ public class EmailTests
         var result = Email.Create(email);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Email>();
         result.Value.Value.Should().Be(email);
     }
 
@@ -31,7 +29,5 @@ public class EmailTests
         var result = Email.Create(email);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 }

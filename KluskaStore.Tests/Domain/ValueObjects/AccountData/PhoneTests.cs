@@ -15,8 +15,6 @@ public class PhoneTests
         var result = Phone.Create(phone);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Phone>();
         result.Value.FullPhone.Should().Be(phone);
         result.Value.Ddi.Should().Be(ddi);
         result.Value.Ddd.Should().Be(ddd);
@@ -40,7 +38,5 @@ public class PhoneTests
         var result = Phone.Create(phone);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 }

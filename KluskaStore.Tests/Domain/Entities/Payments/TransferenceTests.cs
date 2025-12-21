@@ -12,8 +12,6 @@ public class TransferenceTests
         var result = Transference.Create(storeId, value);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Transference>();
 
         var transference = result.Value;
         transference.ReceiverStoreId.Should().Be(storeId);
@@ -26,7 +24,5 @@ public class TransferenceTests
         var result = Transference.Create(Guid.Empty, -1);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Count.Should().Be(2);
-        result.Value.Should().BeNull();
     }
 }

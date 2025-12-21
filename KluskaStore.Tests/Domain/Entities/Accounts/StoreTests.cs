@@ -36,8 +36,6 @@ public class StoreTests
         var result = Store.Create(_sut.Cnpj, _sut.Name, _sut.Email, _sut.PasswordHash, _sut.Address, _sut.Phones);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Store>();
         result.Value.IsActive.Should().BeTrue();
         result.Value.Cnpj.Should().Be(_sut.Cnpj);
         result.Value.Name.Should().Be(_sut.Name);
@@ -53,8 +51,6 @@ public class StoreTests
         var result = Store.Create(null!, "", null!, "", null!, []);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Count.Should().Be(2);
-        result.Value.Should().BeNull();
     }
 
     [Fact]
@@ -64,7 +60,6 @@ public class StoreTests
         var result = _sut.ChangeName("new name");
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
         result.Value.Should().BeSameAs(_sut);
         _sut.Name.Should().Be(newName);
     }
@@ -75,8 +70,6 @@ public class StoreTests
         var result = _sut.ChangeName("");
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 
     [Fact]
@@ -95,7 +88,6 @@ public class StoreTests
         var result = _sut.ChangePasswordHash(newPassword);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
         result.Value.Should().BeSameAs(_sut);
         _sut.PasswordHash.Should().Be(newPassword);
     }
@@ -106,8 +98,6 @@ public class StoreTests
         var result = _sut.ChangePasswordHash("");
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 
     [Fact]

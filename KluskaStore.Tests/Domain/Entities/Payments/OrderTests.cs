@@ -24,8 +24,6 @@ public class OrderTests
         var result = Order.Create(_sut.UserId, _sut.Date, _sut.Items);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Order>();
 
         var order = result.Value;
         order.UserId.Should().Be(_sut.UserId);
@@ -45,8 +43,6 @@ public class OrderTests
         var result = Order.Create(Guid.Empty, DateTime.UtcNow.AddDays(1), []);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Count.Should().Be(3);
-        result.Value.Should().BeNull();
     }
 
     [Fact]

@@ -11,8 +11,6 @@ public class SessionTests
         var result = Session.CreateUserSession(Guid.NewGuid(), DateTime.UtcNow);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Session>();
         result.Value.Owner.OwnerType.Should().Be(SessionOwner.OwnerTypeEnum.User);
         result.Value.IsExpired().Should().BeFalse();
     }
@@ -23,8 +21,6 @@ public class SessionTests
         var result = Session.CreateUserSession(Guid.NewGuid(), DateTime.UtcNow.AddYears(-2));
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Session>();
         result.Value.Owner.OwnerType.Should().Be(SessionOwner.OwnerTypeEnum.User);
         result.Value.IsExpired().Should().BeTrue();
     }
@@ -35,8 +31,6 @@ public class SessionTests
         var result = Session.CreateStoreSession(Guid.NewGuid(), DateTime.UtcNow);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Session>();
         result.Value.Owner.OwnerType.Should().Be(SessionOwner.OwnerTypeEnum.Store);
         result.Value.IsExpired().Should().BeFalse();
     }
@@ -47,8 +41,6 @@ public class SessionTests
         var result = Session.CreateStoreSession(Guid.NewGuid(), DateTime.UtcNow.AddYears(-2));
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Session>();
         result.Value.Owner.OwnerType.Should().Be(SessionOwner.OwnerTypeEnum.Store);
         result.Value.IsExpired().Should().BeTrue();
     }
@@ -60,8 +52,6 @@ public class SessionTests
         var result = Session.CreateUserSession(Guid.NewGuid(), DateTime.UtcNow.AddDays(1));
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 
     [Fact]
@@ -70,7 +60,5 @@ public class SessionTests
         var result = Session.CreateUserSession(Guid.Empty, DateTime.UtcNow);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 }

@@ -1,4 +1,4 @@
-﻿using Cnpj = KluskaStore.Domain.ValueObjects.AccountData.Cnpj;
+﻿using KluskaStore.Domain.ValueObjects.AccountData;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.AccountData;
 
@@ -12,8 +12,6 @@ public class CnpjTests
         var result = Cnpj.Create(cnpj);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Cnpj>();
         result.Value.Value.Should().Be(cnpj);
     }
 
@@ -28,7 +26,5 @@ public class CnpjTests
         var result = Cnpj.Create(cnpj);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 }

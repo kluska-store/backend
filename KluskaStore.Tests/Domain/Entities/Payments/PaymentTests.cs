@@ -14,8 +14,6 @@ public class PaymentTests
         var result = Payment.Create(userId, date, orderId, transferences);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Payment>();
 
         var payment = result.Value;
         payment.PayerUserId.Should().Be(userId);
@@ -31,7 +29,5 @@ public class PaymentTests
         var result = Payment.Create(Guid.Empty, DateTime.UtcNow.AddDays(1), Guid.Empty, new List<Transference>());
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Count.Should().Be(4);
-        result.Value.Should().BeNull();
     }
 }

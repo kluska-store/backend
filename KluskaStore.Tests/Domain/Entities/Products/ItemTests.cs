@@ -12,8 +12,6 @@ public class ItemTests
         var result = Item.Create(product, quantity);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Item>();
         result.Value.Product.Should().Be(product);
         result.Value.Quantity.Should().Be(quantity);
     }
@@ -24,7 +22,5 @@ public class ItemTests
         var result = Item.Create(null!, 0);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 }

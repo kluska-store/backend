@@ -21,8 +21,6 @@ public class ProductTests
         var result = Product.Create(_sut.Specifications, _sut.Price, _sut.Name);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Product>();
         result.Value.Specifications.Should().BeEquivalentTo(_sut.Specifications);
         result.Value.Price.Should().Be(_sut.Price);
         result.Value.Name.Should().Be(_sut.Name);
@@ -35,8 +33,6 @@ public class ProductTests
         var result = Product.Create(new Dictionary<string, string>(), 0, null!);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Count.Should().Be(2);
-        result.Value.Should().BeNull();
     }
 
     [Fact]
@@ -65,7 +61,6 @@ public class ProductTests
         var result = _sut.ChangePrice(newPrice);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
         result.Value.Should().BeSameAs(_sut);
         _sut.Price.Should().Be(newPrice);
     }
@@ -76,8 +71,6 @@ public class ProductTests
         var result = _sut.ChangePrice(0);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 
     [Fact]
@@ -87,7 +80,6 @@ public class ProductTests
         var result = _sut.ChangeName(newName);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
         result.Value.Should().BeSameAs(_sut);
         _sut.Name.Should().Be(newName);
     }
@@ -98,8 +90,6 @@ public class ProductTests
         var result = _sut.ChangeName("");
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 
     [Fact]

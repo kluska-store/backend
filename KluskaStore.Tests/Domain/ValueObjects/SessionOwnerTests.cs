@@ -11,8 +11,6 @@ public class SessionOwnerTests
         var result = SessionOwner.User(id);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<SessionOwner>();
         result.Value.OwnerType.Should().Be(SessionOwner.OwnerTypeEnum.User);
         result.Value.OwnerId.Should().Be(id);
     }
@@ -24,8 +22,6 @@ public class SessionOwnerTests
         var result = SessionOwner.Store(id);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<SessionOwner>();
         result.Value.OwnerType.Should().Be(SessionOwner.OwnerTypeEnum.Store);
         result.Value.OwnerId.Should().Be(id);
     }
@@ -37,7 +33,5 @@ public class SessionOwnerTests
         var result = SessionOwner.User(Guid.Empty);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 }

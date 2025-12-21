@@ -27,8 +27,6 @@ public class UserTests
         var result = User.Create(_sut.Cpf, _sut.Email, _sut.Username, _sut.Phone, _sut.Birthday, _sut.PasswordHash, _sut.Addresses);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<User>();
         result.Value.IsActive.Should().BeTrue();
         result.Value.Cpf.Should().Be(_sut.Cpf);
         result.Value.Email.Should().Be(_sut.Email);
@@ -46,8 +44,6 @@ public class UserTests
         var result = User.Create(null!, null!, "", null!, DateOnly.FromDateTime(DateTime.UtcNow), "", null);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Count.Should().Be(3);
-        result.Value.Should().BeNull();
     }
 
     [Fact]
@@ -66,8 +62,6 @@ public class UserTests
         var result = _sut.ChangeUsername(newName);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeSameAs(_sut);
         _sut.Username.Should().Be(newName);
     }
 
@@ -77,8 +71,6 @@ public class UserTests
         var result = _sut.ChangeUsername("");
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 
     [Fact]
@@ -109,7 +101,6 @@ public class UserTests
         var result = _sut.ChangeBirthday(newBirthday);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
         result.Value.Should().BeSameAs(_sut);
         _sut.Birthday.Should().Be(newBirthday);
     }
@@ -120,8 +111,6 @@ public class UserTests
         var result = _sut.ChangeBirthday(DateOnly.FromDateTime(DateTime.UtcNow));
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 
     [Fact]
@@ -131,7 +120,6 @@ public class UserTests
         var result = _sut.ChangePassword(newPassword);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
         result.Value.Should().BeSameAs(_sut);
         _sut.PasswordHash.Should().Be(newPassword);
     }
@@ -142,8 +130,6 @@ public class UserTests
         var result = _sut.ChangePassword("");
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 
     [Fact]

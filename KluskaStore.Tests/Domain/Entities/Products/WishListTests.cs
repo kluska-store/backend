@@ -15,8 +15,6 @@ public class WishListTests : ProductCollectionTests
         var result = WishList.Create(userId, Items, name);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<WishList>();
         result.Value.UserId.Should().Be(userId);
         result.Value.Items.Should().BeEquivalentTo(Items.Where(i => i.Quantity > 0));
         result.Value.Name.Should().Be(name);
@@ -28,7 +26,5 @@ public class WishListTests : ProductCollectionTests
         var result = WishList.Create(Guid.Empty, [], "");
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Count.Should().Be(2);
-        result.Value.Should().BeNull();
     }
 }

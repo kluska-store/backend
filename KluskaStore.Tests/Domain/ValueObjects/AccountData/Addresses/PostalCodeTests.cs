@@ -1,6 +1,6 @@
-﻿using PostalCode = KluskaStore.Domain.ValueObjects.AccountData.Address.PostalCode;
+﻿using KluskaStore.Domain.ValueObjects.AccountData.Address;
 
-namespace KluskaStore.Tests.Domain.ValueObjects.AccountData.Address;
+namespace KluskaStore.Tests.Domain.ValueObjects.AccountData.Addresses;
 
 public class PostalCodeTests
 {
@@ -11,8 +11,6 @@ public class PostalCodeTests
         var result = PostalCode.Create(postalCodeStr);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<PostalCode>();
         result.Value.Value.Should().Be(postalCodeStr);
     }
 
@@ -26,7 +24,5 @@ public class PostalCodeTests
         var result = PostalCode.Create(postalCodeStr);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 }

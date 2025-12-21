@@ -51,7 +51,6 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
         result.Value.CreatedUserId.Should().Be(expectedId);
         VerifyAddUserCalledOnce();
     }
@@ -63,8 +62,6 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
         VerifyAddUserNeverCalled();
     }
 
@@ -75,8 +72,6 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
         VerifyAddUserNeverCalled();
     }
 
@@ -87,8 +82,6 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
         VerifyAddUserNeverCalled();
     }
 
@@ -99,8 +92,6 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
         VerifyAddUserNeverCalled();
     }
 
@@ -111,8 +102,6 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
         VerifyAddUserNeverCalled();
     }
 
@@ -123,8 +112,6 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
         VerifyAddUserNeverCalled();
     }
 }

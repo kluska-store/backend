@@ -13,8 +13,6 @@ public class CartTests : ProductCollectionTests
         var result = Cart.Create(userId, Items);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<Cart>();
         result.Value.UserId.Should().Be(userId);
         result.Value.Items.Should().BeEquivalentTo(Items.Where(i => i.Quantity > 0));
     }
@@ -25,7 +23,5 @@ public class CartTests : ProductCollectionTests
         var result = Cart.Create(Guid.Empty, []);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 }

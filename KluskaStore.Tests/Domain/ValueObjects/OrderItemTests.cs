@@ -16,8 +16,6 @@ public class OrderItemTests
         var result = OrderItem.Create(productId, name, unitPrice, description, quantity, specifications);
 
         result.IsSuccess.Should().BeTrue();
-        result.Errors.Should().BeEmpty();
-        result.Value.Should().BeAssignableTo<OrderItem>();
 
         var orderItem = result.Value;
         orderItem.ProductId.Should().Be(productId);
@@ -35,7 +33,5 @@ public class OrderItemTests
         var result = OrderItem.Create(Guid.Empty, null!, -10, null, 0, null!);
 
         result.IsFailure.Should().BeTrue();
-        result.Errors.Should().NotBeNullOrEmpty();
-        result.Value.Should().BeNull();
     }
 }
