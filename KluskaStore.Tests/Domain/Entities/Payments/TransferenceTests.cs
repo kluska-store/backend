@@ -12,6 +12,7 @@ public class TransferenceTests
         var result = Transference.Create(storeId, value);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
 
         var transference = result.Value;
         transference.ReceiverStoreId.Should().Be(storeId);

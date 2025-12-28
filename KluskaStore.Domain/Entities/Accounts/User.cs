@@ -3,6 +3,7 @@ using KluskaStore.Domain.ValueObjects.AccountData.Address;
 using Cpf = KluskaStore.Domain.ValueObjects.AccountData.Cpf;
 using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
 using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
+using static KluskaStore.Domain.Errors.Entities.UserErrors;
 
 namespace KluskaStore.Domain.Entities.Accounts;
 
@@ -57,28 +58,24 @@ public class User : DefaultIdentityEntity
         Phone phone,
         DateOnly birthday,
         string passwordHash,
-        IEnumerable<Address>? addresses = null
+        IEnumerable<Address> addresses
     )
     {
-        List<string> errors = [];
-        if (string.IsNullOrWhiteSpace(username)) errors.Add("Username must not be empty");
-        if (string.IsNullOrWhiteSpace(passwordHash)) errors.Add("Password must not be empty");
-        if (birthday.AddYears(18) > DateOnly.FromDateTime(DateTime.UtcNow))
-        {
-            errors.Add("User must be 18 or more years old");
-        }
+        Error? error = null;
+        if (string.IsNullOrWhiteSpace(username)) error = EmptyUsername;
+        else if (string.IsNullOrWhiteSpace(passwordHash)) error = EmptyPassword;
+        else if (birthday.AddYears(18) > DateOnly.FromDateTime(DateTime.UtcNow)) error = InvalidBirthday;
 
-        if (errors.Count > 0) return Result<User>.Failure(errors);
-
-        var user = new User(cpf, email, username, phone, birthday, passwordHash, addresses ?? []);
-        return Result<User>.Success(user);
+        return error is null
+            ? Result<User>.Success(new User(cpf, email, username, phone, birthday, passwordHash, addresses))
+            : Result<User>.Failure(error);
     }
 
     public void ChangeEmail(Email newEmail) => Email = newEmail;
 
     public Result<User> ChangeUsername(string newUsername)
     {
-        if (string.IsNullOrWhiteSpace(newUsername)) return Result<User>.Failure("Username must not be empty");
+        if (string.IsNullOrWhiteSpace(newUsername)) return Result<User>.Failure(EmptyUsername);
 
         Username = newUsername;
         return Result<User>.Success(this);
@@ -93,9 +90,7 @@ public class User : DefaultIdentityEntity
     public Result<User> ChangeBirthday(DateOnly newBirthday)
     {
         if (newBirthday.AddYears(18) > DateOnly.FromDateTime(DateTime.UtcNow))
-        {
-            return Result<User>.Failure("User must be 18 or more years old");
-        }
+            return Result<User>.Failure(InvalidBirthday);
 
         Birthday = newBirthday;
         return Result<User>.Success(this);
@@ -103,7 +98,7 @@ public class User : DefaultIdentityEntity
 
     public Result<User> ChangePassword(string newPasswordHash)
     {
-        if (string.IsNullOrWhiteSpace(newPasswordHash)) return Result<User>.Failure("Password must not be empty");
+        if (string.IsNullOrWhiteSpace(newPasswordHash)) return Result<User>.Failure(EmptyPassword);
 
         PasswordHash = newPasswordHash;
         return Result<User>.Success(this);

@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Domain.Entities.Accounts;
+using KluskaStore.Domain.Errors.Entities;
 using KluskaStore.Domain.ValueObjects.AccountData.Address;
 using Cpf = KluskaStore.Domain.ValueObjects.AccountData.Cpf;
 using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
@@ -27,6 +28,7 @@ public class UserTests
         var result = User.Create(_sut.Cpf, _sut.Email, _sut.Username, _sut.Phone, _sut.Birthday, _sut.PasswordHash, _sut.Addresses);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.IsActive.Should().BeTrue();
         result.Value.Cpf.Should().Be(_sut.Cpf);
         result.Value.Email.Should().Be(_sut.Email);
@@ -71,6 +73,7 @@ public class UserTests
         var result = _sut.ChangeUsername("");
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(UserErrors.EmptyUsername.Code);
     }
 
     [Fact]
@@ -111,6 +114,7 @@ public class UserTests
         var result = _sut.ChangeBirthday(DateOnly.FromDateTime(DateTime.UtcNow));
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(UserErrors.InvalidBirthday.Code);
     }
 
     [Fact]
@@ -130,6 +134,7 @@ public class UserTests
         var result = _sut.ChangePassword("");
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(UserErrors.EmptyPassword.Code);
     }
 
     [Fact]

@@ -14,6 +14,7 @@ public class PaymentTests
         var result = Payment.Create(userId, date, orderId, transferences);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
 
         var payment = result.Value;
         payment.PayerUserId.Should().Be(userId);

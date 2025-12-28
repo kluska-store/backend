@@ -12,7 +12,7 @@ public class GetSessionByTokenTests
     public GetSessionByTokenTests() => _sut = new GetSessionByTokenHandler(_mock.Object);
 
     private static Session GenerateValidSession(DateTime? createdAt = null)
-        => Session.CreateUserSession(Guid.NewGuid(), createdAt ?? DateTime.UtcNow).Value;
+        => Session.CreateUserSession(Guid.NewGuid(), createdAt ?? DateTime.UtcNow).Value!;
 
     private void SetupGetSessionByTokenReturnsNull() => _mock
         .Setup(repo => repo.GetByTokenAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))

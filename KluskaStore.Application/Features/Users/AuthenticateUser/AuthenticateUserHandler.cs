@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
+using static KluskaStore.Application.Features.Users.AuthenticateUser.AuthenticateUserErrors;
 
 namespace KluskaStore.Application.Features.Users.AuthenticateUser;
 
@@ -10,8 +11,8 @@ public sealed class AuthenticateUserHandler(IUnitOfWork uow) : IRequestHandler<A
         try
         {
             var user = await uow.Users.GetByEmailAsync(request.Email, cancellationToken);
-            if (user is null) return Result<string>.Failure("User not found");
-            if (user.PasswordHash != request.Password) return Result<string>.Failure("Password is incorrect");
+            if (user is null) return Result<string>.Failure(UserNotFound);
+            if (user.PasswordHash != request.Password) return Result<string>.Failure(PasswordIsIncorect);
 
             var sessionToken = await uow.Sessions.RegisterAsync(user, cancellationToken);
             await uow.CommitAsync(cancellationToken);
@@ -20,7 +21,7 @@ public sealed class AuthenticateUserHandler(IUnitOfWork uow) : IRequestHandler<A
         catch
         {
             await uow.RollbackAsync(cancellationToken);
-            return Result<string>.Failure("Something went wrong");
+            return Result<string>.Failure(UnexpectedError);
         }
     }
 }

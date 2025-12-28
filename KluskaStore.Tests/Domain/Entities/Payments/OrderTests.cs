@@ -24,6 +24,7 @@ public class OrderTests
         var result = Order.Create(_sut.UserId, _sut.Date, _sut.Items);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
 
         var order = result.Value;
         order.UserId.Should().Be(_sut.UserId);

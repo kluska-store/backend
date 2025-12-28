@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using KluskaStore.Domain.Errors.ValueObjects;
 using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects.AccountData;
@@ -12,7 +13,7 @@ public partial class Cnpj : IValueObject
     public static Result<Cnpj> Create(string value, bool skipVerifierDigitsValidation = false) =>
         Validate(value, skipVerifierDigitsValidation)
             ? Result<Cnpj>.Success(new Cnpj(value))
-            : Result<Cnpj>.Failure("Invalid cnpj");
+            : Result<Cnpj>.Failure(CnpjErrors.InvalidCnpj);
 
     [GeneratedRegex(@"^\d{14}$")]
     private static partial Regex CnpjRegex();

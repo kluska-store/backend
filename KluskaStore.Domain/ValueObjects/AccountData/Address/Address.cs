@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Domain.Interfaces;
+using static KluskaStore.Domain.Errors.ValueObjects.AddressErrors;
 
 namespace KluskaStore.Domain.ValueObjects.AccountData.Address;
 
@@ -41,16 +42,16 @@ public class Address : IValueObject
         string? complement = null
     )
     {
-        List<string> errors = [];
-        if (string.IsNullOrWhiteSpace(country)) errors.Add("Country must not be null");
-        if (string.IsNullOrWhiteSpace(state)) errors.Add("State must not be null");
-        if (string.IsNullOrWhiteSpace(city)) errors.Add("City must not be null");
-        if (string.IsNullOrWhiteSpace(street)) errors.Add("Street must not be null");
+        Error? error = null;
+        if (string.IsNullOrWhiteSpace(country)) error = MissingCountry;
+        if (string.IsNullOrWhiteSpace(state)) error = MissingState;
+        if (string.IsNullOrWhiteSpace(city)) error = MissingCity;
+        if (string.IsNullOrWhiteSpace(street)) error = MissingStreet;
 
         if (string.IsNullOrWhiteSpace(complement)) complement = null;
 
-        return errors.Count > 0
-            ? Result<Address>.Failure(errors)
+        return error is not null
+            ? Result<Address>.Failure(error)
             : Result<Address>.Success(new Address(country, state, city, street, number, postalCode, complement));
     }
 }

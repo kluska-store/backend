@@ -1,5 +1,6 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
 using KluskaStore.Domain.ValueObjects;
+using static KluskaStore.Domain.Errors.Entities.OrderErrors;
 
 namespace KluskaStore.Domain.Entities.Payments;
 
@@ -48,14 +49,14 @@ public class Order : DefaultIdentityEntity
     {
         var innerItems = items.ToList();
 
-        List<string> errors = [];
-        if (userId == Guid.Empty) errors.Add("User Id must not be empty");
-        if (date > DateTime.UtcNow) errors.Add("Ordering Date cannot be in the future");
-        if (innerItems.Count <= 0) errors.Add("Every Order must include at least 1 Item");
+        Error? error = null;
+        if (userId == Guid.Empty) error = EmptyUserId;
+        else if (date > DateTime.UtcNow) error = InvalidOrderingDate;
+        else if (innerItems.Count <= 0) error = EmptyOrder;
 
-        return errors.Count > 0
-            ? Result<Order>.Failure(errors)
-            : Result<Order>.Success(new Order(userId, date, innerItems));
+        return error is null
+            ? Result<Order>.Success(new Order(userId, date, innerItems))
+            : Result<Order>.Failure(error);
     }
 
     public void MarkAs(OrderStatusEnum status) => Status = status;

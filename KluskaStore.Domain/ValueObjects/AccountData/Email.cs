@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using KluskaStore.Domain.Errors.ValueObjects;
 using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects.AccountData;
@@ -12,7 +13,7 @@ public partial class Email : IValueObject
     public static Result<Email> Create(string value) =>
         EmailRegex().IsMatch(value)
             ? Result<Email>.Success(new Email(value))
-            : Result<Email>.Failure("Invalid email");
+            : Result<Email>.Failure(EmailErrors.InvalidEmail);
 
     [GeneratedRegex(@"^\w+(\.\w+)*@\w+(\.\w+)+$", RegexOptions.Compiled)]
     private static partial Regex EmailRegex();

@@ -13,6 +13,7 @@ public class CartTests : ProductCollectionTests
         var result = Cart.Create(userId, Items);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.UserId.Should().Be(userId);
         result.Value.Items.Should().BeEquivalentTo(Items.Where(i => i.Quantity > 0));
     }

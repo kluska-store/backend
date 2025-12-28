@@ -23,7 +23,7 @@ public class VerifySessionTests
         var result = ownerType == OwnerType.Store
             ? Session.CreateStoreSession((Guid)ownerId, (DateTime)createdAt)
             : Session.CreateUserSession((Guid)ownerId, (DateTime)createdAt);
-        return result.Value;
+        return result.Value!;
     }
 
     private void SetupGetBySessionTokenReturnsNull() => _mock

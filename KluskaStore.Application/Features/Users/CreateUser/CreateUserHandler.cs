@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
+using KluskaStore.Application.Features.Common.Results;
 using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.ValueObjects.AccountData;
 
@@ -16,26 +17,23 @@ public sealed class CreateUserHandler(IUserRepository repository)
         var emailResult = Email.Create(request.Email);
         var phoneResult = Phone.Create(request.Phone);
 
-        var errors = cpfResult.Errors
-            .Concat(emailResult.Errors)
-            .Concat(phoneResult.Errors)
-            .Distinct().ToList();
-
-        if (errors.Count > 0) return Result<CreateUserResponse>.Failure(errors);
+        var error = ResultHelper.FirsError(cpfResult, emailResult, phoneResult);
+        if (error is not null) return Result<CreateUserResponse>.Failure(error);
 
         var userResult = User.Create(
-            cpfResult.Value,
-            emailResult.Value,
+            cpfResult.Value!,
+            emailResult.Value!,
             request.Username,
-            phoneResult.Value,
+            phoneResult.Value!,
             request.Birthday,
-            request.RawPassword
+            request.RawPassword,
+            []
         );
 
-        errors = errors.Concat(userResult.Errors).Distinct().ToList();
-        if (errors.Count > 0) return Result<CreateUserResponse>.Failure(errors);
+        if (userResult.IsFailure)
+            return Result<CreateUserResponse>.Failure(userResult.Error!);
 
-        var id = await repository.AddAsync(userResult.Value, cancellationToken);
+        var id = await repository.AddAsync(userResult.Value!, cancellationToken);
         return Result<CreateUserResponse>.Success(new CreateUserResponse(id));
     }
 }

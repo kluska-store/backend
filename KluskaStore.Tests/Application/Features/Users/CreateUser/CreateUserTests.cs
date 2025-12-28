@@ -1,6 +1,8 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
 using KluskaStore.Application.Features.Users.CreateUser;
 using KluskaStore.Domain.Entities.Accounts;
+using KluskaStore.Domain.Errors.Entities;
+using KluskaStore.Domain.Errors.ValueObjects;
 
 namespace KluskaStore.Tests.Application.Features.Users.CreateUser;
 
@@ -51,6 +53,7 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.CreatedUserId.Should().Be(expectedId);
         VerifyAddUserCalledOnce();
     }
@@ -62,6 +65,7 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(CpfErrors.InvalidCpf.Code);
         VerifyAddUserNeverCalled();
     }
 
@@ -72,6 +76,7 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(EmailErrors.InvalidEmail.Code);
         VerifyAddUserNeverCalled();
     }
 
@@ -82,6 +87,7 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(UserErrors.EmptyUsername.Code);
         VerifyAddUserNeverCalled();
     }
 
@@ -92,6 +98,7 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(PhoneErrors.InvalidPhone.Code);
         VerifyAddUserNeverCalled();
     }
 
@@ -102,6 +109,7 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(UserErrors.InvalidBirthday.Code);
         VerifyAddUserNeverCalled();
     }
 
@@ -112,6 +120,7 @@ public class CreateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(UserErrors.EmptyPassword.Code);
         VerifyAddUserNeverCalled();
     }
 }

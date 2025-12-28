@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
+using KluskaStore.Domain.Errors.Entities;
 
 namespace KluskaStore.Domain.Entities.Payments;
 
@@ -17,12 +18,12 @@ public class Transference : DefaultIdentityEntity
 
     public static Result<Transference> Create(Guid receiverStoreId, decimal value)
     {
-        List<string> errors = [];
-        if (receiverStoreId == Guid.Empty) errors.Add("Receiver Store Id must not be empty");
-        if (value <= 0) errors.Add("Value must be grater than 0");
+        Error? error = null;
+        if (receiverStoreId == Guid.Empty) error = TransferenceErrors.EmptyReceiverId;
+        else if (value <= 0) error = TransferenceErrors.InvalidTransference;
 
-        return errors.Count > 0
-            ? Result<Transference>.Failure(errors)
-            : Result<Transference>.Success(new Transference(receiverStoreId, value));
+        return error is null
+            ? Result<Transference>.Success(new Transference(receiverStoreId, value))
+            : Result<Transference>.Failure(error);
     }
 }

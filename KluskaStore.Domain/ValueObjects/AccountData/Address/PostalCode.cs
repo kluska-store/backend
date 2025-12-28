@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using KluskaStore.Domain.Errors.ValueObjects;
 using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects.AccountData.Address;
@@ -12,7 +13,7 @@ public partial class PostalCode : IValueObject
     public static Result<PostalCode> Create(string value) =>
         PostalCodeRegex().IsMatch(value)
             ? Result<PostalCode>.Success(new PostalCode(value))
-            : Result<PostalCode>.Failure("Invalid postal code");
+            : Result<PostalCode>.Failure(PostalCodeErrors.InvalidPostalCode);
 
     [GeneratedRegex(@"^\d{8}$")]
     private static partial Regex PostalCodeRegex();

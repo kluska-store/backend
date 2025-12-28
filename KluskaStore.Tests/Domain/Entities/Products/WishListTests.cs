@@ -15,6 +15,7 @@ public class WishListTests : ProductCollectionTests
         var result = WishList.Create(userId, Items, name);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.UserId.Should().Be(userId);
         result.Value.Items.Should().BeEquivalentTo(Items.Where(i => i.Quantity > 0));
         result.Value.Name.Should().Be(name);

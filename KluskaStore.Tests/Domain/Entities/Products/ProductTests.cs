@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Domain.Entities.Products;
+using KluskaStore.Domain.Errors.Entities;
 
 namespace KluskaStore.Tests.Domain.Entities.Products;
 
@@ -21,6 +22,7 @@ public class ProductTests
         var result = Product.Create(_sut.Specifications, _sut.Price, _sut.Name);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.Specifications.Should().BeEquivalentTo(_sut.Specifications);
         result.Value.Price.Should().Be(_sut.Price);
         result.Value.Name.Should().Be(_sut.Name);
@@ -71,6 +73,7 @@ public class ProductTests
         var result = _sut.ChangePrice(0);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(ProductErrors.InvalidPrice.Code);
     }
 
     [Fact]
@@ -90,6 +93,7 @@ public class ProductTests
         var result = _sut.ChangeName("");
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(ProductErrors.EmptyName.Code);
     }
 
     [Fact]

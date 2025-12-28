@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
+using static KluskaStore.Application.Features.Products.GetProductById.GetProductByIdErrors;
 
 namespace KluskaStore.Application.Features.Products.GetProductById;
 
@@ -11,9 +12,9 @@ public class GetProductByIdHandler(IProductRepository repository)
     )
     {
         var product = await repository.GetByIdAsync(request.ProductId, cancellationToken);
-        if (product is null) return Result<ProductDto>.Failure("Product not found");
+        if (product is null) return Result<ProductDto>.Failure(ProductNotFound);
         return !product.IsAvailable
-            ? Result<ProductDto>.Failure("The Product is unavailable")
+            ? Result<ProductDto>.Failure(ProductIsUnavailable)
             : Result<ProductDto>.Success(product.ToDto());
     }
 }

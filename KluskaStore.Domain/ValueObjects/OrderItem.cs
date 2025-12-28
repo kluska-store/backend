@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Domain.Interfaces;
+using static KluskaStore.Domain.Errors.ValueObjects.OrderItemErrors;
 
 namespace KluskaStore.Domain.ValueObjects;
 
@@ -38,14 +39,14 @@ public record OrderItem : IValueObject
         IEnumerable<KeyValuePair<string, string>> specifications
     )
     {
-        List<string> errors = [];
-        if (productId == Guid.Empty) errors.Add("Product Id must not be empty");
-        if (string.IsNullOrWhiteSpace(name)) errors.Add("Name must not be empty");
-        if (unitPrice <= 0) errors.Add("Unit Price must be grater than 0");
-        if (quantity <= 0) errors.Add("Quantity must be grater than 0");
+        Error? error = null;
+        if (productId == Guid.Empty) error = EmptyProductId;
+        else if (string.IsNullOrWhiteSpace(name)) error = EmptyName;
+        else if (unitPrice <= 0) error = InvalidUnitPrice;
+        else if (quantity <= 0) error = InvalidQuantity;
 
-        return errors.Count > 0
-            ? Result<OrderItem>.Failure(errors)
+        return error is not null
+            ? Result<OrderItem>.Failure(error)
             : Result<OrderItem>.Success(
                 new OrderItem(productId, name, unitPrice, description, quantity, specifications)
             );

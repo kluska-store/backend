@@ -3,6 +3,7 @@ using KluskaStore.Domain.ValueObjects.AccountData.Address;
 using Cnpj = KluskaStore.Domain.ValueObjects.AccountData.Cnpj;
 using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
 using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
+using static KluskaStore.Domain.Errors.Entities.StoreErrors;
 
 namespace KluskaStore.Domain.Entities.Accounts;
 
@@ -43,19 +44,18 @@ public class Store : DefaultIdentityEntity
     public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash, Address address,
         IEnumerable<Phone> phones)
     {
-        List<string> errors = [];
+        Error? error = null;
+        if (string.IsNullOrWhiteSpace(name)) error = EmptyName;
+        else if (string.IsNullOrWhiteSpace(passwordHash)) error = EmptyPassword;
 
-        if (string.IsNullOrWhiteSpace(name)) errors.Add("Name must not be empty");
-        if (string.IsNullOrWhiteSpace(passwordHash)) errors.Add("Password must not be empty");
-
-        return errors.Count == 0
+        return error is null
             ? Result<Store>.Success(new Store(cnpj, name, email, passwordHash, address, phones))
-            : Result<Store>.Failure(errors);
+            : Result<Store>.Failure(error);
     }
 
     public Result<Store> ChangeName(string name)
     {
-        if (string.IsNullOrWhiteSpace(name)) return Result<Store>.Failure("Name must not be empty");
+        if (string.IsNullOrWhiteSpace(name)) return Result<Store>.Failure(EmptyName);
 
         Name = name;
         return Result<Store>.Success(this);
@@ -67,7 +67,7 @@ public class Store : DefaultIdentityEntity
 
     public Result<Store> ChangePasswordHash(string hash)
     {
-        if (string.IsNullOrWhiteSpace(hash)) return Result<Store>.Failure("Password must not be empty");
+        if (string.IsNullOrWhiteSpace(hash)) return Result<Store>.Failure(EmptyPassword);
 
         PasswordHash = hash;
         return Result<Store>.Success(this);

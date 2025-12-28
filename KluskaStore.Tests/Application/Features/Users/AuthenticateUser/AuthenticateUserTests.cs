@@ -70,6 +70,7 @@ public class AuthenticateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(AuthenticateUserErrors.UserNotFound.Code);
         VerifyGetUserByEmailCalledOnce();
         VerifyRegisterSessionNotCalled();
     }
@@ -83,6 +84,7 @@ public class AuthenticateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(AuthenticateUserErrors.PasswordIsIncorect.Code);
         VerifyGetUserByEmailCalledOnce();
         VerifyRegisterSessionNotCalled();
     }
@@ -98,6 +100,7 @@ public class AuthenticateUserTests
         var result = await _sut.Handle(command);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         VerifyGetUserByEmailCalledOnce();
         VerifyRegisterSessionCalledOnce();
     }

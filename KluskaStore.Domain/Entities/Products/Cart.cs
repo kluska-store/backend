@@ -1,4 +1,6 @@
-﻿namespace KluskaStore.Domain.Entities.Products;
+﻿using KluskaStore.Domain.Errors.Entities;
+
+namespace KluskaStore.Domain.Entities.Products;
 
 public class Cart : ProductCollection
 {
@@ -6,8 +8,7 @@ public class Cart : ProductCollection
 
     internal Cart(Guid userId, IEnumerable<Item> items) : base(userId, items) { }
 
-    public static Result<Cart> Create(Guid userId, IEnumerable<Item> items) =>
-        userId == Guid.Empty
-            ? Result<Cart>.Failure("User Id must be valid")
-            : Result<Cart>.Success(new Cart(userId, items.Where(i => i.Quantity > 0)));
+    public static Result<Cart> Create(Guid userId, IEnumerable<Item> items) => userId != Guid.Empty
+        ? Result<Cart>.Success(new Cart(userId, items))
+        : Result<Cart>.Failure(CartErrors.EmptyUserId);
 }

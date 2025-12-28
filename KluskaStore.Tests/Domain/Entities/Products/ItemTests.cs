@@ -12,6 +12,7 @@ public class ItemTests
         var result = Item.Create(product, quantity);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.Product.Should().Be(product);
         result.Value.Quantity.Should().Be(quantity);
     }

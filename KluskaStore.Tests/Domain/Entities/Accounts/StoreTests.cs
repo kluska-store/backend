@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Domain.Entities.Accounts;
+using KluskaStore.Domain.Errors.Entities;
 using KluskaStore.Domain.ValueObjects.AccountData.Address;
 using Cnpj = KluskaStore.Domain.ValueObjects.AccountData.Cnpj;
 using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
@@ -36,6 +37,7 @@ public class StoreTests
         var result = Store.Create(_sut.Cnpj, _sut.Name, _sut.Email, _sut.PasswordHash, _sut.Address, _sut.Phones);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.IsActive.Should().BeTrue();
         result.Value.Cnpj.Should().Be(_sut.Cnpj);
         result.Value.Name.Should().Be(_sut.Name);
@@ -70,6 +72,7 @@ public class StoreTests
         var result = _sut.ChangeName("");
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(StoreErrors.EmptyName.Code);
     }
 
     [Fact]
@@ -98,6 +101,7 @@ public class StoreTests
         var result = _sut.ChangePasswordHash("");
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(StoreErrors.EmptyPassword.Code);
     }
 
     [Fact]

@@ -1,4 +1,6 @@
-﻿namespace KluskaStore.Domain.Entities.Products;
+﻿using KluskaStore.Domain.Errors.Entities;
+
+namespace KluskaStore.Domain.Entities.Products;
 
 public class WishList : ProductCollection
 {
@@ -9,12 +11,12 @@ public class WishList : ProductCollection
 
     public static Result<WishList> Create(Guid userId, IEnumerable<Item> items, string name)
     {
-        List<string> errors = [];
-        if (userId == Guid.Empty) errors.Add("User Id must valid");
-        if (string.IsNullOrWhiteSpace(name)) errors.Add("Name must not be empty");
+        Error? error = null;
+        if (userId == Guid.Empty) error = WishListErrors.EmptyUserId;
+        else if (string.IsNullOrWhiteSpace(name)) error = WishListErrors.EmptyName;
 
-        return errors.Count == 0
-            ? Result<WishList>.Success(new WishList(userId, items.Where(i => i.Quantity > 0), name))
-            : Result<WishList>.Failure(errors);
+        return error is null
+            ? Result<WishList>.Success(new WishList(userId, items, name))
+            : Result<WishList>.Failure(error);
     }
 }

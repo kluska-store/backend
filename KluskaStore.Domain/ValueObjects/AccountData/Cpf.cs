@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using KluskaStore.Domain.Errors.ValueObjects;
 using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects.AccountData;
@@ -40,5 +41,5 @@ public partial class Cpf : IValueObject
     public static Result<Cpf> Create(string value, bool skipVerifierDigitsValidation = false) =>
         Validate(value, skipVerifierDigitsValidation)
             ? Result<Cpf>.Success(new Cpf(value))
-            : Result<Cpf>.Failure("Invalid cpf");
+            : Result<Cpf>.Failure(CpfErrors.InvalidCpf);
 }

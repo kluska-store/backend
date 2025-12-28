@@ -51,6 +51,7 @@ public class GetProductByIdTests
         var result = await _sut.Handle(query);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(GetProductByIdErrors.ProductNotFound.Code);
     }
 
     [Fact]
@@ -62,6 +63,7 @@ public class GetProductByIdTests
         var result = await _sut.Handle(query);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(GetProductByIdErrors.ProductIsUnavailable.Code);
     }
 
     [Fact]
@@ -73,5 +75,6 @@ public class GetProductByIdTests
         var result = await _sut.Handle(query);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
     }
 }

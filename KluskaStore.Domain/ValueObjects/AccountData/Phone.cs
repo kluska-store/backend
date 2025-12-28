@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using KluskaStore.Domain.Errors.ValueObjects;
 using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects.AccountData;
@@ -16,7 +17,7 @@ public partial class Phone : IValueObject
     public static Result<Phone> Create(string value) =>
         PhoneRegex().IsMatch(value)
             ? Result<Phone>.Success(new Phone(value))
-            : Result<Phone>.Failure("Invalid phone");
+            : Result<Phone>.Failure(PhoneErrors.InvalidPhone);
 
     private string GetPhonePart(string partName) => PhoneRegex().Match(FullPhone).Groups[partName].Value;
 

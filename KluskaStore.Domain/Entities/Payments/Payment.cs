@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Domain.Entities.Generics;
+using static KluskaStore.Domain.Errors.Entities.PaymentErrors;
 
 namespace KluskaStore.Domain.Entities.Payments;
 
@@ -27,14 +28,14 @@ public class Payment : DefaultIdentityEntity
         IEnumerable<Transference> transferences)
     {
         var innerTransferences = transferences.ToList();
-        List<string> errors = [];
-        if (payerUserId == Guid.Empty) errors.Add("Payer User Id must not be empty");
-        if (date > DateTime.UtcNow) errors.Add("Payment Date must not be in the future");
-        if (orderId == Guid.Empty) errors.Add("Order Id must not be empty");
-        if (innerTransferences.Count < 1) errors.Add("A Payment must contain at least 1 Transference");
+        Error? error = null;
+        if (payerUserId == Guid.Empty) error = EmptyUserId;
+        else if (date > DateTime.UtcNow) error = InvalidPaymentDate;
+        else if (orderId == Guid.Empty) error = EmptyOrderId;
+        else if (innerTransferences.Count < 1) error = EmptyPayment;
 
-        return errors.Count > 0
-            ? Result<Payment>.Failure(errors)
-            : Result<Payment>.Success(new Payment(payerUserId, date, orderId, innerTransferences));
+        return error is null
+            ? Result<Payment>.Success(new Payment(payerUserId, date, orderId, innerTransferences))
+            : Result<Payment>.Failure(error);
     }
 }

@@ -1,4 +1,6 @@
-﻿using KluskaStore.Domain.Entities.Generics;
+﻿using System.Security.AccessControl;
+using KluskaStore.Domain.Entities.Generics;
+using KluskaStore.Domain.Errors.Entities;
 
 namespace KluskaStore.Domain.Entities.Products;
 
@@ -33,34 +35,27 @@ public class Product : DefaultIdentityEntity
         string name
     )
     {
-        List<string> errors = [];
+        Error? error = null;
+        if (price <= 0) error = ProductErrors.InvalidPrice;
+        else if (string.IsNullOrWhiteSpace(name)) error = ProductErrors.EmptyName;
 
-        if (price <= 0) errors.Add("Price must be grater than 0");
-        if (string.IsNullOrWhiteSpace(name)) errors.Add("Name must not be empty");
-
-        return errors.Count > 0
-            ? Result<Product>.Failure(errors)
-            : Result<Product>.Success(new Product(specifications.ToDictionary(), price, name));
+        return error is null
+            ? Result<Product>.Success(new Product(specifications.ToDictionary(), price, name))
+            : Result<Product>.Failure(error);
     }
 
     public void PatchSpecifications(IEnumerable<KeyValuePair<string, string?>> patch)
     {
         foreach (var (key, val) in patch)
         {
-            if (string.IsNullOrWhiteSpace(val))
-            {
-                _specifications.Remove(key);
-            }
-            else
-            {
-                _specifications[key] = val;
-            }
+            if (string.IsNullOrWhiteSpace(val)) _specifications.Remove(key);
+            else _specifications[key] = val;
         }
     }
 
     public Result<Product> ChangePrice(decimal newPrice)
     {
-        if (newPrice <= 0) return Result<Product>.Failure("Price must be grater than 0");
+        if (newPrice <= 0) return Result<Product>.Failure(ProductErrors.InvalidPrice);
 
         Price = newPrice;
         return Result<Product>.Success(this);
@@ -68,7 +63,7 @@ public class Product : DefaultIdentityEntity
 
     public Result<Product> ChangeName(string newName)
     {
-        if (string.IsNullOrWhiteSpace(newName)) return Result<Product>.Failure("Name must not be empty");
+        if (string.IsNullOrWhiteSpace(newName)) return Result<Product>.Failure(ProductErrors.EmptyName);
 
         Name = newName;
         return Result<Product>.Success(this);

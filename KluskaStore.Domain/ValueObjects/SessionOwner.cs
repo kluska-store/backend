@@ -1,4 +1,5 @@
-﻿using KluskaStore.Domain.Interfaces;
+﻿using KluskaStore.Domain.Errors.ValueObjects;
+using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects;
 
@@ -21,7 +22,7 @@ public class SessionOwner : IValueObject
 
     private static Result<SessionOwner> Create(OwnerTypeEnum type, Guid ownerId) =>
         ownerId == Guid.Empty
-            ? Result<SessionOwner>.Failure("Invalid session owner id")
+            ? Result<SessionOwner>.Failure(SessionOwnerErrors.EmptyOwnerId)
             : Result<SessionOwner>.Success(new SessionOwner(type, ownerId));
 
     public static Result<SessionOwner> User(Guid userId) => Create(OwnerTypeEnum.User, userId);

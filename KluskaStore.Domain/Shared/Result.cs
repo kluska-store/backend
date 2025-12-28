@@ -2,22 +2,17 @@
 
 public class Result
 {
-    private readonly List<string> _errors = [];
-
-    internal Result(bool isSucess, params IEnumerable<string> errors)
+    protected Result(bool isSucess, Error? error = null)
     {
         IsSuccess = isSucess;
-        AddErrors(errors);
+        Error = error;
     }
 
     public bool IsSuccess { get; }
+    public Error? Error { get; }
     public bool IsFailure => !IsSuccess;
-    public IReadOnlyList<string> Errors => _errors.AsReadOnly();
 
     public static Result Success() => new(true);
 
-    public static Result Failure(params IEnumerable<string> errors) => new(false, errors);
-
-    public void AddErrors(params IEnumerable<string> errors) =>
-        _errors.AddRange(errors.Where(e => !string.IsNullOrWhiteSpace(e)));
+    public static Result Failure(Error error) => new(false, error);
 }
