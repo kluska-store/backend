@@ -1,5 +1,4 @@
-﻿using System.Security.AccessControl;
-using KluskaStore.Domain.Entities.Generics;
+﻿using KluskaStore.Domain.Entities.Generics;
 using KluskaStore.Domain.Errors.Entities;
 
 namespace KluskaStore.Domain.Entities.Products;
@@ -15,9 +14,9 @@ public class Product : DefaultIdentityEntity
         IsAvailable = true;
     }
 
-    internal Product(Dictionary<string, string> specifications, decimal price, string name)
+    internal Product(decimal price, string name)
     {
-        _specifications = specifications;
+        _specifications = new Dictionary<string, string>();
         Price = price;
         Name = name;
         IsAvailable = true;
@@ -30,7 +29,6 @@ public class Product : DefaultIdentityEntity
     public bool IsAvailable { get; protected set; }
 
     public static Result<Product> Create(
-        IEnumerable<KeyValuePair<string, string>> specifications,
         decimal price,
         string name
     )
@@ -40,7 +38,7 @@ public class Product : DefaultIdentityEntity
         else if (string.IsNullOrWhiteSpace(name)) error = ProductErrors.EmptyName;
 
         return error is null
-            ? Result<Product>.Success(new Product(specifications.ToDictionary(), price, name))
+            ? Result<Product>.Success(new Product(price, name))
             : Result<Product>.Failure(error);
     }
 

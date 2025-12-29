@@ -5,25 +5,16 @@ namespace KluskaStore.Tests.Domain.Entities.Products;
 
 public class ProductTests
 {
-    private readonly Product _sut = new(
-        new Dictionary<string, string>
-        {
-            ["size"] = "15cm x 30cm",
-            ["weight"] = "5kg",
-            ["category"] = "food"
-        },
-        100,
-        "Sac of Rice"
-    );
+    private readonly Product _sut = new(100, "Sac of Rice");
 
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsValid_ThenCreatesEntity()
     {
-        var result = Product.Create(_sut.Specifications, _sut.Price, _sut.Name);
+        var result = Product.Create(_sut.Price, _sut.Name);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
-        result.Value.Specifications.Should().BeEquivalentTo(_sut.Specifications);
+        result.Value.Specifications.Should().BeEmpty();
         result.Value.Price.Should().Be(_sut.Price);
         result.Value.Name.Should().Be(_sut.Name);
         result.Value.IsAvailable.Should().BeTrue();
@@ -32,28 +23,46 @@ public class ProductTests
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsInvalid_ThenReturnsFailure()
     {
-        var result = Product.Create(new Dictionary<string, string>(), 0, null!);
+        var result = Product.Create(0, null!);
 
         result.IsFailure.Should().BeTrue();
     }
 
     [Fact]
-    public void GivenSpecificationsPatch_ThenPatchesSpecifications()
+    public void GivenSpecificationsPatch_WhenTargetSpecificationDoesNotExist_ThenCreatesSpecification()
     {
-        var size = _sut.Specifications["size"];
-        Dictionary<string, string?> patch = new()
-        {
-            ["category"] = null,
-            ["weight"] = "3kg",
-            ["brand"] = "joãozinho arrozes"
-        };
+        const string target = "size", value = "10 x 20cm";
+        _sut.Specifications.ContainsKey(target).Should().BeFalse();
 
+        _sut.PatchSpecifications(new Dictionary<string, string?> { [target] = value });
+
+        _sut.Specifications[target].Should().Be(value);
+    }
+
+    [Fact]
+    public void GivenSpecificationPatch_WhenTargetSpecificationExists_ThenAltersItsValue()
+    {
+        const string target = "size", value = "10 x 20cm";
+        var patch = new Dictionary<string, string?> { [target] = "2 x 30cm" };
         _sut.PatchSpecifications(patch);
 
-        _sut.Specifications.ContainsKey("category").Should().BeFalse();
-        _sut.Specifications["brand"].Should().Be(patch["brand"]);
-        _sut.Specifications["weight"].Should().Be(patch["weight"]);
-        _sut.Specifications["size"].Should().Be(size);
+        patch[target] = value;
+        _sut.PatchSpecifications(patch);
+
+        _sut.Specifications[target].Should().Be(value);
+    }
+
+    [Fact]
+    public void GivenSpecificationPatch_WhenTargetSpecificationIsSetToNull_ThenRemovesSpecification()
+    {
+        const string target = "size";
+        var patch = new Dictionary<string, string?> { [target] = "10 x 20cm" };
+        _sut.PatchSpecifications(patch);
+
+        patch[target] = null;
+        _sut.PatchSpecifications(patch);
+
+        _sut.Specifications.ContainsKey(target).Should().BeFalse();
     }
 
     [Fact]

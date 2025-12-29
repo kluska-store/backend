@@ -7,10 +7,10 @@ public abstract class ProductCollectionTests
     protected readonly List<Item> Items;
     protected readonly List<Product> Products =
     [
-        new(null!, 10, "p1"),
-        new(null!, 20, "p2"),
-        new(null!, 30, "p3"),
-        new(null!, 40, "p4")
+        new(10, "p1"),
+        new(20, "p2"),
+        new(30, "p3"),
+        new(40, "p4")
     ];
 
     protected ProductCollectionTests() => Items =

@@ -13,11 +13,7 @@ public class GetProductByIdTests
 
     private static Product GenerateValidProduct(bool isAvailable = true)
     {
-        var product = new Product(
-            new Dictionary<string, string>(),
-            100,
-            "Sac of Rice"
-        );
+        var product = new Product(100, "Sac of Rice");
 
         if (!isAvailable) product.MarkAsUnavailable();
         return product;
