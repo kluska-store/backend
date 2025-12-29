@@ -1,6 +1,7 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
 using KluskaStore.Application.Features.Sessions.GetSessionByToken;
 using KluskaStore.Domain.Entities.Accounts;
+using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Tests.Application.Features.Sessions.GetSessionByToken;
 
@@ -12,7 +13,7 @@ public class GetSessionByTokenTests
     public GetSessionByTokenTests() => _sut = new GetSessionByTokenHandler(_mock.Object);
 
     private static Session GenerateValidSession(DateTime? createdAt = null)
-        => Session.CreateUserSession(Guid.NewGuid(), createdAt ?? DateTime.UtcNow).Value!;
+        => new(new SessionOwner(SessionOwner.OwnerTypeEnum.User, Guid.NewGuid()), createdAt ?? DateTime.UtcNow);
 
     private void SetupGetSessionByTokenReturnsNull() => _mock
         .Setup(repo => repo.GetByTokenAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))

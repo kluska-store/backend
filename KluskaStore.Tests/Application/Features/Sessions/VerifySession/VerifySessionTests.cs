@@ -1,6 +1,7 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
 using KluskaStore.Application.Features.Sessions.VerifySession;
 using KluskaStore.Domain.Entities.Accounts;
+using KluskaStore.Domain.ValueObjects;
 using OwnerType = KluskaStore.Domain.ValueObjects.SessionOwner.OwnerTypeEnum;
 
 namespace KluskaStore.Tests.Application.Features.Sessions.VerifySession;
@@ -16,15 +17,7 @@ public class VerifySessionTests
         OwnerType ownerType = OwnerType.User,
         Guid? ownerId = null,
         DateTime? createdAt = null
-    )
-    {
-        ownerId ??= Guid.NewGuid();
-        createdAt ??= DateTime.UtcNow;
-        var result = ownerType == OwnerType.Store
-            ? Session.CreateStoreSession((Guid)ownerId, (DateTime)createdAt)
-            : Session.CreateUserSession((Guid)ownerId, (DateTime)createdAt);
-        return result.Value!;
-    }
+    ) => new(new SessionOwner(ownerType, ownerId ?? Guid.NewGuid()), createdAt ?? DateTime.UtcNow);
 
     private void SetupGetBySessionTokenReturnsNull() => _mock
         .Setup(repo => repo.GetByTokenAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
