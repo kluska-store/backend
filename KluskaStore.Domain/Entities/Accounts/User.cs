@@ -25,8 +25,7 @@ public class User : DefaultIdentityEntity
         string username,
         Phone phone,
         DateOnly birthday,
-        string passwordHash,
-        IEnumerable<Address> addresses
+        string passwordHash
     )
     {
         Cpf = cpf;
@@ -36,7 +35,7 @@ public class User : DefaultIdentityEntity
         Phone = phone;
         Birthday = birthday;
         PasswordHash = passwordHash;
-        _addresses = addresses.ToList();
+        _addresses = [];
     }
 
     private readonly List<Address> _addresses;
@@ -57,8 +56,7 @@ public class User : DefaultIdentityEntity
         string username,
         Phone phone,
         DateOnly birthday,
-        string passwordHash,
-        IEnumerable<Address> addresses
+        string passwordHash
     )
     {
         Error? error = null;
@@ -67,7 +65,7 @@ public class User : DefaultIdentityEntity
         else if (birthday.AddYears(18) > DateOnly.FromDateTime(DateTime.UtcNow)) error = InvalidBirthday;
 
         return error is null
-            ? Result<User>.Success(new User(cpf, email, username, phone, birthday, passwordHash, addresses))
+            ? Result<User>.Success(new User(cpf, email, username, phone, birthday, passwordHash))
             : Result<User>.Failure(error);
     }
 

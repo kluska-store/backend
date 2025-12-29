@@ -26,8 +26,7 @@ public class GetUserByIdTests
             "username",
             new Phone("phone"),
             DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-20)),
-            "password",
-            []
+            "password"
         );
 
         _mock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))

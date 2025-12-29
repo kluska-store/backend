@@ -26,8 +26,7 @@ public sealed class CreateUserHandler(IUserRepository repository)
             request.Username,
             phoneResult.Value!,
             request.Birthday,
-            request.RawPassword,
-            []
+            request.RawPassword
         );
 
         if (userResult.IsFailure)

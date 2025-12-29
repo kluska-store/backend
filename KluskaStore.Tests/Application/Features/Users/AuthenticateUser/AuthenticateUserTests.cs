@@ -30,8 +30,7 @@ public class AuthenticateUserTests
         username ?? "username",
         new Phone(phone ?? "+55 (11) 00000-0000"),
         birthday ?? DateOnly.FromDateTime(DateTime.UtcNow),
-        password ?? "password123",
-        addresses ?? []
+        password ?? "password123"
     );
 
     private void SetupGetUserByEmailReturnsNull() => _mock

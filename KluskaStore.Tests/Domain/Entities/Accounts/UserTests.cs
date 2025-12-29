@@ -15,17 +15,13 @@ public class UserTests
         "username",
         new Phone("phone"),
         DateOnly.Parse("2000-03-03"),
-        "password",
-        [
-            new Address(null!, null!, null!, null!, 1, null!, null!),
-            new Address(null!, null!, null!, null!, 2, null!, null!)
-        ]
+        "password"
     );
 
     [Fact]
     public void GivenEntityCreation_WhenDataIsValid_ThenCreatesUser()
     {
-        var result = User.Create(_sut.Cpf, _sut.Email, _sut.Username, _sut.Phone, _sut.Birthday, _sut.PasswordHash, _sut.Addresses);
+        var result = User.Create(_sut.Cpf, _sut.Email, _sut.Username, _sut.Phone, _sut.Birthday, _sut.PasswordHash);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
@@ -36,14 +32,14 @@ public class UserTests
         result.Value.Phone.Should().Be(_sut.Phone);
         result.Value.Birthday.Should().Be(_sut.Birthday);
         result.Value.PasswordHash.Should().Be(_sut.PasswordHash);
-        result.Value.Addresses.Should().BeEquivalentTo(_sut.Addresses);
-        result.Value.HasAnyAddress().Should().BeTrue();
+        result.Value.Addresses.Should().BeEmpty();
+        result.Value.HasAnyAddress().Should().BeFalse();
     }
 
     [Fact]
     public void GivenEntityCreation_WhenDataIsInvalid_ThenReturnsFailure()
     {
-        var result = User.Create(null!, null!, "", null!, DateOnly.FromDateTime(DateTime.UtcNow), "", null);
+        var result = User.Create(null!, null!, "", null!, DateOnly.FromDateTime(DateTime.UtcNow), "");
 
         result.IsFailure.Should().BeTrue();
     }
@@ -140,26 +136,31 @@ public class UserTests
     [Fact]
     public void GivenAddressAddition_ThenIncreasesTheAmountOfAddresses()
     {
-        var lastAmount = _sut.Addresses.Count;
+        var address = new Address(null!, null!, null!, null!, 3, null!, null!);
+        _sut.Addresses.Should().BeEmpty();
 
-        _sut.AddAddresses(new Address(null!, null!, null!, null!, 3, null!, null!));
+        _sut.AddAddresses(address);
 
-        _sut.Addresses.Count.Should().Be(lastAmount + 1);
+        _sut.Addresses.Should().ContainEquivalentOf(address);
     }
 
     [Fact]
     public void GivenAddressRemoval_WhenRemovingThroughTheInstance_ThenDecreasesTheAmountOfAddresses()
     {
+        var address = new Address(null!, null!, null!, null!, 3, null!, null!);
+        _sut.AddAddresses(null!, address, null!);
         var lastAmount = _sut.Addresses.Count;
 
-        _sut.RemoveAddresses(_sut.Addresses[1]);
+        _sut.RemoveAddresses(address);
 
         _sut.Addresses.Count.Should().Be(lastAmount - 1);
+        _sut.Addresses.Should().NotContainEquivalentOf(address);
     }
 
     [Fact]
     public void GivenAddressRemoval_WhenRemovingThroughTheIndex_ThenDecreasesTheAmountOfAddresses()
     {
+        _sut.AddAddresses(null!, null!, null!);
         var lastAmount = _sut.Addresses.Count;
 
         _sut.RemoveAddressAt(1);
