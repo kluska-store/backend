@@ -21,7 +21,7 @@ public class Store : DefaultIdentityEntity
         _phones = null!;
     }
 
-    internal Store(Cnpj cnpj, string name, Email email, string passwordHash, Address address, IEnumerable<Phone> phones)
+    internal Store(Cnpj cnpj, string name, Email email, string passwordHash, Address address)
     {
         Cnpj = cnpj;
         Name = name;
@@ -29,7 +29,7 @@ public class Store : DefaultIdentityEntity
         IsActive = true;
         PasswordHash = passwordHash;
         Address = address;
-        _phones = phones.ToList();
+        _phones = [];
     }
 
     public Cnpj Cnpj { get; private set; }
@@ -41,15 +41,14 @@ public class Store : DefaultIdentityEntity
     public Address Address { get; private set; }
     public IReadOnlyList<Phone> Phones => _phones.AsReadOnly();
 
-    public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash, Address address,
-        IEnumerable<Phone> phones)
+    public static Result<Store> Create(Cnpj cnpj, string name, Email email, string passwordHash, Address address)
     {
         Error? error = null;
         if (string.IsNullOrWhiteSpace(name)) error = EmptyName;
         else if (string.IsNullOrWhiteSpace(passwordHash)) error = EmptyPassword;
 
         return error is null
-            ? Result<Store>.Success(new Store(cnpj, name, email, passwordHash, address, phones))
+            ? Result<Store>.Success(new Store(cnpj, name, email, passwordHash, address))
             : Result<Store>.Failure(error);
     }
 

@@ -23,18 +23,13 @@ public class StoreTests
             0,
             new PostalCode("postal code"),
             "complement"
-        ),
-        [
-            new Phone("phone"),
-            new Phone("phone 2"),
-            new Phone("phone 3")
-        ]
+        )
     );
 
     [Fact]
     public void GivenEntityCreation_WhenDataIsValid_ThenCreatesStore()
     {
-        var result = Store.Create(_sut.Cnpj, _sut.Name, _sut.Email, _sut.PasswordHash, _sut.Address, _sut.Phones);
+        var result = Store.Create(_sut.Cnpj, _sut.Name, _sut.Email, _sut.PasswordHash, _sut.Address);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
@@ -44,13 +39,13 @@ public class StoreTests
         result.Value.Email.Should().Be(_sut.Email);
         result.Value.PasswordHash.Should().Be(_sut.PasswordHash);
         result.Value.Address.Should().Be(_sut.Address);
-        result.Value.Phones.Should().BeEquivalentTo(_sut.Phones);
+        result.Value.Phones.Should().BeEmpty();
     }
 
     [Fact]
     public void GivenEntityCreation_WhenDataIsInvalid_ThenReturnsFailure()
     {
-        var result = Store.Create(null!, "", null!, "", null!, []);
+        var result = Store.Create(null!, "", null!, "", null!);
 
         result.IsFailure.Should().BeTrue();
     }
