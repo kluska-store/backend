@@ -9,7 +9,7 @@ public class SessionTests
     private static SessionOwner GenerateValidSessionOwner() => new(SessionOwner.OwnerTypeEnum.User, Guid.NewGuid());
 
     [Fact]
-    public void GivenValidUserSession_WhenSessionNotExpired_ThenCreatesEntity()
+    public void GivenEntityCreation_WhenSessionNotExpired_ThenCreatesEntity()
     {
         var result = Session.Create(GenerateValidSessionOwner(), DateTime.UtcNow);
 
@@ -20,7 +20,7 @@ public class SessionTests
     }
 
     [Fact]
-    public void GivenValidUserSession_WhenSessionExpired_ThenCreatesEntity()
+    public void GivenEntityCreation_WhenSessionExpired_ThenCreatesEntity()
     {
         var result = Session.Create(GenerateValidSessionOwner(), DateTime.UtcNow.AddYears(-2));
 
