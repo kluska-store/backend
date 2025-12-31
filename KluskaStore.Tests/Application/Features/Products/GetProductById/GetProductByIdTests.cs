@@ -48,6 +48,7 @@ public class GetProductByIdTests
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(GetProductByIdErrors.ProductNotFound.Code);
+        VerifyGetProductByIdCalledOnce();
     }
 
     [Fact]
@@ -60,6 +61,7 @@ public class GetProductByIdTests
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(GetProductByIdErrors.ProductIsUnavailable.Code);
+        VerifyGetProductByIdCalledOnce();
     }
 
     [Fact]
@@ -72,5 +74,6 @@ public class GetProductByIdTests
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
+        VerifyGetProductByIdCalledOnce();
     }
 }
