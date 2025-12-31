@@ -10,18 +10,17 @@ public partial class Cnpj : IValueObject
 
     public string Value { get; }
 
-    public static Result<Cnpj> Create(string value, bool skipVerifierDigitsValidation = false) =>
-        Validate(value, skipVerifierDigitsValidation)
+    public static Result<Cnpj> Create(string value) =>
+        Validate(value)
             ? Result<Cnpj>.Success(new Cnpj(value))
             : Result<Cnpj>.Failure(CnpjErrors.InvalidCnpj);
 
     [GeneratedRegex(@"^\d{14}$")]
     private static partial Regex CnpjRegex();
 
-    private static bool Validate(string cnpj, bool skipCheckDigits = false)
+    private static bool Validate(string cnpj)
     {
         if (!CnpjRegex().IsMatch(cnpj)) return false;
-        if (skipCheckDigits) return true;
         if (cnpj.Distinct().Count() == 1) return false;
 
         int[] weights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];

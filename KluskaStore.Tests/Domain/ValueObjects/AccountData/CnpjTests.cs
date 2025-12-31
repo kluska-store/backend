@@ -8,7 +8,7 @@ public class CnpjTests
     [Theory]
     [InlineData("04658924000130")]
     [InlineData("10619284000152")]
-    public void GivenValidCnpj_WhenNotSkippingVerifierDigitsValidation_ThenCreatesVo(string cnpj)
+    public void GivenVoCreation_WhenInitialDataIsValid_ThenCreatesVo(string cnpj)
     {
         var result = Cnpj.Create(cnpj);
 
@@ -23,7 +23,7 @@ public class CnpjTests
     [InlineData("04658924w00013")]
     [InlineData("00000000000000")]
     [InlineData("04658924000")]
-    public void GivenInvalidCnpj_WhenCreatingVoWithoutSkippingVerifierDigitsValidation_ThenReturnsFailure(string cnpj)
+    public void GivenVoCreation_WhenCnpjIsInvalid_ThenReturnsFailure(string cnpj)
     {
         var result = Cnpj.Create(cnpj);
 

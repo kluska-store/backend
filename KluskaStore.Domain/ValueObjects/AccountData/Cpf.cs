@@ -13,10 +13,9 @@ public partial class Cpf : IValueObject
     [GeneratedRegex(@"^\d{11}$")]
     private static partial Regex CpfRegex();
 
-    private static bool Validate(string cpf, bool skipCheckDigits)
+    private static bool Validate(string cpf)
     {
         if (!CpfRegex().IsMatch(cpf)) return false;
-        if (skipCheckDigits) return true;
         if (cpf.Distinct().Count() == 1) return false;
 
         var sum = 0;
@@ -38,8 +37,8 @@ public partial class Cpf : IValueObject
         return verifierDigit == (int)char.GetNumericValue(cpf[10]);
     }
 
-    public static Result<Cpf> Create(string value, bool skipVerifierDigitsValidation = false) =>
-        Validate(value, skipVerifierDigitsValidation)
+    public static Result<Cpf> Create(string value) =>
+        Validate(value)
             ? Result<Cpf>.Success(new Cpf(value))
             : Result<Cpf>.Failure(CpfErrors.InvalidCpf);
 }
