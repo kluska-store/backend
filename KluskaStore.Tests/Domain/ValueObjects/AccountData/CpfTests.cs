@@ -1,4 +1,5 @@
-﻿using KluskaStore.Domain.ValueObjects.AccountData;
+﻿using KluskaStore.Domain.Errors.ValueObjects;
+using KluskaStore.Domain.ValueObjects.AccountData;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.AccountData;
 
@@ -12,6 +13,7 @@ public class CpfTests
         var result = Cpf.Create(cpf);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.Value.Should().Be(cpf);
     }
 
@@ -26,6 +28,7 @@ public class CpfTests
         var result = Cpf.Create(cpf);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(CpfErrors.InvalidCpf.Code);
     }
 
     [Theory]
@@ -36,6 +39,7 @@ public class CpfTests
         var result = Cpf.Create(cpf, true);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.Value.Should().Be(cpf);
     }
 }

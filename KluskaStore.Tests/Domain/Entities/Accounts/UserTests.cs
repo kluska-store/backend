@@ -37,11 +37,31 @@ public class UserTests
     }
 
     [Fact]
-    public void GivenEntityCreation_WhenDataIsInvalid_ThenReturnsFailure()
+    public void GivenEntityCreation_WhenNameIsEmpty_ThenReturnsFailure()
     {
-        var result = User.Create(null!, null!, "", null!, DateOnly.FromDateTime(DateTime.UtcNow), "");
+        var result = User.Create(_sut.Cpf, _sut.Email, "", _sut.Phone, _sut.Birthday, _sut.PasswordHash);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(UserErrors.EmptyUsername.Code);
+    }
+
+    [Fact]
+    public void GivenEntityCreation_WhenUserIsAMinor_ThenReturnsFailure()
+    {
+        var birthday = DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-15));
+        var result = User.Create(_sut.Cpf, _sut.Email, _sut.Username, _sut.Phone, birthday, _sut.PasswordHash);
+
+        result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(UserErrors.InvalidBirthday.Code);
+    }
+
+    [Fact]
+    public void GivenEntityCreation_WhenPasswordIsEmpty_ThenReturnsFailure()
+    {
+        var result = User.Create(_sut.Cpf, _sut.Email, _sut.Username, _sut.Phone, _sut.Birthday, "");
+
+        result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(UserErrors.EmptyPassword.Code);
     }
 
     [Fact]

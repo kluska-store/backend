@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Domain.Entities.Payments;
+using KluskaStore.Domain.Errors.Entities;
 using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Tests.Domain.Entities.Payments;
@@ -39,11 +40,30 @@ public class OrderTests
     }
 
     [Fact]
-    public void GivenEntityCreation_WhenInitialDataIsInvalid_ThenReturnsFailure()
+    public void GivenEntityCreation_WhenUserIdIsEmpty_ThenReturnsFailure()
     {
-        var result = Order.Create(Guid.Empty, DateTime.UtcNow.AddDays(1), []);
+        var result = Order.Create(Guid.Empty, _sut.Date, _sut.Items);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(OrderErrors.EmptyUserId.Code);
+    }
+
+    [Fact]
+    public void GivenEntityCreation_WhenOrderingDateIsInTheFuture_ThenReturnsFailure()
+    {
+        var result = Order.Create(_sut.UserId, DateTime.UtcNow.AddDays(1), _sut.Items);
+
+        result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(OrderErrors.InvalidOrderingDate.Code);
+    }
+
+    [Fact]
+    public void GivenEntityCreation_WhenNoItemsAreProvided_ThenReturnsFailure()
+    {
+        var result = Order.Create(_sut.UserId, _sut.Date, []);
+
+        result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(OrderErrors.EmptyOrder.Code);
     }
 
     [Fact]

@@ -1,4 +1,5 @@
-﻿using KluskaStore.Domain.ValueObjects.AccountData;
+﻿using KluskaStore.Domain.Errors.ValueObjects;
+using KluskaStore.Domain.ValueObjects.AccountData;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.AccountData;
 
@@ -12,6 +13,7 @@ public class CnpjTests
         var result = Cnpj.Create(cnpj);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.Value.Should().Be(cnpj);
     }
 
@@ -21,10 +23,11 @@ public class CnpjTests
     [InlineData("04658924w00013")]
     [InlineData("00000000000000")]
     [InlineData("04658924000")]
-    public void GivenInvalidCnpj_WhenNotSkippingVerifierDigistValidation_ThenReturnsInvalidVoResult(string cnpj)
+    public void GivenInvalidCnpj_WhenCreatingVoWithoutSkippingVerifierDigitsValidation_ThenReturnsFailure(string cnpj)
     {
         var result = Cnpj.Create(cnpj);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(CnpjErrors.InvalidCnpj.Code);
     }
 }

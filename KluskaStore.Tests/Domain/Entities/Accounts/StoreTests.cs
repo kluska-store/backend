@@ -43,11 +43,21 @@ public class StoreTests
     }
 
     [Fact]
-    public void GivenEntityCreation_WhenDataIsInvalid_ThenReturnsFailure()
+    public void GivenEntityCreation_WhenNameIsEmpty_ThenReturnsFailure()
     {
-        var result = Store.Create(null!, "", null!, "", null!);
+        var result = Store.Create(_sut.Cnpj, "", _sut.Email, _sut.PasswordHash, _sut.Address);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(StoreErrors.EmptyName.Code);
+    }
+
+    [Fact]
+    public void GivenEntityCreation_WhenPasswordIsEmpty_ThenReturnsFailure()
+    {
+        var result = Store.Create(_sut.Cnpj, _sut.Name, _sut.Email, "", _sut.Address);
+
+        result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(StoreErrors.EmptyPassword.Code);
     }
 
     [Fact]

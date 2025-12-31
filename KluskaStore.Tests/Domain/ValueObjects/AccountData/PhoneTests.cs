@@ -1,4 +1,5 @@
-﻿using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
+﻿using KluskaStore.Domain.Errors.ValueObjects;
+using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.AccountData;
 
@@ -15,6 +16,7 @@ public class PhoneTests
         var result = Phone.Create(phone);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.FullPhone.Should().Be(phone);
         result.Value.Ddi.Should().Be(ddi);
         result.Value.Ddd.Should().Be(ddd);
@@ -38,5 +40,6 @@ public class PhoneTests
         var result = Phone.Create(phone);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(PhoneErrors.InvalidPhone.Code);
     }
 }

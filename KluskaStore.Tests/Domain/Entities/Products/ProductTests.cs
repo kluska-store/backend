@@ -20,12 +20,24 @@ public class ProductTests
         result.Value.IsAvailable.Should().BeTrue();
     }
 
-    [Fact]
-    public void GivenEntityCreation_WhenInitialDataIsInvalid_ThenReturnsFailure()
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void GivenEntityCreation_WhenPriceIsZeroOrNegative_ThenReturnsFailure(decimal price)
     {
-        var result = Product.Create(0, null!);
+        var result = Product.Create(price, _sut.Name);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(ProductErrors.InvalidPrice.Code);
+    }
+
+    [Fact]
+    public void GivenEntityCreation_WhenNameIsEmpty_ThenReturnsFailure()
+    {
+        var result = Product.Create(_sut.Price, "");
+
+        result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(ProductErrors.EmptyName.Code);
     }
 
     [Fact]

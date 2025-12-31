@@ -1,4 +1,5 @@
-﻿using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
+﻿using KluskaStore.Domain.Errors.ValueObjects;
+using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.AccountData;
 
@@ -14,6 +15,7 @@ public class EmailTests
         var result = Email.Create(email);
 
         result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         result.Value.Value.Should().Be(email);
     }
 
@@ -29,5 +31,6 @@ public class EmailTests
         var result = Email.Create(email);
 
         result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(EmailErrors.InvalidEmail.Code);
     }
 }
