@@ -19,6 +19,8 @@ public class SessionOwner : IValueObject
 
     public OwnerTypeEnum OwnerType { get; }
     public Guid OwnerId { get; }
+    public bool IsUser => OwnerType == OwnerTypeEnum.User;
+    public bool IsStore => OwnerType == OwnerTypeEnum.Store;
 
     private static Result<SessionOwner> Create(OwnerTypeEnum type, Guid ownerId) =>
         ownerId == Guid.Empty

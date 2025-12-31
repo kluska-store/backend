@@ -15,6 +15,8 @@ public class SessionOwnerTests
         result.Value.Should().NotBeNull();
         result.Value.OwnerType.Should().Be(SessionOwner.OwnerTypeEnum.User);
         result.Value.OwnerId.Should().Be(id);
+        result.Value.IsUser.Should().BeTrue();
+        result.Value.IsStore.Should().BeFalse();
     }
 
     [Fact]
@@ -27,6 +29,8 @@ public class SessionOwnerTests
         result.Value.Should().NotBeNull();
         result.Value.OwnerType.Should().Be(SessionOwner.OwnerTypeEnum.Store);
         result.Value.OwnerId.Should().Be(id);
+        result.Value.IsStore.Should().BeTrue();
+        result.Value.IsUser.Should().BeFalse();
     }
 
     // Every public factory method for SessionOwner uses the same base method, so the verification is the same
