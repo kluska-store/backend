@@ -4,15 +4,11 @@ namespace KluskaStore.Domain.Entities.Products;
 
 public abstract class ProductCollection : AggregateRoot
 {
-    protected readonly HashSet<Item> _items;
+    protected readonly HashSet<Item> _items = [];
 
     protected ProductCollection() => _items = null!;
 
-    internal ProductCollection(Guid userId, IEnumerable<Item> items)
-    {
-        UserId = userId;
-        _items = items.ToHashSet();
-    }
+    internal ProductCollection(Guid userId) => UserId = userId;
 
     public Guid UserId { get; protected set; }
     public IReadOnlySet<Item> Items => _items;

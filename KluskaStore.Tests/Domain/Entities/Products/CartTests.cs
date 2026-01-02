@@ -5,13 +5,13 @@ namespace KluskaStore.Tests.Domain.Entities.Products;
 
 public class CartTests : ProductCollectionTests
 {
-    private readonly Cart _sut = new(Guid.NewGuid(), [new Item(new Product(10, "product"), 2)]);
-    protected override ProductCollection CreateSut(IEnumerable<Item> items) => new Cart(_sut.UserId, items);
+    private readonly Cart _sut = new(Guid.NewGuid());
+    protected override ProductCollection CreateSut() => new Cart(_sut.UserId);
 
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsValid_ThenCreatesCart()
     {
-        var result = Cart.Create(_sut.UserId, _sut.Items);
+        var result = Cart.Create(_sut.UserId);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
@@ -22,7 +22,7 @@ public class CartTests : ProductCollectionTests
     [Fact]
     public void GivenEntityCreation_WhenUserIsIsEmpty_ThenReturnsFailure()
     {
-        var result = Cart.Create(Guid.Empty, _sut.Items);
+        var result = Cart.Create(Guid.Empty);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(CartErrors.EmptyUserId.Code);

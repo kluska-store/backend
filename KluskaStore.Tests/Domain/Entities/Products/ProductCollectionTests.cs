@@ -20,13 +20,13 @@ public abstract class ProductCollectionTests
         new Item(Products[2], 15)
     ];
 
-    protected abstract ProductCollection CreateSut(IEnumerable<Item> items);
-    private ProductCollection CreateSut() => CreateSut(Items);
+    protected abstract ProductCollection CreateSut();
 
     [Fact]
     public void GivenTotalPriceCalculation_ThenCalculatesTotalPrice()
     {
         var sut = CreateSut();
+        Items.ForEach(i => sut.AddItem(i));
         sut.CalculateTotalPrice().Should().Be(sut.Items.Select(i => i.Product.Price * i.Quantity).Sum());
     }
 
@@ -49,15 +49,16 @@ public abstract class ProductCollectionTests
     public void GivenItemAddition_WhenItemAlreadyExists_ThenIncreasesItemsQuantity()
     {
         var sut = CreateSut();
-        var item = new Item(Products[0], 15);
-        var stored = sut.Items.First(i => i == item);
-        var lastItemCount = sut.Items.Count;
+        var product = Products[0];
+        var item = new Item(product, 15);
+        var stored = new Item(product, 10);
         var expectedFinalQuantity = item.Quantity + stored.Quantity;
 
+        sut.AddItem(stored);
         sut.AddItem(item);
 
         sut.Items.First(i => i == item).Quantity.Should().Be(expectedFinalQuantity);
-        sut.Items.Count.Should().Be(lastItemCount);
+        sut.Items.Should().HaveCount(1);
     }
 
     [Fact]
@@ -79,9 +80,10 @@ public abstract class ProductCollectionTests
         var item = Items[0];
         var lastCount = sut.Items.Count;
 
+        sut.AddItem(item);
         sut.RemoveItem(item);
 
-        sut.Items.Count.Should().Be(lastCount - 1);
+        sut.Items.Should().BeEmpty();
         sut.Items.Should().NotContain(item);
     }
 }

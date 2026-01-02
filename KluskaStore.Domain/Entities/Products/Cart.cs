@@ -6,9 +6,9 @@ public sealed class Cart : ProductCollection
 {
     private Cart() { }
 
-    internal Cart(Guid userId, IEnumerable<Item> items) : base(userId, items) { }
+    internal Cart(Guid userId) : base(userId) { }
 
-    public static Result<Cart> Create(Guid userId, IEnumerable<Item> items) => userId != Guid.Empty
-        ? Result<Cart>.Success(new Cart(userId, items))
+    public static Result<Cart> Create(Guid userId) => userId != Guid.Empty
+        ? Result<Cart>.Success(new Cart(userId))
         : Result<Cart>.Failure(CartErrors.EmptyUserId);
 }
