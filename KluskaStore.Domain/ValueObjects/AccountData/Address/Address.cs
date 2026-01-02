@@ -1,9 +1,8 @@
-﻿using KluskaStore.Domain.Interfaces;
-using static KluskaStore.Domain.Errors.ValueObjects.AddressErrors;
+﻿using static KluskaStore.Domain.Errors.ValueObjects.AddressErrors;
 
 namespace KluskaStore.Domain.ValueObjects.AccountData.Address;
 
-public class Address : IValueObject
+public sealed record Address
 {
     internal Address(
         string country,

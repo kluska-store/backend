@@ -1,8 +1,6 @@
-﻿using KluskaStore.Domain.Interfaces;
+﻿namespace KluskaStore.Domain.Entities.Generics;
 
-namespace KluskaStore.Domain.Entities.Generics;
-
-public abstract class Entity<TId> : IEntity
+public abstract class Entity<TId>
 {
     protected Entity() => Id = default!;
 

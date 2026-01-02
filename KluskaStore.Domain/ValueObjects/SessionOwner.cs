@@ -1,9 +1,8 @@
 ﻿using KluskaStore.Domain.Errors.ValueObjects;
-using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public class SessionOwner : IValueObject
+public sealed record SessionOwner
 {
     public enum OwnerTypeEnum
     {

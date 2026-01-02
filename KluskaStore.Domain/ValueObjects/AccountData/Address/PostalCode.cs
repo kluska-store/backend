@@ -1,10 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 using KluskaStore.Domain.Errors.ValueObjects;
-using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects.AccountData.Address;
 
-public partial class PostalCode : IValueObject
+public sealed partial record PostalCode
 {
     internal PostalCode(string value) => Value = value;
 

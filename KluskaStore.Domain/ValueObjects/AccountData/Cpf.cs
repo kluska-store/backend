@@ -1,10 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 using KluskaStore.Domain.Errors.ValueObjects;
-using KluskaStore.Domain.Interfaces;
 
 namespace KluskaStore.Domain.ValueObjects.AccountData;
 
-public partial class Cpf : IValueObject
+public sealed partial record Cpf
 {
     internal Cpf(string value) => Value = value;
 

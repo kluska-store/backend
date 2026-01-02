@@ -1,9 +1,8 @@
-﻿using KluskaStore.Domain.Interfaces;
-using static KluskaStore.Domain.Errors.ValueObjects.OrderItemErrors;
+﻿using static KluskaStore.Domain.Errors.ValueObjects.OrderItemErrors;
 
 namespace KluskaStore.Domain.ValueObjects;
 
-public record OrderItem : IValueObject
+public sealed record OrderItem
 {
     internal OrderItem(
         Guid productId,
