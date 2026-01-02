@@ -4,7 +4,7 @@ using static KluskaStore.Domain.Errors.Entities.OrderErrors;
 
 namespace KluskaStore.Domain.Entities.Payments;
 
-public class Order : DefaultIdentityEntity
+public sealed class Order : AggregateRoot
 {
     public enum OrderStatusEnum
     {

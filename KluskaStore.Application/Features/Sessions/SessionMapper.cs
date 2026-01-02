@@ -8,7 +8,7 @@ namespace KluskaStore.Application.Features.Sessions;
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 public partial class SessionMapper
 {
-    [MapProperty(nameof(Session.Id), nameof(GetSessionByTokenResponse.Token))]
+    [MapProperty(nameof(Session.Token), nameof(GetSessionByTokenResponse.Token))]
     [MapProperty(nameof(Session.Owner.OwnerId), nameof(GetSessionByTokenResponse.OwnerId))]
     [MapProperty(nameof(Session.Owner), nameof(GetSessionByTokenResponse.OwnerType))]
     public partial GetSessionByTokenResponse ToResponse(Session session);

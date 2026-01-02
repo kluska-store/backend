@@ -7,7 +7,7 @@ using static KluskaStore.Domain.Errors.Entities.UserErrors;
 
 namespace KluskaStore.Domain.Entities.Accounts;
 
-public class User : DefaultIdentityEntity
+public sealed class User : AggregateRoot
 {
     private User()
     {
@@ -40,14 +40,14 @@ public class User : DefaultIdentityEntity
 
     private readonly List<Address> _addresses;
 
-    public Cpf Cpf { get; protected set; }
-    public Email Email { get; protected set; }
-    public string Username { get; protected set; }
-    public string? ProfilePicture { get; protected set; }
-    public bool IsActive { get; protected set; }
-    public Phone Phone { get; protected set; }
-    public DateOnly Birthday { get; protected set; }
-    public string PasswordHash { get; protected set; }
+    public Cpf Cpf { get; private set; }
+    public Email Email { get; private set; }
+    public string Username { get; private set; }
+    public string? ProfilePicture { get; private set; }
+    public bool IsActive { get; private set; }
+    public Phone Phone { get; private set; }
+    public DateOnly Birthday { get; private set; }
+    public string PasswordHash { get; private set; }
     public IReadOnlyList<Address> Addresses => _addresses.AsReadOnly();
 
     public static Result<User> Create(

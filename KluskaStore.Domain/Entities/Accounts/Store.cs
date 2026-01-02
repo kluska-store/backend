@@ -7,7 +7,7 @@ using static KluskaStore.Domain.Errors.Entities.StoreErrors;
 
 namespace KluskaStore.Domain.Entities.Accounts;
 
-public class Store : DefaultIdentityEntity
+public sealed class Store : AggregateRoot
 {
     private readonly List<Phone> _phones;
 

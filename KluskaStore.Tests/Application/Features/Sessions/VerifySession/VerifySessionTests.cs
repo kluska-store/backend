@@ -17,7 +17,7 @@ public class VerifySessionTests
         OwnerType ownerType = OwnerType.User,
         Guid? ownerId = null,
         DateTime? createdAt = null
-    ) => new(new SessionOwner(ownerType, ownerId ?? Guid.NewGuid()), createdAt ?? DateTime.UtcNow);
+    ) => new("token", new SessionOwner(ownerType, ownerId ?? Guid.NewGuid()), createdAt ?? DateTime.UtcNow);
 
     private void SetupGetBySessionTokenReturnsNull() => _mock
         .Setup(repo => repo.GetByTokenAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))

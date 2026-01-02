@@ -4,24 +4,41 @@ using KluskaStore.Domain.ValueObjects;
 
 namespace KluskaStore.Domain.Entities.Accounts;
 
-public class Session : Entity<string>
+public sealed class Session : Entity
 {
-    private Session() => Owner = null!;
-
-    internal Session(SessionOwner owner, DateTime createdAt)
+    private Session()
     {
+        Token = "";
+        Owner = null!;
+    }
+
+    internal Session(string token, SessionOwner owner, DateTime createdAt)
+    {
+        Token = token;
         Owner = owner;
         CreatedAt = createdAt;
     }
 
-    public SessionOwner Owner { get; protected set; }
-    public DateTime CreatedAt { get; protected set; }
+    public string Token { get; private set; }
+    public SessionOwner Owner { get; private set; }
+    public DateTime CreatedAt { get; private set; }
     public DateTime ExpiresAt => CreatedAt.AddMonths(3);
 
     public bool IsExpired() => DateTime.UtcNow > ExpiresAt;
 
-    public static Result<Session> Create(SessionOwner sessionOwner, DateTime createdAt) =>
-        createdAt <= DateTime.UtcNow
-            ? Result<Session>.Success(new Session(sessionOwner, createdAt))
-            : Result<Session>.Failure(SessionErrors.InvalidCreationDate);
+    public static Result<Session> Create(string token, SessionOwner sessionOwner, DateTime createdAt)
+    {
+        Error? error = null;
+        if (createdAt > DateTime.UtcNow) error = SessionErrors.InvalidCreationDate;
+        else if (string.IsNullOrEmpty(token)) error = SessionErrors.EmptySessionToken;
+
+        return error is not null
+            ? Result<Session>.Failure(error)
+            : Result<Session>.Success(new Session(token, sessionOwner, createdAt));
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Token;
+    }
 }

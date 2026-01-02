@@ -3,7 +3,7 @@ using static KluskaStore.Domain.Errors.Entities.PaymentErrors;
 
 namespace KluskaStore.Domain.Entities.Payments;
 
-public class Payment : DefaultIdentityEntity
+public sealed class Payment : AggregateRoot
 {
     private readonly List<Transference> _transferences;
 

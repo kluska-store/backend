@@ -3,7 +3,7 @@ using KluskaStore.Domain.Errors.Entities;
 
 namespace KluskaStore.Domain.Entities.Products;
 
-public class Product : DefaultIdentityEntity
+public sealed class Product : AggregateRoot
 {
     private readonly Dictionary<string, string> _specifications;
 
@@ -14,7 +14,7 @@ public class Product : DefaultIdentityEntity
         IsAvailable = true;
     }
 
-    internal Product(decimal price, string name)
+    internal Product(decimal price, string name) : base(Guid.NewGuid())
     {
         _specifications = new Dictionary<string, string>();
         Price = price;
@@ -23,10 +23,10 @@ public class Product : DefaultIdentityEntity
     }
 
     public IReadOnlyDictionary<string, string> Specifications => _specifications.AsReadOnly();
-    public decimal Price { get; protected set; }
-    public string Name { get; protected set; }
-    public string? Description { get; protected set; }
-    public bool IsAvailable { get; protected set; }
+    public decimal Price { get; private set; }
+    public string Name { get; private set; }
+    public string? Description { get; private set; }
+    public bool IsAvailable { get; private set; }
 
     public static Result<Product> Create(
         decimal price,

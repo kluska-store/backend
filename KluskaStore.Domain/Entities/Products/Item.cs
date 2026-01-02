@@ -3,7 +3,7 @@ using KluskaStore.Domain.Errors.Entities;
 
 namespace KluskaStore.Domain.Entities.Products;
 
-public class Item : DefaultIdentityEntity
+public sealed class Item : Entity
 {
     private Item() => Product = null!;
 
@@ -19,4 +19,9 @@ public class Item : DefaultIdentityEntity
     public static Result<Item> Create(Product product, uint quantity) => quantity > 0
         ? Result<Item>.Success(new Item(product, quantity))
         : Result<Item>.Failure(ItemErrors.EmptyItem);
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Product.Id;
+    }
 }

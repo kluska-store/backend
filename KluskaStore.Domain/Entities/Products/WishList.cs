@@ -2,7 +2,7 @@
 
 namespace KluskaStore.Domain.Entities.Products;
 
-public class WishList : ProductCollection
+public sealed class WishList : ProductCollection
 {
     private WishList() => Name = null!;
 

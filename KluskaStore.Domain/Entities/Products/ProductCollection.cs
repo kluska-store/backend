@@ -2,7 +2,7 @@
 
 namespace KluskaStore.Domain.Entities.Products;
 
-public abstract class ProductCollection : DefaultIdentityEntity
+public abstract class ProductCollection : AggregateRoot
 {
     protected readonly List<Item> _items;
 

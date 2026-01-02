@@ -2,7 +2,7 @@
 
 namespace KluskaStore.Domain.Entities.Products;
 
-public class Cart : ProductCollection
+public sealed class Cart : ProductCollection
 {
     private Cart() { }
 
