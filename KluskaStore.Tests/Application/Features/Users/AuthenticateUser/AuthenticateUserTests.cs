@@ -50,6 +50,9 @@ public class AuthenticateUserTests
         Times.Once
     );
 
+    private void VerifyCommitAsyncCalled(Func<Times> times) =>
+        _mock.Verify(uow => uow.CommitAsync(It.IsAny<CancellationToken>()), times);
+
     private void VerifyRegisterSessionCalledOnce() => _mock.Verify(
         uow => uow.Sessions.RegisterAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()),
         Times.Once
@@ -72,6 +75,7 @@ public class AuthenticateUserTests
         result.Error!.Code.Should().Be(AuthenticateUserErrors.UserNotFound.Code);
         VerifyGetUserByEmailCalledOnce();
         VerifyRegisterSessionNotCalled();
+        VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -86,6 +90,7 @@ public class AuthenticateUserTests
         result.Error!.Code.Should().Be(AuthenticateUserErrors.PasswordIsIncorect.Code);
         VerifyGetUserByEmailCalledOnce();
         VerifyRegisterSessionNotCalled();
+        VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -102,5 +107,6 @@ public class AuthenticateUserTests
         result.Value.Should().NotBeNull();
         VerifyGetUserByEmailCalledOnce();
         VerifyRegisterSessionCalledOnce();
+        VerifyCommitAsyncCalled(Times.Once);
     }
 }

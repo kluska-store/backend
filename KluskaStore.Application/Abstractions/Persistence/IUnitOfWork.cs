@@ -7,5 +7,4 @@ public interface IUnitOfWork
     IProductRepository Products { get; }
 
     Task CommitAsync(CancellationToken cancellationToken = default);
-    Task RollbackAsync(CancellationToken cancellationToken = default);
 }

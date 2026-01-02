@@ -5,7 +5,7 @@ using KluskaStore.Domain.ValueObjects.AccountData;
 
 namespace KluskaStore.Application.Features.Users.CreateUser;
 
-public sealed class CreateUserHandler(IUserRepository repository)
+public sealed class CreateUserHandler(IUnitOfWork uow)
     : IRequestHandler<CreateUserCommand, Result<CreateUserResponse>>
 {
     public async Task<Result<CreateUserResponse>> Handle(
@@ -32,7 +32,8 @@ public sealed class CreateUserHandler(IUserRepository repository)
         if (userResult.IsFailure)
             return Result<CreateUserResponse>.Failure(userResult.Error!);
 
-        var id = await repository.AddAsync(userResult.Value!, cancellationToken);
+        var id = await uow.Users.AddAsync(userResult.Value!, cancellationToken);
+        await uow.CommitAsync(cancellationToken);
         return Result<CreateUserResponse>.Success(new CreateUserResponse(id));
     }
 }

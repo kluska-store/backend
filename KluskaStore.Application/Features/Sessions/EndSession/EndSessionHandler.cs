@@ -2,8 +2,11 @@
 
 namespace KluskaStore.Application.Features.Sessions.EndSession;
 
-public class EndSessionHandler(ISessionRepository repository) : IRequestHandler<EndSessionCommand>
+public class EndSessionHandler(IUnitOfWork uow) : IRequestHandler<EndSessionCommand>
 {
     public async Task Handle(EndSessionCommand request, CancellationToken cancellationToken = default)
-        => await repository.UnregisterAsync(request.SessionToken, cancellationToken);
+    {
+        await uow.Sessions.UnregisterAsync(request.SessionToken, cancellationToken);
+        await uow.CommitAsync(cancellationToken);
+    }
 }
