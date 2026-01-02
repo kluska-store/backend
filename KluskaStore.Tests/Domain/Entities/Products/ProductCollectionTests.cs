@@ -31,71 +31,57 @@ public abstract class ProductCollectionTests
     }
 
     [Fact]
-    public void GivenItemUpdate_WhenItemDoesNotExist_ThenCreatesItem()
-    {
-        uint quantity = 20;
-        var sut = CreateSut();
-        var result = sut.SetItem(Products[3], quantity);
-
-        var item = sut.Items.ToList().Find(i => i.Product == Products[3]);
-        item.Should().NotBeNull();
-        item.Quantity.Should().Be(quantity);
-        sut.Items.Count.Should().Be(4);
-        result.Should().BeTrue();
-    }
-
-    [Fact]
-    public void GivenItemUpdate_WhenItemExistsAndFinalQuantityIsGraterThenZero_ThenUpdatesItemQuantity()
-    {
-        uint newQuantity = 2;
-        var sut = CreateSut();
-        var result = sut.SetItem(Products[0], newQuantity);
-
-        var item = sut.Items.ToList().Find(i => i.Product == Products[0]);
-        item.Should().BeSameAs(Items[0]);
-        item.Quantity.Should().Be(newQuantity);
-        result.Should().BeTrue();
-    }
-
-    [Fact]
-    public void GivenItemUpdate_WhenItemExistisAndFinalQuantityIsLessThanOrEqualToZero_ThenRemovesItem()
-    {
-        var sut = CreateSut();
-        var result = sut.SetItem(Products[0], 0);
-
-        sut.Items.Should().NotContain(Items[0]);
-        result.Should().BeFalse();
-    }
-
-    [Fact]
     public void GivenItemAddition_WhenItemDoesNotExist_ThenCreatesItem()
     {
         var sut = CreateSut();
-        sut.AddItem(Products[3]);
+        var item = new Item(Products[3], 30);
+        var lastCount = sut.Items.Count;
 
-        var item = sut.Items.ToList().Find(i => i.Product == Products[3]);
-        item.Should().NotBeNull();
-        item.Quantity.Should().Be(1);
+        sut.AddItem(item);
+
+        var stored = sut.Items.FirstOrDefault(i => i == item);
+        stored.Should().NotBeNull();
+        stored.Quantity.Should().Be(item.Quantity);
+        sut.Items.Count.Should().Be(lastCount + 1);
     }
 
     [Fact]
-    public void GivenItemAddition_WhenItemAlreadyExists_ThenItemQuantityIncreasesInOne()
+    public void GivenItemAddition_WhenItemAlreadyExists_ThenIncreasesItemsQuantity()
     {
-        var lastQuantity = Items[0].Quantity;
         var sut = CreateSut();
-        sut.AddItem(Products[0]);
+        var item = new Item(Products[0], 15);
+        var stored = sut.Items.First(i => i == item);
+        var lastItemCount = sut.Items.Count;
+        var expectedFinalQuantity = item.Quantity + stored.Quantity;
 
-        var item = sut.Items.ToList().Find(i => i.Product == Products[0]);
-        item.Should().BeSameAs(Items[0]);
-        item.Quantity.Should().Be(lastQuantity + 1);
+        sut.AddItem(item);
+
+        sut.Items.First(i => i == item).Quantity.Should().Be(expectedFinalQuantity);
+        sut.Items.Count.Should().Be(lastItemCount);
     }
 
     [Fact]
-    public void GivenItemRemoval_ThenRemovesItem()
+    public void GivenItemRemoval_WhenItemDoesNotExist_ThenDoesNothing()
     {
         var sut = CreateSut();
-        sut.RemoveItem(Products[0]);
+        var item = new Item(Products[3], 30);
+        var lastCount = sut.Items.Count;
 
-        sut.Items.Should().NotContain(Items[0]);
+        sut.RemoveItem(item);
+
+        sut.Items.Count.Should().Be(lastCount);
+    }
+
+    [Fact]
+    public void GivenItemRemoval_WhenItemAlreadyExists_ThenRemovesItem()
+    {
+        var sut = CreateSut();
+        var item = Items[0];
+        var lastCount = sut.Items.Count;
+
+        sut.RemoveItem(item);
+
+        sut.Items.Count.Should().Be(lastCount - 1);
+        sut.Items.Should().NotContain(item);
     }
 }

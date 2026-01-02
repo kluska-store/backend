@@ -4,46 +4,26 @@ namespace KluskaStore.Domain.Entities.Products;
 
 public abstract class ProductCollection : AggregateRoot
 {
-    protected readonly List<Item> _items;
+    protected readonly HashSet<Item> _items;
 
     protected ProductCollection() => _items = null!;
 
     internal ProductCollection(Guid userId, IEnumerable<Item> items)
     {
         UserId = userId;
-        _items = items.ToList();
+        _items = items.ToHashSet();
     }
 
     public Guid UserId { get; protected set; }
-    public IReadOnlyList<Item> Items => _items.AsReadOnly();
+    public IReadOnlySet<Item> Items => _items;
 
-    public bool SetItem(Product product, uint quantity)
+    public void RemoveItem(Item item) => _items.Remove(item);
+
+    public void AddItem(Item item)
     {
-        var item = _items.Find(i => i.Product == product);
-
-        if (item is not null && quantity == 0) _items.Remove(item);
-        else if (item is not null) item.Quantity = quantity;
-        else if (quantity != 0)
-        {
-            var newItem = new Item(product, quantity);
-            _items.Add(newItem);
-        }
-
-        return quantity != 0;
-    }
-
-    public void RemoveItem(Product product)
-    {
-        var item = _items.Find(i => i.Product == product);
-        if (item is not null) _items.Remove(item);
-    }
-
-    public void AddItem(Product product)
-    {
-        var item = _items.Find(i => i.Product == product);
-
-        if (item is not null) item.Quantity += 1;
-        else _items.Add(new Item(product, 1));
+        if (_items.Add(item)) return;
+        var stored = _items.First(i => i.Product.Id == item.Product.Id);
+        stored.Quantity += item.Quantity;
     }
 
     public decimal CalculateTotalPrice() => _items.Select(i => i.Product.Price * i.Quantity).Sum();
