@@ -18,8 +18,10 @@ public sealed record OrderItem
         UnitPrice = unitPrice;
         Description = description;
         Quantity = quantity;
-        Specifications = specifications.ToDictionary();
+        _specifications = specifications.ToDictionary();
     }
+
+    private readonly Dictionary<string, string> _specifications;
 
     public Guid ProductId { get; }
     public string Name { get; }
@@ -27,7 +29,7 @@ public sealed record OrderItem
     public string? Description { get; }
     public uint Quantity { get; }
     public decimal TotalPrice => UnitPrice * Quantity;
-    public Dictionary<string, string> Specifications { get; }
+    public IReadOnlyDictionary<string, string> Specifications => _specifications.AsReadOnly();
 
     public static Result<OrderItem> Create(
         Guid productId,
