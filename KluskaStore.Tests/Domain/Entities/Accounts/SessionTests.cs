@@ -1,16 +1,13 @@
 ﻿using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.Errors.Entities;
 using KluskaStore.Domain.ValueObjects;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Domain.Entities.Accounts;
 
 public class SessionTests
 {
-    private readonly Session _sut = new(
-        "token",
-        new SessionOwner(SessionOwner.OwnerTypeEnum.User, Guid.NewGuid()),
-        DateTime.UtcNow
-    );
+    private readonly Session _sut = SessionBuilder.Valid(isUserSession: true);
 
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsValid_ThenCreatesEntity()

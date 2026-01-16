@@ -1,19 +1,12 @@
 ﻿using KluskaStore.Domain.Errors.ValueObjects;
 using KluskaStore.Domain.ValueObjects.AccountData.Address;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Domain.ValueObjects.AccountData.Addresses;
 
 public class AddressTests
 {
-    private readonly Address _sut = new(
-        "tomorrowland",
-        "magic district",
-        "oz city",
-        "Glinda avenue",
-        2,
-        new PostalCode("12345678"),
-        "next to shame tower"
-    );
+    private readonly Address _sut = AddressBuilder.Valid();
 
     [Theory]
     [InlineData(null)]
@@ -45,6 +38,7 @@ public class AddressTests
     [Fact]
     public void GivenValidAddress_WhenWithComplement_ThenCreatesVo()
     {
+        const string complement = "complement";
         var result = Address.Create(
             _sut.Country,
             _sut.State,
@@ -52,7 +46,7 @@ public class AddressTests
             _sut.Street,
             _sut.Number,
             _sut.PostalCode,
-            _sut.Complement
+            complement
         );
 
         result.IsSuccess.Should().BeTrue();
@@ -63,7 +57,7 @@ public class AddressTests
         result.Value.Street.Should().Be(_sut.Street);
         result.Value.Number.Should().Be(_sut.Number);
         result.Value.PostalCode.Should().Be(_sut.PostalCode);
-        result.Value.Complement.Should().Be(_sut.Complement);
+        result.Value.Complement.Should().Be(complement);
     }
 
     [Fact]

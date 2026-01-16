@@ -1,6 +1,8 @@
-﻿using KluskaStore.Domain.Entities.Accounts;
+﻿using System.ComponentModel.Design.Serialization;
+using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.Errors.Entities;
 using KluskaStore.Domain.ValueObjects.AccountData.Address;
+using KluskaStore.Tests.Common.Builders;
 using Cnpj = KluskaStore.Domain.ValueObjects.AccountData.Cnpj;
 using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
 using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
@@ -10,21 +12,7 @@ namespace KluskaStore.Tests.Domain.Entities.Accounts;
 
 public class StoreTests
 {
-    private readonly Store _sut = new(
-        new Cnpj("cnpj"),
-        "name",
-        new Email("email"),
-        "password",
-        new Address(
-            "country",
-            "state",
-            "city",
-            "street",
-            0,
-            new PostalCode("postal code"),
-            "complement"
-        )
-    );
+    private readonly Store _sut = StoreBuilder.Valid();
 
     [Fact]
     public void GivenEntityCreation_WhenDataIsValid_ThenCreatesStore()
@@ -112,8 +100,7 @@ public class StoreTests
     [Fact]
     public void GivenAddressChange_ThenChangesAddress()
     {
-        var newAddress = new Address("country 2", "state 2", "city 2", "street 2", 2, new PostalCode("postal code 2"),
-            null);
+        var newAddress = AddressBuilder.Valid();
         _sut.ChangeAddress(newAddress);
 
         _sut.Address.Should().Be(newAddress);
@@ -134,7 +121,7 @@ public class StoreTests
     [Fact]
     public void GivenPhoneAdditionAndRemoval_ThenAddsAndRemovesPhone()
     {
-        var newPhone = new Phone("phone extra");
+        var newPhone = PhoneBuilder.Valid();
         _sut.AddPhones(newPhone);
         _sut.Phones[^1].Should().Be(newPhone);
 

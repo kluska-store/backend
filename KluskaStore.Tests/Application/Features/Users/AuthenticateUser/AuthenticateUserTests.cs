@@ -3,6 +3,7 @@ using KluskaStore.Application.Features.Users.AuthenticateUser;
 using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.ValueObjects.AccountData;
 using KluskaStore.Domain.ValueObjects.AccountData.Address;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Application.Features.Users.AuthenticateUser;
 
@@ -16,30 +17,19 @@ public class AuthenticateUserTests
     private static AuthenticateUserCommand GenerateValidCommand(string? email = null, string? password = null)
         => new(email ?? "example@email.com", password ?? "password123");
 
-    private static User GenerateValidUser(
-        string? cpf = null,
-        string? email = null,
-        string? username = null,
-        string? phone = null,
-        DateOnly? birthday = null,
-        string? password = null,
-        IEnumerable<Address>? addresses = null
-    ) => new(
-        new Cpf(cpf ?? "00000000000"),
-        new Email(email ?? "example@email.com"),
-        username ?? "username",
-        new Phone(phone ?? "+55 (11) 00000-0000"),
-        birthday ?? DateOnly.FromDateTime(DateTime.UtcNow),
-        password ?? "password123"
-    );
-
     private void SetupGetUserByEmailReturnsNull() => _mock
         .Setup(uow => uow.Users.GetByEmailAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
         .ReturnsAsync((User?)null);
 
-    private void SetupGetUserByEmailReturnsValidUser() => _mock
-        .Setup(uow => uow.Users.GetByEmailAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-        .ReturnsAsync(GenerateValidUser());
+    private User SetupGetUserByEmailReturnsValidUser()
+    {
+        var returnedUser = UserBuilder.Valid();
+        _mock
+            .Setup(uow => uow.Users.GetByEmailAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(returnedUser);
+
+        return returnedUser;
+    }
 
     private void SetupRegisterSessionReturnsSessionToken(string? token = null) => _mock
         .Setup(uow => uow.Sessions.RegisterAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
@@ -97,8 +87,8 @@ public class AuthenticateUserTests
     public async Task GivenExistingUserAndCorrectPassword_WhenTryingToAuthenticate_ThenReturnsSessionToken()
     {
         var token = "session token";
-        var command = GenerateValidCommand();
-        SetupGetUserByEmailReturnsValidUser();
+        var user = SetupGetUserByEmailReturnsValidUser();
+        var command = GenerateValidCommand(password: user.PasswordHash);
         SetupRegisterSessionReturnsSessionToken(token);
 
         var result = await _sut.Handle(command);

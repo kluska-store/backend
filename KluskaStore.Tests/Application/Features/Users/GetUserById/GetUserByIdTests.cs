@@ -2,6 +2,7 @@
 using KluskaStore.Application.Features.Users.GetUserById;
 using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.ValueObjects.AccountData;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Application.Features.Users.GetUserById;
 
@@ -20,14 +21,7 @@ public class GetUserByIdTests
     [Fact]
     public async Task GivenExistingUser_WhenGettingById_ThenReturnsUserDto()
     {
-        var user = new User(
-            new Cpf("cpf"),
-            new Email("email"),
-            "username",
-            new Phone("phone"),
-            DateOnly.FromDateTime(DateTime.UtcNow.AddYears(-20)),
-            "password"
-        );
+        var user = UserBuilder.Valid();
 
         _mock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(user);

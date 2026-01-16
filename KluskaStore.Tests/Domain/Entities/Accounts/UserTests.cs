@@ -1,6 +1,7 @@
 ﻿using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.Errors.Entities;
 using KluskaStore.Domain.ValueObjects.AccountData.Address;
+using KluskaStore.Tests.Common.Builders;
 using Cpf = KluskaStore.Domain.ValueObjects.AccountData.Cpf;
 using Email = KluskaStore.Domain.ValueObjects.AccountData.Email;
 using Phone = KluskaStore.Domain.ValueObjects.AccountData.Phone;
@@ -9,14 +10,7 @@ namespace KluskaStore.Tests.Domain.Entities.Accounts;
 
 public class UserTests
 {
-    private readonly User _sut = new(
-        new Cpf("cpf"),
-        new Email("email"),
-        "username",
-        new Phone("phone"),
-        DateOnly.Parse("2000-03-03"),
-        "password"
-    );
+    private readonly User _sut = UserBuilder.Valid();
 
     [Fact]
     public void GivenEntityCreation_WhenDataIsValid_ThenCreatesUser()
@@ -67,7 +61,7 @@ public class UserTests
     [Fact]
     public void GivenEmailChange_ThenChangesEmail()
     {
-        var newEmail = new Email("email 2");
+        var newEmail = EmailBuilder.Valid();
         _sut.ChangeEmail(newEmail);
 
         _sut.Email.Should().Be(newEmail);
@@ -107,7 +101,7 @@ public class UserTests
     [Fact]
     public void GivenPhoneChange_ThenChangesPhone()
     {
-        var newPhone = new Phone("phone 2");
+        var newPhone = PhoneBuilder.Valid();
         _sut.ChangePhone(newPhone);
 
         _sut.Phone.Should().Be(newPhone);
@@ -156,7 +150,7 @@ public class UserTests
     [Fact]
     public void GivenAddressAddition_ThenIncreasesTheAmountOfAddresses()
     {
-        var address = new Address(null!, null!, null!, null!, 3, null!, null!);
+        var address = AddressBuilder.Valid();
         _sut.Addresses.Should().BeEmpty();
 
         _sut.AddAddresses(address);
@@ -167,7 +161,7 @@ public class UserTests
     [Fact]
     public void GivenAddressRemoval_WhenRemovingThroughTheInstance_ThenDecreasesTheAmountOfAddresses()
     {
-        var address = new Address(null!, null!, null!, null!, 3, null!, null!);
+        var address = AddressBuilder.Valid();
         _sut.AddAddresses(null!, address, null!);
         var lastAmount = _sut.Addresses.Count;
 

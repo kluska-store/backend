@@ -1,16 +1,12 @@
 ﻿using KluskaStore.Domain.Entities.Payments;
 using KluskaStore.Domain.Errors.Entities;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Domain.Entities.Payments;
 
 public class PaymentTests
 {
-    private readonly Payment _sut = new(
-        Guid.NewGuid(),
-        DateTime.UtcNow.AddDays(-30),
-        Guid.NewGuid(),
-        [new Transference(Guid.NewGuid(), 10)]
-    );
+    private readonly Payment _sut = PaymentBuilder.Valid();
 
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsValid_ThenCreatesPayment()

@@ -1,6 +1,7 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
 using KluskaStore.Application.Features.Products.GetProductById;
 using KluskaStore.Domain.Entities.Products;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Application.Features.Products.GetProductById;
 
@@ -11,14 +12,6 @@ public class GetProductByIdTests
 
     public GetProductByIdTests() => _sut = new GetProductByIdHandler(_mock.Object);
 
-    private static Product GenerateValidProduct(bool isAvailable = true)
-    {
-        var product = new Product(100, "Sac of Rice");
-
-        if (!isAvailable) product.MarkAsUnavailable();
-        return product;
-    }
-
     private static GetProductByIdQuery GenerateValidQuery() => new(Guid.NewGuid());
 
     private void SetupGetProductByIdReturnsNull() => _mock
@@ -27,11 +20,11 @@ public class GetProductByIdTests
 
     private void SetupGetProductByIdReturnsUnavailableProduct() => _mock
         .Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-        .ReturnsAsync(GenerateValidProduct(isAvailable: false));
+        .ReturnsAsync(ProductBuilder.Unavailable());
 
     private void SetupGetProductByIdReturnsAvailableProduct() => _mock
         .Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-        .ReturnsAsync(GenerateValidProduct());
+        .ReturnsAsync(ProductBuilder.Valid());
 
     private void VerifyGetProductByIdCalledOnce() => _mock.Verify(
         repo => repo.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()),

@@ -1,6 +1,7 @@
 ﻿using KluskaStore.Domain.Entities.Payments;
 using KluskaStore.Domain.Errors.Entities;
 using KluskaStore.Domain.ValueObjects;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Domain.Entities.Payments;
 
@@ -8,14 +9,7 @@ using OrderStatus = Order.OrderStatusEnum;
 
 public class OrderTests
 {
-    private readonly Order _sut = new(
-        Guid.NewGuid(),
-        DateTime.UtcNow.AddDays(-30),
-        [
-            new OrderItem(Guid.NewGuid(), "product 1", 10, null, 2, new Dictionary<string, string>()),
-            new OrderItem(Guid.NewGuid(), "product 2", 20, "Product number 2", 1, new Dictionary<string, string>())
-        ]
-    );
+    private readonly Order _sut = OrderBuilder.Valid();
 
     public static TheoryData<OrderStatus> OrderStatuses => new(Enum.GetValues<OrderStatus>());
 

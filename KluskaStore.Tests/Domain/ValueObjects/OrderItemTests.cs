@@ -1,22 +1,12 @@
 ﻿using KluskaStore.Domain.Errors.ValueObjects;
 using KluskaStore.Domain.ValueObjects;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Domain.ValueObjects;
 
 public class OrderItemTests
 {
-    private readonly OrderItem _sut = new(
-        Guid.NewGuid(),
-        "name",
-        10,
-        "description",
-        2,
-        new Dictionary<string, string>
-        {
-            ["material"] = "metal",
-            ["category"] = "RPG Games"
-        }
-    );
+    private readonly OrderItem _sut = OrderItemBuilder.Valid();
 
     [Fact]
     public void GivenValueObjectCreation_WhenDataIsValid_ThenCreatesOrderItem()

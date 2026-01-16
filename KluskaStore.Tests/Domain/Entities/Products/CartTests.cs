@@ -1,11 +1,12 @@
 ﻿using KluskaStore.Domain.Entities.Products;
 using KluskaStore.Domain.Errors.Entities;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Domain.Entities.Products;
 
 public class CartTests : ProductCollectionTests
 {
-    private readonly Cart _sut = new(Guid.NewGuid());
+    private readonly Cart _sut = CartBuilder.Valid();
     protected override ProductCollection CreateSut() => new Cart(_sut.UserId);
 
     [Fact]

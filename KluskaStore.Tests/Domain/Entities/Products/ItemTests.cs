@@ -1,11 +1,12 @@
 ﻿using KluskaStore.Domain.Entities.Products;
 using KluskaStore.Domain.Errors.Entities;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Domain.Entities.Products;
 
 public class ItemTests
 {
-    private readonly Item _sut = new(new Product(10, "product"), 10);
+    private readonly Item _sut = ItemBuilder.Valid();
 
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsValid_ThenCreatesItem()

@@ -1,11 +1,12 @@
 ﻿using KluskaStore.Domain.Entities.Payments;
 using KluskaStore.Domain.Errors.Entities;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Domain.Entities.Payments;
 
 public class TransferenceTests
 {
-    private readonly Transference _sut = new(Guid.NewGuid(), 20m);
+    private readonly Transference _sut = TransferenceBuilder.Valid();
 
     [Fact]
     public void GivenEntityCreation_WhenInitialDataIsValid_ThenCreatesTransference()

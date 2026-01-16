@@ -4,6 +4,7 @@ using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.Entities.Products;
 using KluskaStore.Domain.Errors.Entities;
 using KluskaStore.Domain.ValueObjects;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Application.Features.Carts.AddProductToCart;
 
@@ -16,14 +17,6 @@ public sealed class AddProductToCartTest
 
     private static AddProductToCartCommand GenerateValidCommand(Guid? productId = null, uint? quantity = null) =>
         new("token", productId ?? Guid.NewGuid(), quantity ?? 1);
-
-    private static SessionOwner GenerateUserSessionOwner() => new(SessionOwner.OwnerTypeEnum.User, Guid.NewGuid());
-    private static SessionOwner GenerateStoreSessionOwner() => new(SessionOwner.OwnerTypeEnum.Store, Guid.NewGuid());
-
-    private static Session GenerateValidSession(
-        SessionOwner? owner = null,
-        DateTime? createdAt = null
-    ) => new("token", owner ?? GenerateUserSessionOwner(), createdAt ?? DateTime.UtcNow);
 
     private static Product GenerateValidProduct(bool isAvailable = true)
     {
@@ -122,7 +115,7 @@ public sealed class AddProductToCartTest
     [Fact]
     public async Task GivenUserWithExpiredSession_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        SetupGetSessionByTokenReturn(GenerateValidSession(createdAt: DateTime.UtcNow.AddYears(-2)));
+        SetupGetSessionByTokenReturn(SessionBuilder.Expired(isUserSession: true));
         var command = GenerateValidCommand();
 
         var result = await _sut.Handle(command);
@@ -139,7 +132,7 @@ public sealed class AddProductToCartTest
     [Fact]
     public async Task GivenValidStoreSession_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        SetupGetSessionByTokenReturn(GenerateValidSession(owner: GenerateStoreSessionOwner()));
+        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: false));
         var command = GenerateValidCommand();
 
         var result = await _sut.Handle(command);
@@ -156,7 +149,7 @@ public sealed class AddProductToCartTest
     [Fact]
     public async Task GivenNonExistingProduct_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        SetupGetSessionByTokenReturn(GenerateValidSession());
+        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: true));
         SetupGetProductByIdReturn(null);
         var command = GenerateValidCommand();
 
@@ -176,7 +169,7 @@ public sealed class AddProductToCartTest
     {
         var queriedProduct = GenerateValidProduct(isAvailable: false);
         var command = GenerateValidCommand(productId: queriedProduct.Id);
-        SetupGetSessionByTokenReturn(GenerateValidSession());
+        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: true));
         SetupGetProductByIdReturn(queriedProduct);
 
         var result = await _sut.Handle(command);
@@ -195,7 +188,7 @@ public sealed class AddProductToCartTest
     {
         var queriedProduct = GenerateValidProduct();
         var command = GenerateValidCommand(productId: queriedProduct.Id, quantity: 0);
-        SetupGetSessionByTokenReturn(GenerateValidSession());
+        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: true));
         SetupGetProductByIdReturn(queriedProduct);
 
         var result = await _sut.Handle(command);
@@ -214,7 +207,7 @@ public sealed class AddProductToCartTest
     {
         var queriedProduct = GenerateValidProduct();
         var command = GenerateValidCommand(productId: queriedProduct.Id);
-        SetupGetSessionByTokenReturn(GenerateValidSession());
+        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: true));
         SetupGetProductByIdReturn(queriedProduct);
         Cart? persistedCart = null;
         _mock.Setup(uow => uow.Carts.AddAsync(It.IsAny<Cart>(), It.IsAny<CancellationToken>()))
@@ -241,7 +234,7 @@ public sealed class AddProductToCartTest
         var command = GenerateValidCommand(productId: storedItem.Product.Id);
         var expectedFinalQuantity = storedItem.Quantity + command.Quantity;
         var persistedCart = GenerateCartWithItem(storedItem);
-        SetupGetSessionByTokenReturn(GenerateValidSession());
+        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: true));
         SetupGetProductByIdReturn(storedItem.Product);
         SetupGetCartByUserIdReturn(persistedCart);
 

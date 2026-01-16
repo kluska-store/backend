@@ -1,11 +1,12 @@
 ﻿using KluskaStore.Domain.Entities.Products;
 using KluskaStore.Domain.Errors.Entities;
+using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Domain.Entities.Products;
 
 public class WishListTests : ProductCollectionTests
 {
-    private readonly WishList _sut = new(Guid.NewGuid(), "wish list");
+    private readonly WishList _sut = WishListBuilder.Valid();
 
     protected override ProductCollection CreateSut() => new WishList(_sut.UserId, _sut.Name);
 
