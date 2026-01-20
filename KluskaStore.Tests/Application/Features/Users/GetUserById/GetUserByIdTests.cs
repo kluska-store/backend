@@ -1,7 +1,6 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
 using KluskaStore.Application.Features.Users.GetUserById;
 using KluskaStore.Domain.Entities.Accounts;
-using KluskaStore.Domain.ValueObjects.AccountData;
 using KluskaStore.Tests.Common.Builders;
 
 namespace KluskaStore.Tests.Application.Features.Users.GetUserById;
@@ -28,7 +27,8 @@ public class GetUserByIdTests
 
         var result = await _sut.Handle(new GetUserByIdQuery(Guid.NewGuid()));
 
-        result.Should().NotBeNull();
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
         VerifyGetUserByIdCalledOnce();
     }
 
@@ -40,7 +40,8 @@ public class GetUserByIdTests
 
         var result = await _sut.Handle(new GetUserByIdQuery(Guid.NewGuid()));
 
-        result.Should().BeNull();
+        result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(GetUserByIdErrors.NotFound.Code);
         VerifyGetUserByIdCalledOnce();
     }
 }

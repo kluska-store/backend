@@ -17,8 +17,9 @@ public class EndSessionTests
         _mock.Setup(uow => uow.Sessions.UnregisterAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
-        await _sut.Handle(command);
+        var result = await _sut.Handle(command);
 
+        result.IsSuccess.Should().BeTrue();
         _mock.Verify(
             uow => uow.Sessions.UnregisterAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
             Times.Once

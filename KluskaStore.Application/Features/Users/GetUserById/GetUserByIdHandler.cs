@@ -2,11 +2,13 @@
 
 namespace KluskaStore.Application.Features.Users.GetUserById;
 
-public class GetUserByIdHandler(IUserRepository repository) : IRequestHandler<GetUserByIdQuery, UserDto?>
+public class GetUserByIdHandler(IUserRepository repository) : IRequestHandler<GetUserByIdQuery, Result<UserDto>>
 {
-    public async Task<UserDto?> Handle(GetUserByIdQuery request, CancellationToken cancellationToken = default)
+    public async Task<Result<UserDto>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken = default)
     {
         var user = await repository.GetByIdAsync(request.UserId, cancellationToken);
-        return user?.ToDto();
+        return user is not null
+            ? Result<UserDto>.Success(user.ToDto())
+            : Result<UserDto>.Failure(GetUserByIdErrors.NotFound);
     }
 }
