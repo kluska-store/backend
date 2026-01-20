@@ -2,7 +2,7 @@
 
 public static class ResultHelper
 {
-    public static Error? FirsError(params Result[] results) => results
+    public static Error? FirstError(params Result[] results) => results
         .Where(r => r.IsFailure)
         .Select(r => r.Error)
         .FirstOrDefault();

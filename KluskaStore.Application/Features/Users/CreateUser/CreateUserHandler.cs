@@ -17,7 +17,7 @@ public sealed class CreateUserHandler(IUnitOfWork uow)
         var emailResult = Email.Create(request.Email);
         var phoneResult = Phone.Create(request.Phone);
 
-        var error = ResultHelper.FirsError(cpfResult, emailResult, phoneResult);
+        var error = ResultHelper.FirstError(cpfResult, emailResult, phoneResult);
         if (error is not null) return Result<CreateUserResponse>.Failure(error);
 
         var userResult = User.Create(
