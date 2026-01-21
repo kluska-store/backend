@@ -1,8 +1,9 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
 using KluskaStore.Application.Features.Users.CreateUser;
-using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.Errors.Entities;
 using KluskaStore.Domain.Errors.ValueObjects;
+using KluskaStore.Tests.Common.Mocks.UnitOfWork;
+using KluskaStore.Tests.Common.Mocks.UnitOfWork.Users;
 
 namespace KluskaStore.Tests.Application.Features.Users.CreateUser;
 
@@ -29,28 +30,11 @@ public class CreateUserTests
         rawPassword ?? "password123"
     );
 
-    private void SetupAddUserReturns(Guid id) => _mock
-        .Setup(uow => uow.Users.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-        .ReturnsAsync(id);
-
-    private void VerifyAddUserCalledOnce() => _mock.Verify(
-        uow => uow.Users.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()),
-        Times.Once
-    );
-
-    private void VerifyAddUserNeverCalled() => _mock.Verify(
-        uow => uow.Users.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()),
-        Times.Never
-    );
-
-    private void VerifyCommitAsyncCalled(Func<Times> times) =>
-        _mock.Verify(uow => uow.CommitAsync(It.IsAny<CancellationToken>()), times);
-
     [Fact]
     public async Task GivingValidData_WhenCreatingUser_ThenReturnsCreatedUsersId()
     {
         var expectedId = Guid.NewGuid();
-        SetupAddUserReturns(expectedId);
+        _mock.SetupAddUserReturns(expectedId);
 
         var command = CreateValidCommand();
         var result = await _sut.Handle(command);
@@ -58,8 +42,8 @@ public class CreateUserTests
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
         result.Value.CreatedUserId.Should().Be(expectedId);
-        VerifyAddUserCalledOnce();
-        VerifyCommitAsyncCalled(Times.Once);
+        _mock.VerifyAddUserCalled(Times.Once);
+        _mock.VerifyCommitAsyncCalled(Times.Once);
     }
 
     [Fact]
@@ -70,8 +54,8 @@ public class CreateUserTests
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(CpfErrors.InvalidCpf.Code);
-        VerifyAddUserNeverCalled();
-        VerifyCommitAsyncCalled(Times.Never);
+        _mock.VerifyAddUserCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -82,8 +66,8 @@ public class CreateUserTests
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(EmailErrors.InvalidEmail.Code);
-        VerifyAddUserNeverCalled();
-        VerifyCommitAsyncCalled(Times.Never);
+        _mock.VerifyAddUserCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -94,8 +78,8 @@ public class CreateUserTests
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(UserErrors.EmptyUsername.Code);
-        VerifyAddUserNeverCalled();
-        VerifyCommitAsyncCalled(Times.Never);
+        _mock.VerifyAddUserCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -106,8 +90,8 @@ public class CreateUserTests
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(PhoneErrors.InvalidPhone.Code);
-        VerifyAddUserNeverCalled();
-        VerifyCommitAsyncCalled(Times.Never);
+        _mock.VerifyAddUserCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -118,8 +102,8 @@ public class CreateUserTests
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(UserErrors.InvalidBirthday.Code);
-        VerifyAddUserNeverCalled();
-        VerifyCommitAsyncCalled(Times.Never);
+        _mock.VerifyAddUserCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -130,7 +114,7 @@ public class CreateUserTests
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(UserErrors.EmptyPassword.Code);
-        VerifyAddUserNeverCalled();
-        VerifyCommitAsyncCalled(Times.Never);
+        _mock.VerifyAddUserCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 }

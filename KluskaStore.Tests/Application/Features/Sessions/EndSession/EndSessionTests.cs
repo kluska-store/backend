@@ -1,5 +1,7 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
 using KluskaStore.Application.Features.Sessions.EndSession;
+using KluskaStore.Tests.Common.Mocks.UnitOfWork;
+using KluskaStore.Tests.Common.Mocks.UnitOfWork.Sessions;
 
 namespace KluskaStore.Tests.Application.Features.Sessions.EndSession;
 
@@ -13,18 +15,14 @@ public class EndSessionTests
     [Fact]
     public async Task GivenSessionEnd_ThenEndsSession()
     {
-        var command = new EndSessionCommand("session token");
-        _mock.Setup(uow => uow.Sessions.UnregisterAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+        const string token = "session token";
+        var command = new EndSessionCommand(token);
+        _mock.SetupUnregisterSessionByTokenAsyncReturnsCompletedTask(token);
 
         var result = await _sut.Handle(command);
 
         result.IsSuccess.Should().BeTrue();
-        _mock.Verify(
-            uow => uow.Sessions.UnregisterAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
-            Times.Once
-        );
-
-        _mock.Verify(uow => uow.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
+        _mock.VerifyUnregisterSessionByTokenAsyncCalledOnce();
+        _mock.VerifyCommitAsyncCalled(Times.Once);
     }
 }

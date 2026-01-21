@@ -3,8 +3,11 @@ using KluskaStore.Application.Features.Carts.AddProductToCart;
 using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.Entities.Products;
 using KluskaStore.Domain.Errors.Entities;
-using KluskaStore.Domain.ValueObjects;
 using KluskaStore.Tests.Common.Builders;
+using KluskaStore.Tests.Common.Mocks.UnitOfWork;
+using KluskaStore.Tests.Common.Mocks.UnitOfWork.Carts;
+using KluskaStore.Tests.Common.Mocks.UnitOfWork.Products;
+using KluskaStore.Tests.Common.Mocks.UnitOfWork.Sessions;
 
 namespace KluskaStore.Tests.Application.Features.Carts.AddProductToCart;
 
@@ -15,201 +18,130 @@ public sealed class AddProductToCartTest
 
     public AddProductToCartTest() => _sut = new AddProductToCartHandler(_mock.Object);
 
-    private static AddProductToCartCommand GenerateValidCommand(Guid? productId = null, uint? quantity = null) =>
-        new("token", productId ?? Guid.NewGuid(), quantity ?? 1);
-
-    private static Product GenerateValidProduct(bool isAvailable = true)
-    {
-        var product = new Product(10, "product");
-        if (!isAvailable) product.MarkAsUnavailable();
-        return product;
-    }
-
-    private static Cart GenerateEmptyCart() => new(Guid.NewGuid());
-
-    private static Cart GenerateCartWithItem(Item item)
-    {
-        var cart = GenerateEmptyCart();
-        cart.AddItem(item);
-        return cart;
-    }
-
-    private void SetupGetSessionByTokenReturn(Session? expectedValue) => _mock
-        .Setup(uow => uow.Sessions.GetByTokenAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-        .ReturnsAsync(expectedValue);
-
-    private void SetupGetProductByIdReturn(Product? expectedValue)
-    {
-        var returnedProductId = expectedValue?.Id ?? It.IsAny<Guid>();
-        _mock
-            .Setup(uow => uow.Products.GetByIdAsync(returnedProductId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(expectedValue);
-    }
-
-    private void SetupGetCartByUserIdReturn(Cart? expectedValue) => _mock
-        .Setup(uow => uow.Carts.GetByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-        .ReturnsAsync(expectedValue);
-
-    private void VerifyGetSessionByTokenCalledOnce() => _mock.Verify(
-        uow => uow.Sessions.GetByTokenAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
-        Times.Once
-    );
-
-    private void VerifyGetProductByIdNeverCalled() => _mock.Verify(
-        uow => uow.Products.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()),
-        Times.Never
-    );
-
-    private void VerifyGetProductByIdCalledOnce() => _mock.Verify(
-        uow => uow.Products.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()),
-        Times.Once
-    );
-
-    private void VerifyGetCartByUserIdNeverCalled() => _mock.Verify(
-        uow => uow.Carts.GetByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()),
-        Times.Never
-    );
-
-    private void VerifyGetCartByUserIdCalledOnce() => _mock.Verify(
-        uow => uow.Carts.GetByUserIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()),
-        Times.Once
-    );
-
-    private void VerifyAddCartNeverCalled() => _mock.Verify(
-        uow => uow.Carts.AddAsync(It.IsAny<Cart>(), It.IsAny<CancellationToken>()),
-        Times.Never
-    );
-
-    private void VerifyAddCartCalledOnce() => _mock.Verify(
-        uow => uow.Carts.AddAsync(It.IsAny<Cart>(), It.IsAny<CancellationToken>()),
-        Times.Once
-    );
-
-    private void VerifyCommitAsyncNeverCalled() => _mock.Verify(
-        uow => uow.CommitAsync(It.IsAny<CancellationToken>()),
-        Times.Never
-    );
-
-    private void VerifyCommitAsyncCalledOnce() => _mock.Verify(
-        uow => uow.CommitAsync(It.IsAny<CancellationToken>()),
-        Times.Once
-    );
+    private static AddProductToCartCommand GenerateValidCommand(string? sessionToken = null, Guid? productId = null, uint? quantity = null) =>
+        new(sessionToken ?? "token", productId ?? Guid.NewGuid(), quantity ?? 1);
 
     [Fact]
     public async Task GivenUserNotLoggedIn_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        SetupGetSessionByTokenReturn(null);
+        _mock.SetupGetSessionByTokenReturnsNull();
         var command = GenerateValidCommand();
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Should().Be(AddProductToCartErrors.NotLoggedIn);
-        VerifyGetSessionByTokenCalledOnce();
-        VerifyGetProductByIdNeverCalled();
-        VerifyGetCartByUserIdNeverCalled();
-        VerifyAddCartNeverCalled();
-        VerifyCommitAsyncNeverCalled();
+        _mock.VerifyGetSessionByTokenCalled(Times.Once);
+        _mock.VerifyGetProductByIdCalled(Times.Never);
+        _mock.VerifyGetCartByUserIdCalled(Times.Never);
+        _mock.VerifyAddCartCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
     public async Task GivenUserWithExpiredSession_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        SetupGetSessionByTokenReturn(SessionBuilder.Expired(isUserSession: true));
+        _mock.SetupGetSessionByTokenReturns(SessionBuilder.Expired(isUserSession: true));
         var command = GenerateValidCommand();
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Should().Be(AddProductToCartErrors.NotLoggedIn);
-        VerifyGetSessionByTokenCalledOnce();
-        VerifyGetProductByIdNeverCalled();
-        VerifyGetCartByUserIdNeverCalled();
-        VerifyAddCartNeverCalled();
-        VerifyCommitAsyncNeverCalled();
+        _mock.VerifyGetSessionByTokenCalled(Times.Once);
+        _mock.VerifyGetProductByIdCalled(Times.Never);
+        _mock.VerifyGetCartByUserIdCalled(Times.Never);
+        _mock.VerifyAddCartCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
     public async Task GivenValidStoreSession_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: false));
-        var command = GenerateValidCommand();
+        var session = SessionBuilder.Valid(isUserSession: false);
+        var command = GenerateValidCommand(sessionToken: session.Token);
+        _mock.SetupGetSessionByTokenReturns(session);
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Should().Be(AddProductToCartErrors.NotAnUser);
-        VerifyGetSessionByTokenCalledOnce();
-        VerifyGetProductByIdNeverCalled();
-        VerifyGetCartByUserIdNeverCalled();
-        VerifyAddCartNeverCalled();
-        VerifyCommitAsyncNeverCalled();
+        _mock.VerifyGetSessionByTokenCalled(Times.Once);
+        _mock.VerifyGetProductByIdCalled(Times.Never);
+        _mock.VerifyGetCartByUserIdCalled(Times.Never);
+        _mock.VerifyAddCartCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
     public async Task GivenNonExistingProduct_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: true));
-        SetupGetProductByIdReturn(null);
-        var command = GenerateValidCommand();
+        var session = SessionBuilder.Valid(isUserSession: true);
+        var command = GenerateValidCommand(sessionToken: session.Token);
+        _mock.SetupGetSessionByTokenReturns(session);
+        _mock.SetupGetProductByIdReturnsNull();
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Should().Be(AddProductToCartErrors.ProductNotFound);
-        VerifyGetSessionByTokenCalledOnce();
-        VerifyGetProductByIdCalledOnce();
-        VerifyGetCartByUserIdNeverCalled();
-        VerifyAddCartNeverCalled();
-        VerifyCommitAsyncNeverCalled();
+        _mock.VerifyGetSessionByTokenCalled(Times.Once);
+        _mock.VerifyGetProductByIdCalled(Times.Once);
+        _mock.VerifyGetCartByUserIdCalled(Times.Never);
+        _mock.VerifyAddCartCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
     public async Task GivenNonAvailableProduct_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        var queriedProduct = GenerateValidProduct(isAvailable: false);
-        var command = GenerateValidCommand(productId: queriedProduct.Id);
-        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: true));
-        SetupGetProductByIdReturn(queriedProduct);
+        var queriedProduct = ProductBuilder.Unavailable();
+        var session = SessionBuilder.Valid(isUserSession: true);
+        var command = GenerateValidCommand(productId: queriedProduct.Id, sessionToken: session.Token);
+        _mock.SetupGetSessionByTokenReturns(session);
+        _mock.SetupGetProductByIdReturns(queriedProduct);
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Should().Be(AddProductToCartErrors.ProductNotAvailable);
-        VerifyGetSessionByTokenCalledOnce();
-        VerifyGetProductByIdCalledOnce();
-        VerifyGetCartByUserIdNeverCalled();
-        VerifyAddCartNeverCalled();
-        VerifyCommitAsyncNeverCalled();
+        _mock.VerifyGetSessionByTokenCalled(Times.Once);
+        _mock.VerifyGetProductByIdCalled(Times.Once);
+        _mock.VerifyGetCartByUserIdCalled(Times.Never);
+        _mock.VerifyAddCartCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
     public async Task GivenItemQuantityEqualToZero_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        var queriedProduct = GenerateValidProduct();
-        var command = GenerateValidCommand(productId: queriedProduct.Id, quantity: 0);
-        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: true));
-        SetupGetProductByIdReturn(queriedProduct);
+        var queriedProduct = ProductBuilder.Valid();
+        var session = SessionBuilder.Valid(isUserSession: true);
+        var command = GenerateValidCommand(productId: queriedProduct.Id, quantity: 0, sessionToken: session.Token);
+        _mock.SetupGetSessionByTokenReturns(session);
+        _mock.SetupGetProductByIdReturns(queriedProduct);
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Should().Be(ItemErrors.EmptyItem);
-        VerifyGetSessionByTokenCalledOnce();
-        VerifyGetProductByIdCalledOnce();
-        VerifyGetCartByUserIdNeverCalled();
-        VerifyAddCartNeverCalled();
-        VerifyCommitAsyncNeverCalled();
+        _mock.VerifyGetSessionByTokenCalled(Times.Once);
+        _mock.VerifyGetProductByIdCalled(Times.Once);
+        _mock.VerifyGetCartByUserIdCalled(Times.Never);
+        _mock.VerifyAddCartCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
     public async Task GivenNonExistingCart_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        var queriedProduct = GenerateValidProduct();
-        var command = GenerateValidCommand(productId: queriedProduct.Id);
-        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: true));
-        SetupGetProductByIdReturn(queriedProduct);
+        var queriedProduct = ProductBuilder.Valid();
+        var session = SessionBuilder.Valid(isUserSession: true);
+        var command = GenerateValidCommand(productId: queriedProduct.Id, sessionToken: session.Token);
         Cart? persistedCart = null;
+        _mock.SetupGetSessionByTokenReturns(session);
+        _mock.SetupGetProductByIdReturns(queriedProduct);
+        _mock.SetupGetCartByUserIdReturnsNull();
         _mock.Setup(uow => uow.Carts.AddAsync(It.IsAny<Cart>(), It.IsAny<CancellationToken>()))
             .Callback<Cart, CancellationToken>((cart, _) => persistedCart = cart);
 
@@ -220,23 +152,25 @@ public sealed class AddProductToCartTest
         persistedCart.Items.Should().HaveCount(1);
         persistedCart.Items.Single().Quantity.Should().Be(command.Quantity);
         persistedCart.Items.Single().Product.Id.Should().Be(command.ProductId);
-        VerifyGetSessionByTokenCalledOnce();
-        VerifyGetProductByIdCalledOnce();
-        VerifyGetCartByUserIdCalledOnce();
-        VerifyAddCartCalledOnce();
-        VerifyCommitAsyncCalledOnce();
+        _mock.VerifyGetSessionByTokenCalled(Times.Once);
+        _mock.VerifyGetProductByIdCalled(Times.Once);
+        _mock.VerifyGetCartByUserIdCalled(Times.Once);
+        _mock.VerifyAddCartCalled(Times.Once);
+        _mock.VerifyCommitAsyncCalled(Times.Once);
     }
 
     [Fact]
     public async Task GivenExistingCartContainingAddedProduct_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        var storedItem = new Item(GenerateValidProduct(), 2u);
-        var command = GenerateValidCommand(productId: storedItem.Product.Id);
+        var storedItem = ItemBuilder.Valid();
+        var session = SessionBuilder.Valid(isUserSession: true);
+        var command = GenerateValidCommand(productId: storedItem.Product.Id, sessionToken: session.Token);
         var expectedFinalQuantity = storedItem.Quantity + command.Quantity;
-        var persistedCart = GenerateCartWithItem(storedItem);
-        SetupGetSessionByTokenReturn(SessionBuilder.Valid(isUserSession: true));
-        SetupGetProductByIdReturn(storedItem.Product);
-        SetupGetCartByUserIdReturn(persistedCart);
+        var persistedCart = CartBuilder.WithUserId(session.Owner.OwnerId);
+        persistedCart.AddItem(storedItem);
+        _mock.SetupGetSessionByTokenReturns(session);
+        _mock.SetupGetProductByIdReturns(storedItem.Product);
+        _mock.SetupGetCartByUserIdReturns(persistedCart);
 
         var result = await _sut.Handle(command);
 
@@ -245,10 +179,10 @@ public sealed class AddProductToCartTest
         persistedCart.Items.Should().HaveCount(1);
         persistedCart.Items.Single().Quantity.Should().Be(expectedFinalQuantity);
         persistedCart.Items.Single().Product.Id.Should().Be(storedItem.Product.Id);
-        VerifyGetSessionByTokenCalledOnce();
-        VerifyGetProductByIdCalledOnce();
-        VerifyGetCartByUserIdCalledOnce();
-        VerifyAddCartNeverCalled();
-        VerifyCommitAsyncCalledOnce();
+        _mock.VerifyGetSessionByTokenCalled(Times.Once);
+        _mock.VerifyGetProductByIdCalled(Times.Once);
+        _mock.VerifyGetCartByUserIdCalled(Times.Once);
+        _mock.VerifyAddCartCalled(Times.Never);
+        _mock.VerifyCommitAsyncCalled(Times.Once);
     }
 }
