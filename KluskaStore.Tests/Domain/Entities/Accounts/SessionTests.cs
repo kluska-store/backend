@@ -17,19 +17,9 @@ public class SessionTests
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
         result.Value.Owner.OwnerType.Should().Be(_sut.Owner.OwnerType);
-        result.Value.IsExpired().Should().BeFalse();
         result.Value.Token.Should().Be(_sut.Token);
-    }
-
-    [Fact]
-    public void GivenEntityCreation_WhenSessionExpired_ThenCreatesEntity()
-    {
-        var result = Session.Create(_sut.Token, _sut.Owner, DateTime.UtcNow.AddYears(-2));
-
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().NotBeNull();
-        result.Value.Owner.OwnerType.Should().Be(SessionOwner.OwnerTypeEnum.User);
-        result.Value.IsExpired().Should().BeTrue();
+        result.Value.CreatedAt.Should().Be(_sut.CreatedAt);
+        result.Value.ExpiresAt.Should().Be(default);
     }
 
     [Fact]
@@ -48,5 +38,31 @@ public class SessionTests
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(SessionErrors.EmptySessionToken.Code);
+    }
+
+    [Fact]
+    public void GivenExpirationDateDefinition_WhenExpirationDateIsValid_ThenSetsExpirationDate()
+    {
+        var expirationDate = DateTime.UtcNow.AddDays(1);
+
+        var result = _sut.SetExpirationDate(expirationDate);
+
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Should().NotBeNull();
+        var alteredSession = result.Value;
+        alteredSession.Should().BeSameAs(_sut);
+        alteredSession.ExpiresAt.Should().Be(expirationDate);
+        alteredSession.IsExpired().Should().BeFalse();
+    }
+
+    [Fact]
+    public void GivenExpirationDateDefinition_WhenExpirationDateIsInvalid_ThenReturnsFailure()
+    {
+        var expirationDate = DateTime.UtcNow;
+
+        var result = _sut.SetExpirationDate(expirationDate);
+
+        result.IsFailure.Should().BeTrue();
+        result.Error!.Code.Should().Be(SessionErrors.InvalidExpirationDate.Code);
     }
 }

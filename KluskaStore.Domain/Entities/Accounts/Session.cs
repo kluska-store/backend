@@ -22,9 +22,9 @@ public sealed class Session : Entity
     public string Token { get; private set; }
     public SessionOwner Owner { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    public DateTime ExpiresAt => CreatedAt.AddMonths(3);
+    public DateTime ExpiresAt { get; internal set; }
 
-    public bool IsExpired() => DateTime.UtcNow > ExpiresAt;
+    public bool IsExpired() => DateTime.UtcNow > ExpiresAt && ExpiresAt != default;
 
     public static Result<Session> Create(string token, SessionOwner sessionOwner, DateTime createdAt)
     {
@@ -40,5 +40,14 @@ public sealed class Session : Entity
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Token;
+    }
+
+    public Result<Session> SetExpirationDate(DateTime expirationDate)
+    {
+        if (expirationDate <= DateTime.UtcNow)
+            return Result<Session>.Failure(SessionErrors.InvalidExpirationDate);
+
+        ExpiresAt = expirationDate;
+        return Result<Session>.Success(this);
     }
 }
