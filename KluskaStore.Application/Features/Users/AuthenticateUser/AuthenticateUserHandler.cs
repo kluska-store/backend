@@ -15,7 +15,7 @@ public sealed class AuthenticateUserHandler(IUnitOfWork uow) : IRequestHandler<A
         if (user is null) return Result<string>.Failure(UserNotFound);
         if (user.PasswordHash != request.Password) return Result<string>.Failure(PasswordIsIncorrect);
 
-        var sessionToken = await uow.Sessions.RegisterAsync(user, cancellationToken);
+        var sessionToken = await uow.Sessions.RegisterAsync(user.Id, cancellationToken);
         await uow.CommitAsync(cancellationToken);
         return Result<string>.Success(sessionToken);
     }

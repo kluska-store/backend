@@ -13,7 +13,7 @@ public static class SessionRepositoryMockExtensions
         .Returns(Task.CompletedTask);
 
     public static void SetupRegisterSessionReturns(this Mock<IUnitOfWork> mock, string createdSessionToken) => mock
-        .Setup(uow => uow.Sessions.RegisterAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
+        .Setup(uow => uow.Sessions.RegisterAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
         .ReturnsAsync(createdSessionToken);
 
     public static void SetupGetSessionByTokenReturnsNull(this Mock<IUnitOfWork> mock) => mock
@@ -30,7 +30,7 @@ public static class SessionRepositoryMockExtensions
     );
 
     public static void VerifyRegisterSessionCalled(this Mock<IUnitOfWork> mock, Func<Times> times) => mock.Verify(
-        uow => uow.Sessions.RegisterAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()),
+        uow => uow.Sessions.RegisterAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()),
         times
     );
 
