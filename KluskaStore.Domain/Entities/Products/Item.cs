@@ -13,6 +13,7 @@ public sealed class Item : Entity
         Quantity = quantity;
     }
 
+    public Guid Id { get; private set; }
     public Product Product { get; private set; }
     public uint Quantity { get; internal set; }
 
