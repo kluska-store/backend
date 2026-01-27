@@ -42,7 +42,7 @@ public class AuthenticateUserTests
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
-        result.Error!.Code.Should().Be(AuthenticateUserErrors.PasswordIsIncorect.Code);
+        result.Error!.Code.Should().Be(AuthenticateUserErrors.PasswordIsIncorrect.Code);
         _mock.VerifyGetUserByEmailCalled(Times.Once);
         _mock.VerifyRegisterSessionCalled(Times.Never);
         _mock.VerifyCommitAsyncCalled(Times.Never);

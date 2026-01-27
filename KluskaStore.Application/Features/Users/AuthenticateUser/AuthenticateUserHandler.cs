@@ -13,7 +13,7 @@ public sealed class AuthenticateUserHandler(IUnitOfWork uow) : IRequestHandler<A
     {
         var user = await uow.Users.GetByEmailAsync(request.Email, cancellationToken);
         if (user is null) return Result<string>.Failure(UserNotFound);
-        if (user.PasswordHash != request.Password) return Result<string>.Failure(PasswordIsIncorect);
+        if (user.PasswordHash != request.Password) return Result<string>.Failure(PasswordIsIncorrect);
 
         var sessionToken = await uow.Sessions.RegisterAsync(user, cancellationToken);
         await uow.CommitAsync(cancellationToken);
