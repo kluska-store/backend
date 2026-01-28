@@ -6,6 +6,7 @@ public interface IUnitOfWork
     ISessionRepository Sessions { get; }
     IProductRepository Products { get; }
     ICartRepository Carts { get; }
+    IItemRepository Items { get; }
 
     Task CommitAsync(CancellationToken cancellationToken = default);
 }
