@@ -25,7 +25,8 @@ echo "Formatting code..."
 mapfile -t files < <(git diff --cached --name-only -- '*.cs')
 
 if (( ${#files[@]} > 0 )); then
-    dotnet format --include "${files[@]}" > /dev/null 2>&1 || error "Formatting failed"
+    include=$(IFS=' '; echo "${files[*]}")
+    dotnet format --include $include > /dev/null 2>&1 || error "Formatting failed"
     git add "${files[@]}"
 fi
 
