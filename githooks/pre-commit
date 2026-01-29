@@ -21,13 +21,8 @@ echo "Tests passed"
 
 
 cd "$REPO_ROOT"
-echo "Formatting code..."
 mapfile -t files < <(git diff --cached --name-only -- '*.cs')
 
-if (( ${#files[@]} > 0 )); then
-    include=$(IFS=' '; echo "${files[*]}")
-    dotnet format --include $include > /dev/null 2>&1 || error "Formatting failed"
-    git add "${files[@]}"
+if ! dotnet format --include "${files[@]}" --verify-no-changes; then
+    error "Code not formatted. Format the added files before commiting"
 fi
-
-echo "Code formatted"
