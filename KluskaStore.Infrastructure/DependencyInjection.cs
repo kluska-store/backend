@@ -18,8 +18,9 @@ public static class DependencyInjection
             configuration.GetConnectionString("Default")
         ));
 
-        services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<ICartRepository, CartRepository>();
 
         return services;
     }
