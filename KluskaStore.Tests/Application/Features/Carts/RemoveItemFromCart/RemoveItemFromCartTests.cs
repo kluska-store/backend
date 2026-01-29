@@ -2,18 +2,26 @@
 using KluskaStore.Application.Features.Carts.RemoveItemFromCart;
 using KluskaStore.Tests.Common.Builders;
 using KluskaStore.Tests.Common.Mocks.UnitOfWork;
-using KluskaStore.Tests.Common.Mocks.UnitOfWork.Carts;
-using KluskaStore.Tests.Common.Mocks.UnitOfWork.Items;
-using KluskaStore.Tests.Common.Mocks.UnitOfWork.Sessions;
+using KluskaStore.Tests.Common.Mocks.Carts;
+using KluskaStore.Tests.Common.Mocks.Items;
+using KluskaStore.Tests.Common.Mocks.Sessions;
 
 namespace KluskaStore.Tests.Application.Features.Carts.RemoveItemFromCart;
 
 public sealed class RemoveItemFromCartTests
 {
-    private readonly Mock<IUnitOfWork> _mock = new();
+    private readonly Mock<IUnitOfWork> _uowMock = new();
+    private readonly Mock<ISessionRepository> _sessionMock = new();
+    private readonly Mock<ICartRepository> _cartMock = new();
+    private readonly Mock<IItemRepository> _itemMock = new();
     private readonly RemoveItemFromCartHandler _sut;
 
-    public RemoveItemFromCartTests() => _sut = new RemoveItemFromCartHandler(_mock.Object);
+    public RemoveItemFromCartTests() => _sut = new RemoveItemFromCartHandler(
+        _uowMock.Object, 
+        _sessionMock.Object, 
+        _cartMock.Object, 
+        _itemMock.Object
+    );
 
     private RemoveItemFromCartCommand GenerateValidCommand(string? sessionToken = null, Guid? itemId = null)
         => new(sessionToken ?? "session token", itemId ?? Guid.NewGuid());
@@ -22,16 +30,16 @@ public sealed class RemoveItemFromCartTests
     public async Task GivenUserNotLoggedIn_WhenTryingToRemoveItemFromCart_ThenReturnsFailure()
     {
         var command = GenerateValidCommand();
-        _mock.SetupGetSessionByTokenReturnsNull();
+        _sessionMock.SetupGetSessionByTokenReturnsNull();
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(RemoveItemFromCartErrors.NotLoggedIn.Code);
-        _mock.VerifyGetSessionByTokenCalled(Times.Once);
-        _mock.VerifyGetCartByUserIdCalled(Times.Never);
-        _mock.VerifyGetItemByIdCalled(Times.Never);
-        _mock.VerifyCommitAsyncCalled(Times.Never);
+        _sessionMock.VerifyGetSessionByTokenCalled(Times.Once);
+        _cartMock.VerifyGetCartByUserIdCalled(Times.Never);
+        _itemMock.VerifyGetItemByIdCalled(Times.Never);
+        _uowMock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -39,16 +47,16 @@ public sealed class RemoveItemFromCartTests
     {
         var session = SessionBuilder.Expired(isUserSession: true);
         var command = GenerateValidCommand(sessionToken: session.Token);
-        _mock.SetupGetSessionByTokenReturns(session);
+        _sessionMock.SetupGetSessionByTokenReturns(session);
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(RemoveItemFromCartErrors.NotLoggedIn.Code);
-        _mock.VerifyGetSessionByTokenCalled(Times.Once);
-        _mock.VerifyGetCartByUserIdCalled(Times.Never);
-        _mock.VerifyGetItemByIdCalled(Times.Never);
-        _mock.VerifyCommitAsyncCalled(Times.Never);
+        _sessionMock.VerifyGetSessionByTokenCalled(Times.Once);
+        _cartMock.VerifyGetCartByUserIdCalled(Times.Never);
+        _itemMock.VerifyGetItemByIdCalled(Times.Never);
+        _uowMock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -56,16 +64,16 @@ public sealed class RemoveItemFromCartTests
     {
         var session = SessionBuilder.Valid(isUserSession: false);
         var command = GenerateValidCommand(sessionToken: session.Token);
-        _mock.SetupGetSessionByTokenReturns(session);
+        _sessionMock.SetupGetSessionByTokenReturns(session);
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(RemoveItemFromCartErrors.NotAnUser.Code);
-        _mock.VerifyGetSessionByTokenCalled(Times.Once);
-        _mock.VerifyGetCartByUserIdCalled(Times.Never);
-        _mock.VerifyGetItemByIdCalled(Times.Never);
-        _mock.VerifyCommitAsyncCalled(Times.Never);
+        _sessionMock.VerifyGetSessionByTokenCalled(Times.Once);
+        _cartMock.VerifyGetCartByUserIdCalled(Times.Never);
+        _itemMock.VerifyGetItemByIdCalled(Times.Never);
+        _uowMock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -73,17 +81,17 @@ public sealed class RemoveItemFromCartTests
     {
         var session = SessionBuilder.Valid(isUserSession: true);
         var command = GenerateValidCommand(sessionToken: session.Token);
-        _mock.SetupGetSessionByTokenReturns(session);
-        _mock.SetupGetCartByUserIdReturnsNull();
+        _sessionMock.SetupGetSessionByTokenReturns(session);
+        _cartMock.SetupGetCartByUserIdReturnsNull();
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(RemoveItemFromCartErrors.CartNotFound.Code);
-        _mock.VerifyGetSessionByTokenCalled(Times.Once);
-        _mock.VerifyGetCartByUserIdCalled(Times.Once);
-        _mock.VerifyGetItemByIdCalled(Times.Never);
-        _mock.VerifyCommitAsyncCalled(Times.Never);
+        _sessionMock.VerifyGetSessionByTokenCalled(Times.Once);
+        _cartMock.VerifyGetCartByUserIdCalled(Times.Once);
+        _itemMock.VerifyGetItemByIdCalled(Times.Never);
+        _uowMock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -92,18 +100,18 @@ public sealed class RemoveItemFromCartTests
         var session = SessionBuilder.Valid(isUserSession: true);
         var cart = CartBuilder.WithUserId(session.Owner.OwnerId);
         var command = GenerateValidCommand(sessionToken: session.Token);
-        _mock.SetupGetSessionByTokenReturns(session);
-        _mock.SetupGetCartByUserIdReturns(cart);
-        _mock.SetupGetItemByIdReturnsNull();
+        _sessionMock.SetupGetSessionByTokenReturns(session);
+        _cartMock.SetupGetCartByUserIdReturns(cart);
+        _itemMock.SetupGetItemByIdReturnsNull();
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(RemoveItemFromCartErrors.ItemNotFound.Code);
-        _mock.VerifyGetSessionByTokenCalled(Times.Once);
-        _mock.VerifyGetCartByUserIdCalled(Times.Once);
-        _mock.VerifyGetItemByIdCalled(Times.Once);
-        _mock.VerifyCommitAsyncCalled(Times.Never);
+        _sessionMock.VerifyGetSessionByTokenCalled(Times.Once);
+        _cartMock.VerifyGetCartByUserIdCalled(Times.Once);
+        _itemMock.VerifyGetItemByIdCalled(Times.Once);
+        _uowMock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -113,18 +121,18 @@ public sealed class RemoveItemFromCartTests
         var cart = CartBuilder.WithUserId(session.Owner.OwnerId);
         var item = ItemBuilder.Valid();
         var command = GenerateValidCommand(sessionToken: session.Token, itemId: item.Id);
-        _mock.SetupGetSessionByTokenReturns(session);
-        _mock.SetupGetCartByUserIdReturns(cart);
-        _mock.SetupGetItemByIdReturns(item);
+        _sessionMock.SetupGetSessionByTokenReturns(session);
+        _cartMock.SetupGetCartByUserIdReturns(cart);
+        _itemMock.SetupGetItemByIdReturns(item);
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(RemoveItemFromCartErrors.ItemNotInCart.Code);
-        _mock.VerifyGetSessionByTokenCalled(Times.Once);
-        _mock.VerifyGetCartByUserIdCalled(Times.Once);
-        _mock.VerifyGetItemByIdCalled(Times.Once);
-        _mock.VerifyCommitAsyncCalled(Times.Never);
+        _sessionMock.VerifyGetSessionByTokenCalled(Times.Once);
+        _cartMock.VerifyGetCartByUserIdCalled(Times.Once);
+        _itemMock.VerifyGetItemByIdCalled(Times.Once);
+        _uowMock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -135,16 +143,16 @@ public sealed class RemoveItemFromCartTests
         var item = ItemBuilder.Valid();
         var command = GenerateValidCommand(sessionToken: session.Token, itemId: item.Id);
         cart.AddItem(item);
-        _mock.SetupGetSessionByTokenReturns(session);
-        _mock.SetupGetCartByUserIdReturns(cart);
-        _mock.SetupGetItemByIdReturns(item);
+        _sessionMock.SetupGetSessionByTokenReturns(session);
+        _cartMock.SetupGetCartByUserIdReturns(cart);
+        _itemMock.SetupGetItemByIdReturns(item);
 
         var result = await _sut.Handle(command);
 
         result.IsSuccess.Should().BeTrue();
-        _mock.VerifyGetSessionByTokenCalled(Times.Once);
-        _mock.VerifyGetCartByUserIdCalled(Times.Once);
-        _mock.VerifyGetItemByIdCalled(Times.Once);
-        _mock.VerifyCommitAsyncCalled(Times.Once);
+        _sessionMock.VerifyGetSessionByTokenCalled(Times.Once);
+        _cartMock.VerifyGetCartByUserIdCalled(Times.Once);
+        _itemMock.VerifyGetItemByIdCalled(Times.Once);
+        _uowMock.VerifyCommitAsyncCalled(Times.Once);
     }
 }

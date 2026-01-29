@@ -2,17 +2,23 @@
 using KluskaStore.Application.Features.Users.AuthenticateUser;
 using KluskaStore.Tests.Common.Builders;
 using KluskaStore.Tests.Common.Mocks.UnitOfWork;
-using KluskaStore.Tests.Common.Mocks.UnitOfWork.Sessions;
-using KluskaStore.Tests.Common.Mocks.UnitOfWork.Users;
+using KluskaStore.Tests.Common.Mocks.Sessions;
+using KluskaStore.Tests.Common.Mocks.Users;
 
 namespace KluskaStore.Tests.Application.Features.Users.AuthenticateUser;
 
 public class AuthenticateUserTests
 {
-    private readonly Mock<IUnitOfWork> _mock = new();
+    private readonly Mock<IUnitOfWork> _uowMock = new();
+    private readonly Mock<IUserRepository> _userMock = new();
+    private readonly Mock<ISessionRepository> _sessionMock = new();
     private readonly AuthenticateUserHandler _sut;
 
-    public AuthenticateUserTests() => _sut = new AuthenticateUserHandler(_mock.Object);
+    public AuthenticateUserTests() => _sut = new AuthenticateUserHandler(
+        _uowMock.Object,
+        _userMock.Object,
+        _sessionMock.Object
+    );
 
     private static AuthenticateUserCommand GenerateValidCommand(string? email = null, string? password = null)
         => new(email ?? "example@email.com", password ?? "password123");
@@ -20,32 +26,32 @@ public class AuthenticateUserTests
     [Fact]
     public async Task GivenNonExistingUser_WhenTryingToAuthenticate_ThenReturnsFailure()
     {
-        _mock.SetupGetUserByEmailReturnsNull();
+        _userMock.SetupGetUserByEmailReturnsNull();
         var command = GenerateValidCommand();
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(AuthenticateUserErrors.UserNotFound.Code);
-        _mock.VerifyGetUserByEmailCalled(Times.Once);
-        _mock.VerifyRegisterSessionCalled(Times.Never);
-        _mock.VerifyCommitAsyncCalled(Times.Never);
+        _userMock.VerifyGetUserByEmailCalled(Times.Once);
+        _sessionMock.VerifyRegisterSessionCalled(Times.Never);
+        _uowMock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
     public async Task GivenExistingUserAndWrongPassword_WhenTryingToAuthenticate_ThenReturnsFailure()
     {
         var user = UserBuilder.Valid();
-        _mock.SetupGetUserByEmailReturns(user);
+        _userMock.SetupGetUserByEmailReturns(user);
         var command = GenerateValidCommand(password: user.PasswordHash + ".");
 
         var result = await _sut.Handle(command);
 
         result.IsFailure.Should().BeTrue();
         result.Error!.Code.Should().Be(AuthenticateUserErrors.PasswordIsIncorrect.Code);
-        _mock.VerifyGetUserByEmailCalled(Times.Once);
-        _mock.VerifyRegisterSessionCalled(Times.Never);
-        _mock.VerifyCommitAsyncCalled(Times.Never);
+        _userMock.VerifyGetUserByEmailCalled(Times.Once);
+        _sessionMock.VerifyRegisterSessionCalled(Times.Never);
+        _uowMock.VerifyCommitAsyncCalled(Times.Never);
     }
 
     [Fact]
@@ -54,15 +60,15 @@ public class AuthenticateUserTests
         const string token = "session token";
         var user = UserBuilder.Valid();
         var command = GenerateValidCommand(email: user.Email.Value, password: user.PasswordHash);
-        _mock.SetupGetUserByEmailReturns(user);
-        _mock.SetupRegisterSessionReturns(token);
+        _userMock.SetupGetUserByEmailReturns(user);
+        _sessionMock.SetupRegisterSessionReturns(token);
 
         var result = await _sut.Handle(command);
 
         result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
-        _mock.VerifyGetUserByEmailCalled(Times.Once);
-        _mock.VerifyRegisterSessionCalled(Times.Once);
-        _mock.VerifyCommitAsyncCalled(Times.Once);
+        _userMock.VerifyGetUserByEmailCalled(Times.Once);
+        _sessionMock.VerifyRegisterSessionCalled(Times.Once);
+        _uowMock.VerifyCommitAsyncCalled(Times.Once);
     }
 }

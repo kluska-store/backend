@@ -1,13 +1,13 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
 using KluskaStore.Application.Features.Products.GetProductById;
 using KluskaStore.Tests.Common.Builders;
-using KluskaStore.Tests.Common.Mocks.UnitOfWork.Products;
+using KluskaStore.Tests.Common.Mocks.Products;
 
 namespace KluskaStore.Tests.Application.Features.Products.GetProductById;
 
 public class GetProductByIdTests
 {
-    private readonly Mock<IUnitOfWork> _mock = new();
+    private readonly Mock<IProductRepository> _mock = new();
     private readonly GetProductByIdHandler _sut;
 
     public GetProductByIdTests() => _sut = new GetProductByIdHandler(_mock.Object);
