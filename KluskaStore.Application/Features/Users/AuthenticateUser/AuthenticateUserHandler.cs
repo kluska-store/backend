@@ -1,4 +1,7 @@
-﻿using KluskaStore.Application.Abstractions.Persistence;
+﻿using KluskaStore.Application.Abstractions;
+using KluskaStore.Application.Abstractions.Persistence;
+using KluskaStore.Domain.Entities.Accounts;
+using KluskaStore.Domain.ValueObjects;
 using static KluskaStore.Application.Features.Users.AuthenticateUser.AuthenticateUserErrors;
 
 namespace KluskaStore.Application.Features.Users.AuthenticateUser;
@@ -7,7 +10,8 @@ namespace KluskaStore.Application.Features.Users.AuthenticateUser;
 public sealed class AuthenticateUserHandler(
     IUnitOfWork uow,
     IUserRepository userRepo,
-    ISessionRepository sessionRepo
+    ISessionRepository sessionRepo,
+    ISessionTokenGenerator tokenGenerator
 ) : IRequestHandler<AuthenticateUserCommand, Result<string>>
 {
     public async Task<Result<string>> Handle(
@@ -19,8 +23,15 @@ public sealed class AuthenticateUserHandler(
         if (user is null) return Result<string>.Failure(UserNotFound);
         if (user.PasswordHash != request.Password) return Result<string>.Failure(PasswordIsIncorrect);
 
-        var sessionToken = await sessionRepo.RegisterAsync(user.Id, cancellationToken);
+        var sessionOwnerResult = SessionOwner.User(user.Id);
+        if (sessionOwnerResult.IsFailure) return Result<string>.Failure(sessionOwnerResult.Error!);
+
+        var sessionResult = Session.Create(tokenGenerator.New(), sessionOwnerResult.Value!, DateTime.UtcNow);
+        if (sessionResult.IsFailure) return Result<string>.Failure(sessionResult.Error!);
+        var session = sessionResult.Value!;
+
+        await sessionRepo.RegisterAsync(session, cancellationToken);
         await uow.CommitAsync(cancellationToken);
-        return Result<string>.Success(sessionToken);
+        return Result<string>.Success(session.Token);
     }
 }

@@ -2,7 +2,7 @@
 
 public abstract class AggregateRoot() : Entity
 {
-    public Guid Id { get; protected set; } = Guid.Empty;
+    public Guid Id { get; internal set; } = Guid.Empty;
 
     protected AggregateRoot(Guid id) : this() => Id = id;
 

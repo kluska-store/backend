@@ -17,7 +17,7 @@ public sealed record SessionOwner
     }
 
     public OwnerTypeEnum OwnerType { get; }
-    public Guid OwnerId { get; }
+    public Guid OwnerId { get; internal set; }
     public bool IsUser => OwnerType == OwnerTypeEnum.User;
     public bool IsStore => OwnerType == OwnerTypeEnum.Store;
 

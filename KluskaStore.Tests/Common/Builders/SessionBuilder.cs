@@ -17,6 +17,14 @@ public static class SessionBuilder
     { ExpiresAt = expirationDate ?? default };
 
     public static Session Valid(bool isUserSession) => Generate(isUserSession);
+
+    public static Session WithOwnerId(bool isUserSession, Guid ownerId)
+    {
+        var session = Valid(isUserSession);
+        session.Owner.OwnerId = ownerId;
+        return session;
+    }
+
     public static Session EmptyToken(bool isUserSession) => Generate(isUserSession, token: "");
 
     public static Session Expired(bool isUserSession) => Generate(
