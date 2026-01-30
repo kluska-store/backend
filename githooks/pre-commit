@@ -20,9 +20,11 @@ dotnet test > /dev/null 2>&1 || error "Tests failed"
 echo "Tests passed"
 
 
-cd "$REPO_ROOT"
-mapfile -t files < <(git diff --cached --name-only -- '*.cs')
-
-if ! dotnet format --include "${files[@]}" --verify-no-changes > /dev/null 2>&1; then
+echo "Verifying Formatting..."
+if ! dotnet format --verify-no-changes > /dev/null 2>&1; then
     error "Code not formatted. Format the added files before commiting"
 fi
+
+echo "The code is well formatted"
+
+cd "$REPO_ROOT"
