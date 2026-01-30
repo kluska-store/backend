@@ -4,6 +4,8 @@ namespace KluskaStore.Domain.ValueObjects.AccountData.Address;
 
 public sealed record Address
 {
+    private Address() { }
+
     internal Address(
         string country,
         string state,
