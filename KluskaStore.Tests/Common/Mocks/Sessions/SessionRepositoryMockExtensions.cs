@@ -12,9 +12,9 @@ public static class SessionRepositoryMockExtensions
         .Setup(repo => repo.UnregisterAsync(token, It.IsAny<CancellationToken>()))
         .Returns(Task.CompletedTask);
 
-    public static void SetupRegisterSessionReturns(this Mock<ISessionRepository> mock, Session createdSession) => mock
-        .Setup(repo => repo.RegisterAsync(createdSession, It.IsAny<CancellationToken>()))
-        .ReturnsAsync(createdSession.Token);
+    public static void SetupRegisterSessionReturns(this Mock<ISessionRepository> mock, Task returnValue) => mock
+        .Setup(repo => repo.RegisterAsync(It.IsAny<Session>(), It.IsAny<CancellationToken>()))
+        .Returns(returnValue);
 
     public static void SetupGetSessionByTokenReturnsNull(this Mock<ISessionRepository> mock) => mock
         .Setup(repo => repo.GetByTokenAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -29,13 +29,15 @@ public static class SessionRepositoryMockExtensions
         Times.Once
     );
 
-    public static void VerifyRegisterSessionCalled(this Mock<ISessionRepository> mock, Func<Times> times) => mock.Verify(
-        repo => repo.RegisterAsync(It.IsAny<Session>(), It.IsAny<CancellationToken>()),
-        times
-    );
+    public static void VerifyRegisterSessionCalled(this Mock<ISessionRepository> mock, Func<Times> times) =>
+        mock.Verify(
+            repo => repo.RegisterAsync(It.IsAny<Session>(), It.IsAny<CancellationToken>()),
+            times
+        );
 
-    public static void VerifyGetSessionByTokenCalled(this Mock<ISessionRepository> mock, Func<Times> times) => mock.Verify(
-        repo => repo.GetByTokenAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
-        times
-    );
+    public static void VerifyGetSessionByTokenCalled(this Mock<ISessionRepository> mock, Func<Times> times) =>
+        mock.Verify(
+            repo => repo.GetByTokenAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
+            times
+        );
 }

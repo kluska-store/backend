@@ -67,7 +67,7 @@ public class AuthenticateUserTests
         var session = SessionBuilder.WithOwnerId(ownerId: user.Id, isUserSession: true);
         var command = GenerateValidCommand(email: user.Email.Value, password: user.PasswordHash);
         _userMock.SetupGetUserByEmailReturns(user);
-        _sessionMock.SetupRegisterSessionReturns(session);
+        _sessionMock.SetupRegisterSessionReturns(Task.CompletedTask);
         _tokenGeneratorMock.SetupGenerateNewTokenReturns(session.Token);
 
         var result = await _sut.Handle(command);
