@@ -4,11 +4,6 @@ using static Error;
 
 public static class RemoveItemFromCartErrors
 {
-    public static readonly Error ItemNotFound = NotFound(
-        "Cart.RemoveItem.ItemNotFound",
-        "We weren't able to locate the Item with the given Id in order to remove it from the Cart"
-    );
-
     public static readonly Error ItemNotInCart =
         NotFound("Cart.RemoveItem.ItemNotInCart", "The Item was not in the Cart, so it was not removed");
 

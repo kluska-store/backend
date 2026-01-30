@@ -13,7 +13,7 @@ public abstract class ProductCollection : AggregateRoot
     public Guid UserId { get; protected set; }
     public IReadOnlySet<Item> Items => _items;
 
-    public bool RemoveItem(Item item) => _items.Remove(item);
+    public bool RemoveItem(Guid itemId) => _items.RemoveWhere(i => i.Id == itemId) == 1;
 
     public void AddItem(Item item)
     {

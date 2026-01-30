@@ -68,7 +68,7 @@ public abstract class ProductCollectionTests
         var item = new Item(Products[3], 30);
         var lastCount = sut.Items.Count;
 
-        sut.RemoveItem(item);
+        sut.RemoveItem(item.Id);
 
         sut.Items.Count.Should().Be(lastCount);
     }
@@ -78,10 +78,9 @@ public abstract class ProductCollectionTests
     {
         var sut = CreateSut();
         var item = Items[0];
-        var lastCount = sut.Items.Count;
 
         sut.AddItem(item);
-        sut.RemoveItem(item);
+        sut.RemoveItem(item.Id);
 
         sut.Items.Should().BeEmpty();
         sut.Items.Should().NotContain(item);

@@ -6,8 +6,7 @@ namespace KluskaStore.Application.Features.Carts.RemoveItemFromCart;
 public sealed class RemoveItemFromCartHandler(
     IUnitOfWork uow,
     ISessionRepository sessionRepo,
-    ICartRepository cartRepo,
-    IItemRepository itemRepo
+    ICartRepository cartRepo
 ) : IRequestHandler<RemoveItemFromCartCommand, Result>
 {
     public async Task<Result> Handle(RemoveItemFromCartCommand request, CancellationToken cancellationToken = default)
@@ -20,10 +19,7 @@ public sealed class RemoveItemFromCartHandler(
         var cart = await cartRepo.GetByUserIdAsync(userId, cancellationToken);
         if (cart is null) return Result.Failure(CartNotFound);
 
-        var item = await itemRepo.GetByIdAsync(request.ItemId, cancellationToken);
-        if (item is null) return Result.Failure(ItemNotFound);
-
-        if (!cart.RemoveItem(item)) return Result.Failure(ItemNotInCart);
+        if (!cart.RemoveItem(request.ItemId)) return Result.Failure(ItemNotInCart);
 
         await uow.CommitAsync(cancellationToken);
         return Result.Success();
