@@ -5,13 +5,6 @@ namespace KluskaStore.Tests.Common.Mocks.Sessions;
 
 public static class SessionRepositoryMockExtensions
 {
-    public static void SetupUnregisterSessionByTokenAsyncReturnsCompletedTask(
-        this Mock<ISessionRepository> mock,
-        string token
-    ) => mock
-        .Setup(repo => repo.UnregisterAsync(token, It.IsAny<CancellationToken>()))
-        .Returns(Task.CompletedTask);
-
     public static void SetupRegisterSessionReturns(this Mock<ISessionRepository> mock, Task returnValue) => mock
         .Setup(repo => repo.RegisterAsync(It.IsAny<Session>(), It.IsAny<CancellationToken>()))
         .Returns(returnValue);
@@ -24,10 +17,8 @@ public static class SessionRepositoryMockExtensions
         .Setup(repo => repo.GetByTokenAsync(session.Token, It.IsAny<CancellationToken>()))
         .ReturnsAsync(session);
 
-    public static void VerifyUnregisterSessionByTokenAsyncCalledOnce(this Mock<ISessionRepository> mock) => mock.Verify(
-        repo => repo.UnregisterAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
-        Times.Once
-    );
+    public static void VerifyUnregisterSessionByTokenAsyncCalled(this Mock<ISessionRepository> mock, Func<Times> times)
+        => mock.Verify(repo => repo.UnregisterAsync(It.IsAny<Session>()), times);
 
     public static void VerifyRegisterSessionCalled(this Mock<ISessionRepository> mock, Func<Times> times) =>
         mock.Verify(

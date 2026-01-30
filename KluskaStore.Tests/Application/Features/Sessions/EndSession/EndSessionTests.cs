@@ -1,5 +1,6 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
 using KluskaStore.Application.Features.Sessions.EndSession;
+using KluskaStore.Tests.Common.Builders;
 using KluskaStore.Tests.Common.Mocks.UnitOfWork;
 using KluskaStore.Tests.Common.Mocks.Sessions;
 
@@ -13,17 +14,34 @@ public class EndSessionTests
 
     public EndSessionTests() => _sut = new EndSessionHandler(_uowMock.Object, _sessionMock.Object);
 
-    [Fact]
-    public async Task GivenSessionEnd_ThenEndsSession()
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task GivenExistingSession_WhenTryingToEndIt_ThenEndsSession(bool isUserSession)
     {
-        const string token = "session token";
-        var command = new EndSessionCommand(token);
-        _sessionMock.SetupUnregisterSessionByTokenAsyncReturnsCompletedTask(token);
+        var session = SessionBuilder.Valid(isUserSession);
+        var command = new EndSessionCommand(session.Token);
+        _sessionMock.SetupGetSessionByTokenReturns(session);
 
         var result = await _sut.Handle(command);
 
         result.IsSuccess.Should().BeTrue();
-        _sessionMock.VerifyUnregisterSessionByTokenAsyncCalledOnce();
+        _sessionMock.VerifyGetSessionByTokenCalled(Times.Once);
+        _sessionMock.VerifyUnregisterSessionByTokenAsyncCalled(Times.Once);
         _uowMock.VerifyCommitAsyncCalled(Times.Once);
+    }
+
+    [Fact]
+    public async Task GivenNonExistingSession_WhenTryingToEndIt_ThenEndsSession()
+    {
+        var command = new EndSessionCommand("session token");
+        _sessionMock.SetupGetSessionByTokenReturnsNull();
+
+        var result = await _sut.Handle(command);
+
+        result.IsFailure.Should().BeTrue();
+        _sessionMock.VerifyGetSessionByTokenCalled(Times.Once);
+        _sessionMock.VerifyUnregisterSessionByTokenAsyncCalled(Times.Never);
+        _uowMock.VerifyCommitAsyncCalled(Times.Never);
     }
 }

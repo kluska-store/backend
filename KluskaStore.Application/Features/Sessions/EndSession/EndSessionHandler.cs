@@ -7,7 +7,10 @@ public class EndSessionHandler(IUnitOfWork uow, ISessionRepository sessionRepo)
 {
     public async Task<Result> Handle(EndSessionCommand request, CancellationToken cancellationToken = default)
     {
-        await sessionRepo.UnregisterAsync(request.SessionToken, cancellationToken);
+        var session = await sessionRepo.GetByTokenAsync(request.SessionToken, cancellationToken);
+        if (session is null) return Result.Failure(EndSessionErrors.SessionNotFound);
+
+        sessionRepo.UnregisterAsync(session);
         await uow.CommitAsync(cancellationToken);
         return Result.Success();
     }
