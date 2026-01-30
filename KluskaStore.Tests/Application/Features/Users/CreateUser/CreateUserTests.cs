@@ -34,15 +34,12 @@ public class CreateUserTests
     [Fact]
     public async Task GivingValidData_WhenCreatingUser_ThenReturnsCreatedUsersId()
     {
-        var expectedId = Guid.NewGuid();
-        _userMock.SetupAddUserReturns(expectedId);
+        _userMock.SetupAddUserReturns(Task.CompletedTask);
 
         var command = CreateValidCommand();
         var result = await _sut.Handle(command);
 
         result.IsSuccess.Should().BeTrue();
-        result.Value.Should().NotBeNull();
-        result.Value.CreatedUserId.Should().Be(expectedId);
         _userMock.VerifyAddUserCalled(Times.Once);
         _uowMock.VerifyCommitAsyncCalled(Times.Once);
     }

@@ -28,9 +28,9 @@ public static class UserRepositoryMockExtensions
         .Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
         .ReturnsAsync((User?)null);
 
-    public static void SetupAddUserReturns(this Mock<IUserRepository> mock, Guid addedUserId) => mock
+    public static void SetupAddUserReturns(this Mock<IUserRepository> mock, Task returnValue) => mock
         .Setup(repo => repo.AddAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-        .ReturnsAsync(addedUserId);
+        .Returns(returnValue);
 
     public static void SetupGetUserByEmailReturnsNull(this Mock<IUserRepository> mock) => mock
         .Setup(repo => repo.GetByEmailAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))

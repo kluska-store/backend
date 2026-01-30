@@ -7,4 +7,4 @@ public sealed record CreateUserCommand(
     string Phone,
     DateOnly Birthday,
     string RawPassword
-) : IRequest<Result<CreateUserResponse>>;
+) : IRequest<Result>;

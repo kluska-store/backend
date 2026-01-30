@@ -6,9 +6,9 @@ using KluskaStore.Domain.ValueObjects.AccountData;
 namespace KluskaStore.Application.Features.Users.CreateUser;
 
 public sealed class CreateUserHandler(IUnitOfWork uow, IUserRepository userRepo)
-    : IRequestHandler<CreateUserCommand, Result<CreateUserResponse>>
+    : IRequestHandler<CreateUserCommand, Result>
 {
-    public async Task<Result<CreateUserResponse>> Handle(
+    public async Task<Result> Handle(
         CreateUserCommand request,
         CancellationToken cancellationToken = default
     )
@@ -18,7 +18,7 @@ public sealed class CreateUserHandler(IUnitOfWork uow, IUserRepository userRepo)
         var phoneResult = Phone.Create(request.Phone);
 
         var error = ResultHelper.FirstError(cpfResult, emailResult, phoneResult);
-        if (error is not null) return Result<CreateUserResponse>.Failure(error);
+        if (error is not null) return Result.Failure(error);
 
         var userResult = User.Create(
             cpfResult.Value!,
@@ -29,11 +29,10 @@ public sealed class CreateUserHandler(IUnitOfWork uow, IUserRepository userRepo)
             request.RawPassword
         );
 
-        if (userResult.IsFailure)
-            return Result<CreateUserResponse>.Failure(userResult.Error!);
+        if (userResult.IsFailure) return Result.Failure(userResult.Error!);
 
-        var id = await userRepo.AddAsync(userResult.Value!, cancellationToken);
+        await userRepo.AddAsync(userResult.Value!, cancellationToken);
         await uow.CommitAsync(cancellationToken);
-        return Result<CreateUserResponse>.Success(new CreateUserResponse(id));
+        return Result.Success();
     }
 }
