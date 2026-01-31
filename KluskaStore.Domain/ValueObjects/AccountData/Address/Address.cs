@@ -4,6 +4,7 @@ namespace KluskaStore.Domain.ValueObjects.AccountData.Address;
 
 public sealed record Address
 {
+    // TODO: attribute default value for non-nullable fields
     private Address() { }
 
     internal Address(

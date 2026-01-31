@@ -12,4 +12,7 @@ public static class SessionErrors
 
     public static readonly Error InvalidExpirationDate =
         Validation("Session.InvalidExpirationDate", "You can only set the Expiration date to the future");
+
+    public static readonly Error EmptyOwnerId =
+        Validation("Session.EmptyOwnerId", "You need a valid Owner Id in order to create a Session");
 }

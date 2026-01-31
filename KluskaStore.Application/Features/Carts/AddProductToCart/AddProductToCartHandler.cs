@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
+using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Domain.Entities.Products;
 using static KluskaStore.Application.Features.Carts.AddProductToCart.AddProductToCartErrors;
 
@@ -19,8 +20,8 @@ public sealed class AddProductToCartHandler(
         var session = await sessionRepo.GetByTokenAsync(request.SessionToken, cancellationToken);
         if (session is null || session.IsExpired()) return Result.Failure(NotLoggedIn);
 
-        if (!session.Owner.IsUser) return Result.Failure(NotAnUser);
-        var userId = session.Owner.OwnerId;
+        if (session is not UserSession userSession) return Result.Failure(NotAnUser);
+        var userId = userSession.UserId;
 
         var product = await productRepo.GetByIdAsync(request.ProductId, cancellationToken);
         if (product is null) return Result.Failure(ProductNotFound);

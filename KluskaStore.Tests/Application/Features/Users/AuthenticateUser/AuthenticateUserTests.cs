@@ -64,7 +64,7 @@ public class AuthenticateUserTests
     public async Task GivenExistingUserAndCorrectPassword_WhenTryingToAuthenticate_ThenReturnsSessionToken()
     {
         var user = UserBuilder.WithId(Guid.NewGuid());
-        var session = SessionBuilder.WithOwnerId(ownerId: user.Id, isUserSession: true);
+        var session = UserSessionBuilder.WithUserId(userId: user.Id);
         var command = GenerateValidCommand(email: user.Email.Value, password: user.PasswordHash);
         _userMock.SetupGetUserByEmailReturns(user);
         _sessionMock.SetupRegisterSessionReturns(Task.CompletedTask);

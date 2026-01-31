@@ -23,10 +23,7 @@ public sealed class AuthenticateUserHandler(
         if (user is null) return Result<string>.Failure(UserNotFound);
         if (user.PasswordHash != request.Password) return Result<string>.Failure(PasswordIsIncorrect);
 
-        var sessionOwnerResult = SessionOwner.User(user.Id);
-        if (sessionOwnerResult.IsFailure) return Result<string>.Failure(sessionOwnerResult.Error!);
-
-        var sessionResult = Session.Create(tokenGenerator.New(), sessionOwnerResult.Value!, DateTime.UtcNow);
+        var sessionResult = UserSession.Create(tokenGenerator.New(), user.Id, DateTime.UtcNow);
         if (sessionResult.IsFailure) return Result<string>.Failure(sessionResult.Error!);
         var session = sessionResult.Value!;
 

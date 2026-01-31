@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
+using KluskaStore.Domain.Entities.Accounts;
 using static KluskaStore.Application.Features.Carts.RemoveItemFromCart.RemoveItemFromCartErrors;
 
 namespace KluskaStore.Application.Features.Carts.RemoveItemFromCart;
@@ -13,8 +14,8 @@ public sealed class RemoveItemFromCartHandler(
     {
         var session = await sessionRepo.GetByTokenAsync(request.SessionToken, cancellationToken);
         if (session is null || session.IsExpired()) return Result.Failure(NotLoggedIn);
-        if (session.Owner.IsStore) return Result.Failure(NotAnUser);
-        var userId = session.Owner.OwnerId;
+        if (session is not UserSession userSession) return Result.Failure(NotAnUser);
+        var userId = userSession.UserId;
 
         var cart = await cartRepo.GetByUserIdAsync(userId, cancellationToken);
         if (cart is null) return Result.Failure(CartNotFound);

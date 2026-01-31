@@ -41,7 +41,7 @@ public sealed class RemoveItemFromCartTests
     [Fact]
     public async Task GivenUserWithExpiredSession_WhenTryingToRemoveItemFromCart_ThenReturnsFailure()
     {
-        var session = SessionBuilder.Expired(isUserSession: true);
+        var session = UserSessionBuilder.Expired();
         var command = GenerateValidCommand(sessionToken: session.Token);
         _sessionMock.SetupGetSessionByTokenReturns(session);
 
@@ -57,7 +57,7 @@ public sealed class RemoveItemFromCartTests
     [Fact]
     public async Task GivenStoreAccountLoggedIn_WhenTryingToRemoveItemFromCart_ThenReturnsFailure()
     {
-        var session = SessionBuilder.Valid(isUserSession: false);
+        var session = StoreSessionBuilder.Valid();
         var command = GenerateValidCommand(sessionToken: session.Token);
         _sessionMock.SetupGetSessionByTokenReturns(session);
 
@@ -73,7 +73,7 @@ public sealed class RemoveItemFromCartTests
     [Fact]
     public async Task GivenUserWithoutExistingCart_WhenTryingToRemoveItemFromCart_ThenReturnsFailure()
     {
-        var session = SessionBuilder.Valid(isUserSession: true);
+        var session = UserSessionBuilder.Valid();
         var command = GenerateValidCommand(sessionToken: session.Token);
         _sessionMock.SetupGetSessionByTokenReturns(session);
         _cartMock.SetupGetCartByUserIdReturnsNull();
@@ -90,8 +90,8 @@ public sealed class RemoveItemFromCartTests
     [Fact]
     public async Task GivenItemNotStoredInCart_WhenTryingToRemoveItemFromCart_ThenReturnsFailure()
     {
-        var session = SessionBuilder.Valid(isUserSession: true);
-        var cart = CartBuilder.WithUserId(session.Owner.OwnerId);
+        var session = UserSessionBuilder.Valid();
+        var cart = CartBuilder.WithUserId(session.UserId);
         var item = ItemBuilder.Valid();
         var command = GenerateValidCommand(sessionToken: session.Token, itemId: item.Id);
         _sessionMock.SetupGetSessionByTokenReturns(session);
@@ -109,8 +109,8 @@ public sealed class RemoveItemFromCartTests
     [Fact]
     public async Task GivenItemStoredInExistingCart_WhenTryingToRemoveItemFromCart_ThenReturnsSuccess()
     {
-        var session = SessionBuilder.Valid(isUserSession: true);
-        var cart = CartBuilder.WithUserId(session.Owner.OwnerId);
+        var session = UserSessionBuilder.Valid();
+        var cart = CartBuilder.WithUserId(session.UserId);
         var item = ItemBuilder.Valid();
         var command = GenerateValidCommand(sessionToken: session.Token, itemId: item.Id);
         cart.AddItem(item);

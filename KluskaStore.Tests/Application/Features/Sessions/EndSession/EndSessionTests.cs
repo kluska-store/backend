@@ -1,5 +1,6 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
 using KluskaStore.Application.Features.Sessions.EndSession;
+using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Tests.Common.Builders;
 using KluskaStore.Tests.Common.Mocks.UnitOfWork;
 using KluskaStore.Tests.Common.Mocks.Sessions;
@@ -14,12 +15,11 @@ public class EndSessionTests
 
     public EndSessionTests() => _sut = new EndSessionHandler(_uowMock.Object, _sessionMock.Object);
 
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public async Task GivenExistingSession_WhenTryingToEndIt_ThenEndsSession(bool isUserSession)
+    public static TheoryData<Session> ValidSessions => [UserSessionBuilder.Valid(), StoreSessionBuilder.Valid()];
+
+    [Theory, MemberData(nameof(ValidSessions))]
+    public async Task GivenExistingSession_WhenTryingToEndIt_ThenEndsSession(Session session)
     {
-        var session = SessionBuilder.Valid(isUserSession);
         var command = new EndSessionCommand(session.Token);
         _sessionMock.SetupGetSessionByTokenReturns(session);
 

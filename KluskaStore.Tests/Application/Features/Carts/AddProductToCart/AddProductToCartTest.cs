@@ -49,7 +49,7 @@ public sealed class AddProductToCartTest
     [Fact]
     public async Task GivenUserWithExpiredSession_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        _sessionMock.SetupGetSessionByTokenReturns(SessionBuilder.Expired(isUserSession: true));
+        _sessionMock.SetupGetSessionByTokenReturns(UserSessionBuilder.Expired());
         var command = GenerateValidCommand();
 
         var result = await _sut.Handle(command);
@@ -66,7 +66,7 @@ public sealed class AddProductToCartTest
     [Fact]
     public async Task GivenValidStoreSession_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        var session = SessionBuilder.Valid(isUserSession: false);
+        var session = StoreSessionBuilder.Valid();
         var command = GenerateValidCommand(sessionToken: session.Token);
         _sessionMock.SetupGetSessionByTokenReturns(session);
 
@@ -84,7 +84,7 @@ public sealed class AddProductToCartTest
     [Fact]
     public async Task GivenNonExistingProduct_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
-        var session = SessionBuilder.Valid(isUserSession: true);
+        var session = UserSessionBuilder.Valid();
         var command = GenerateValidCommand(sessionToken: session.Token);
         _sessionMock.SetupGetSessionByTokenReturns(session);
         _productMock.SetupGetProductByIdReturnsNull();
@@ -104,7 +104,7 @@ public sealed class AddProductToCartTest
     public async Task GivenNonAvailableProduct_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
         var queriedProduct = ProductBuilder.Unavailable();
-        var session = SessionBuilder.Valid(isUserSession: true);
+        var session = UserSessionBuilder.Valid();
         var command = GenerateValidCommand(productId: queriedProduct.Id, sessionToken: session.Token);
         _sessionMock.SetupGetSessionByTokenReturns(session);
         _productMock.SetupGetProductByIdReturns(queriedProduct);
@@ -123,7 +123,7 @@ public sealed class AddProductToCartTest
     public async Task GivenItemQuantityEqualToZero_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
         var queriedProduct = ProductBuilder.Valid();
-        var session = SessionBuilder.Valid(isUserSession: true);
+        var session = UserSessionBuilder.Valid();
         var command = GenerateValidCommand(productId: queriedProduct.Id, quantity: 0, sessionToken: session.Token);
         _sessionMock.SetupGetSessionByTokenReturns(session);
         _productMock.SetupGetProductByIdReturns(queriedProduct);
@@ -142,7 +142,7 @@ public sealed class AddProductToCartTest
     public async Task GivenNonExistingCart_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
         var queriedProduct = ProductBuilder.Valid();
-        var session = SessionBuilder.Valid(isUserSession: true);
+        var session = UserSessionBuilder.Valid();
         var command = GenerateValidCommand(productId: queriedProduct.Id, sessionToken: session.Token);
         Cart? persistedCart = null;
         _sessionMock.SetupGetSessionByTokenReturns(session);
@@ -169,10 +169,10 @@ public sealed class AddProductToCartTest
     public async Task GivenExistingCartContainingAddedProduct_WhenTryingToAddProductToCart_ThenReturnsFailure()
     {
         var storedItem = ItemBuilder.Valid();
-        var session = SessionBuilder.Valid(isUserSession: true);
+        var session = UserSessionBuilder.Valid();
         var command = GenerateValidCommand(productId: storedItem.Product.Id, sessionToken: session.Token);
         var expectedFinalQuantity = storedItem.Quantity + command.Quantity;
-        var persistedCart = CartBuilder.WithUserId(session.Owner.OwnerId);
+        var persistedCart = CartBuilder.WithUserId(session.UserId);
         persistedCart.AddItem(storedItem);
         _sessionMock.SetupGetSessionByTokenReturns(session);
         _productMock.SetupGetProductByIdReturns(storedItem.Product);
