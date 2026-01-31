@@ -1,4 +1,5 @@
 ﻿using KluskaStore.Application.Abstractions.Persistence;
+using KluskaStore.Domain.Entities.Accounts;
 using KluskaStore.Infrastructure.Persistence;
 using KluskaStore.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICartRepository, CartRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ISessionRepository, SessionRepository>();
 
         return services;
     }

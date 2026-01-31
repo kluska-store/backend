@@ -3,6 +3,7 @@ using KluskaStore.Domain.Errors.Entities;
 
 namespace KluskaStore.Domain.Entities.Accounts;
 
+// TODO: make ExpiresAt nullable for better handling
 public abstract class Session : Entity
 {
     protected Session() => Token = "";
